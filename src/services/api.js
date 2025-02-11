@@ -3,8 +3,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  // baseURL: 'https://sentrad-production-2d25.up.railway.app/api',
-  baseURL: 'http://localhost:8000/api',
+  baseURL: 'https://sentrad-backend-production.up.railway.app/api',
+  // baseURL: 'http://localhost:8000/api',
   headers: {
     'Content-Type': 'application/json',
   },
