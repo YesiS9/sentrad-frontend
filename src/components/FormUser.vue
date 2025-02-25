@@ -153,6 +153,7 @@ const handleSubmit = async () => {
         formDataToSend.append('email', formData.email);
         formDataToSend.append('password', formData.password);
         formDataToSend.append('nama_role', formData.nama_role);
+        console.log('Data yang dikirim:', formData);
 
         if (formData.foto) {
             formDataToSend.append('foto', formData.foto);
