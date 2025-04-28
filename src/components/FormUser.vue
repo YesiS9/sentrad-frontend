@@ -153,7 +153,6 @@ const handleSubmit = async () => {
         formDataToSend.append('email', formData.email);
         formDataToSend.append('password', formData.password);
         formDataToSend.append('nama_role', formData.nama_role);
-        console.log('Data yang dikirim:', formData);
 
         if (formData.foto) {
             formDataToSend.append('foto', formData.foto);
@@ -168,7 +167,8 @@ const handleSubmit = async () => {
         if (mode.value === 'add') {
             response = await axios.post('/user/store-byAdmin', formDataToSend, config);
         } else if (mode.value === 'edit') {
-            response = await axios.put(`/user/${formData.id}`, formDataToSend, config);
+            formDataToSend.append('_method', 'PUT'); // Tambahkan ini
+            response = await axios.post(`/user/${formData.id}`, formDataToSend, config); // Ganti ke POST
         }
 
         if (response.status === 200 && response.data.status === 'success') {
@@ -178,7 +178,7 @@ const handleSubmit = async () => {
             closeForm();
         }
     } catch (error) {
-        if (error.response && error.response.status === 400) {
+        if (error.response && error.response.status === 422) { // ubah cek error ke 422
             const errorMessage = error.response.data.message;
             console.error('Validation errors details:', errorMessage);
             if (errorMessage.username) {
@@ -196,13 +196,14 @@ const handleSubmit = async () => {
             if (errorMessage.foto) {
                 Swal.fire('Error', `Foto error: ${errorMessage.foto[0]}`, 'error');
             }
-        }  else if (error.response && error.response.status === 500) {
+        } else if (error.response && error.response.status === 500) {
             Swal.fire('Error', 'Form sedang bermasalah. Silakan coba lagi.', 'error');
         } else {
             Swal.fire('Error', 'Terjadi kesalahan yang tidak diketahui.', 'error');
         }
     }
 };
+
 
 
 
