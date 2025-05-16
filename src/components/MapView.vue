@@ -193,6 +193,7 @@
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-bottom: 1rem;
 }
 
 .geo-btn:hover {
@@ -200,7 +201,7 @@
 }
 
 .save-location-btn {
-  background-color: #4caf50;
+  background-color: #43fc49;
   color: #fff;
   padding: 0.5rem 1rem;
   border: none;
