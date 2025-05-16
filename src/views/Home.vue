@@ -52,6 +52,7 @@ export default {
       ],
       map: null,
       artists: [],
+      markers: [],
       searchQuery: '',
       filteredArtists: [],
     };
@@ -61,49 +62,20 @@ export default {
     this.initializeMap();
   },
   methods: {
-      async fetchArtists() {
-          try {
-              const response = await axios.get("/map-sanggar");
-
-              if (response.data && Array.isArray(response.data.data)) {
-              this.artists = response.data.data;
-              this.filteredArtists = this.artists;
-              this.updateMarkers();
-              } else {
-              console.error('Unexpected API response format:', response.data);
-              }
-          } catch (error) {
-              console.error('Error fetching artist data:', error.message);
-          }
-          },
-      updateMarkers() {
-      if (!this.map) {
-          console.error('Map is not initialized');
-          return;
+    async fetchArtists() {
+      try {
+        const response = await axios.get("/map-sanggar");
+        if (response.data && Array.isArray(response.data.data)) {
+          this.artists = response.data.data;
+          this.filteredArtists = this.artists;
+          this.updateMarkers();
+        } else {
+          console.error('Unexpected API response format:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching artist data:', error.message);
       }
-
-      this.map.eachLayer((layer) => {
-          if (layer instanceof L.Marker) {
-          this.map.removeLayer(layer);
-          }
-      });
-
-
-      this.filteredArtists.forEach((artist) => {
-          if (artist.latitude && artist.longitude) {
-          const popupContent = `
-              <b>${artist.name}</b><br />
-              <i>${artist.description || 'Deskripsi tidak tersedia'}</i><br />
-              <b>Seniman:</b> ${artist.seniman?.nama_seniman || 'Tidak diketahui'}
-          `;
-          L.marker([artist.latitude, artist.longitude])
-              .addTo(this.map)
-              .bindPopup(popupContent);
-          } else {
-          console.warn('Artist data is missing latitude or longitude:', artist);
-          }
-      });
-      },
+    },
     initializeMap() {
       this.map = L.map('map').setView([-7.797068, 110.370529], 13);
 
@@ -112,22 +84,36 @@ export default {
       }).addTo(this.map);
     },
     updateMarkers() {
-      this.map.eachLayer((layer) => {
-        if (layer instanceof L.Marker) {
-          this.map.removeLayer(layer);
+      if (!this.map) return;
+
+      // Remove existing markers
+      this.markers.forEach(marker => this.map.removeLayer(marker));
+      this.markers = [];
+
+      this.filteredArtists.forEach((artist) => {
+        if (artist.latitude && artist.longitude) {
+          const popupContent = `
+            <b>${artist.name}</b><br />
+            <i>${artist.description || 'Deskripsi tidak tersedia'}</i><br />
+            <b>Seniman:</b> ${artist.seniman?.nama_seniman || 'Tidak diketahui'}
+          `;
+          const marker = L.marker([artist.latitude, artist.longitude])
+            .addTo(this.map)
+            .bindPopup(popupContent);
+          this.markers.push(marker);
         }
       });
 
-      this.filteredArtists.forEach((artist) => {
-        const popupContent = `
-          <b>${artist.name}</b><br />
-          <i>${artist.description}</i><br />
-          <b>Seniman:</b> ${artist.seniman.nama_seniman}
-        `;
-        L.marker([artist.latitude, artist.longitude])
-          .addTo(this.map)
-          .bindPopup(popupContent);
-      });
+      // If only one result, pan and open popup
+      if (this.filteredArtists.length === 1) {
+        const artist = this.filteredArtists[0];
+        if (artist.latitude && artist.longitude) {
+          this.map.setView([artist.latitude, artist.longitude], 16);
+          if (this.markers.length > 0) {
+            this.markers[0].openPopup();
+          }
+        }
+      }
     },
     filterArtists() {
       this.filteredArtists = this.artists.filter((artist) =>
@@ -143,9 +129,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  main{
-    align-items: flex-start;
-  }
+main {
+  align-items: flex-start;
+}
 .home-page {
   display: flex;
   justify-content: center;
@@ -153,7 +139,6 @@ export default {
   background-color: #f7941e;
   padding: 20px;
 }
-
 .homepage-container {
   text-align: center;
   background-color: white;
@@ -163,20 +148,17 @@ export default {
   width: 100%;
   max-width: 1200px;
 }
-
 .logo {
   width: 200px;
   height: auto;
   margin-bottom: 20px;
 }
-
 .gallery {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 30px;
 }
-
 .gallery-image {
   width: 200px;
   height: 200px;
@@ -188,16 +170,13 @@ export default {
   @media (max-width: 1024px) {
     width: 100%;
   }
-
 }
-
 .button-container {
   display: flex;
   justify-content: center;
   gap: 1em;
   margin-bottom: 30px;
 }
-
 .btn {
   padding: 0.8em 1.2em;
   background-color: #f5a840;
@@ -207,29 +186,24 @@ export default {
   border-radius: 5px;
   transition: background-color 0.3s ease;
 }
-
 .btn:hover {
   background-color: #df853b;
 }
-
 .map-container {
   margin-top: 40px;
   position: relative;
 }
-
 h2 {
   text-align: left;
   margin-bottom: 10px;
   font-size: 1.5em;
   color: #333;
 }
-
 #map {
   height: 400px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
-
 .search-input {
   width: 100%;
   padding: 10px;
