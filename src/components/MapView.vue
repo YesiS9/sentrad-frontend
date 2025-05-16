@@ -18,10 +18,10 @@
             placeholder="Masukkan deskripsi lokasi"
             class="location-input"
             ></textarea>
+            <button class="geo-btn" @click="useGeolocation">Gunakan Lokasi Saat Ini</button>
             <button @click="confirmLocation" class="save-location-btn" :disabled="!locationConfirmed">
             Simpan Lokasi
             </button>
-            <button class="geo-btn" @click="useGeolocation">Gunakan Lokasi Saat Ini</button>
         </div>
 
         <div class="location-card">
@@ -49,7 +49,7 @@
           description: "",
           latitude: null,
           longitude: null,
-          seniman_id: null, // Tambahkan atribut seniman_id
+          seniman_id: null, 
         },
         locationConfirmed: false,
       };
@@ -138,7 +138,7 @@
           description: "",
           latitude: null,
           longitude: null,
-          seniman_id: localStorage.getItem("seniman_id"), // Tetap ambil dari localStorage
+          seniman_id: localStorage.getItem("seniman_id"),
         };
         this.locationConfirmed = false;
         this.clearMarkers();
@@ -185,9 +185,39 @@
     margin-bottom: 1rem;
     padding: 0.5rem;
   }
-  .save-location-btn,
   .geo-btn {
-    margin-top: 1rem;
-    display: block;
-  }
+  background-color: #ff9800; 
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.geo-btn:hover {
+  background-color: #e68900;
+}
+
+.save-location-btn {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-location-btn:hover {
+  background-color: #43a047;
+}
+
+.save-location-btn:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+
+  
   </style>

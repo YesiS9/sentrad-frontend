@@ -2,7 +2,7 @@
     <main>
       <div class="auth-container">
         <div class="auth-form">
-          <h3>{{ mode === 'add' ? 'Tambah Proyek' : 'Edit Proyek' }}</h3>
+          <h3>{{ mode === 'add' ? 'Tambah Event' : 'Edit Event' }}</h3>
           <form @submit.prevent="handleSubmit">
             <div class="form-group">
               <label for="kategori">Kategori</label>
@@ -21,17 +21,17 @@
             </div>
 
             <div class="form-group">
-              <label for="judul_proyek">Judul Proyek</label>
+              <label for="judul_proyek">Judul event</label>
               <input type="text" id="judul_proyek" v-model="formData.judul_proyek" placeholder="Judul Proyek" required/>
             </div>
 
             <div class="form-group">
-              <label for="deskripsi_proyek">Deskripsi Proyek</label>
+              <label for="deskripsi_proyek">Deskripsi event</label>
               <textarea id="deskripsi_proyek" v-model="formData.deskripsi_proyek" placeholder="Deskripsi Proyek" required></textarea>
             </div>
 
             <div class="form-group">
-              <label for="waktu_mulai">Waktu Proyek Dimulai</label>
+              <label for="waktu_mulai">Waktu event Dimulai</label>
               <flat-pickr
                 v-model="formData.waktu_mulai"
                 :config="flatpickrConfig"
@@ -40,7 +40,7 @@
             </div>
 
             <div class="form-group">
-              <label for="waktu_selesai">Waktu Proyek Selesai</label>
+              <label for="waktu_selesai">Waktu event Selesai</label>
               <flat-pickr
                 v-model="formData.waktu_selesai"
                 :config="flatpickrConfig"
@@ -49,12 +49,12 @@
             </div>
 
             <div class="form-group">
-              <label for="lokasi_proyek">Lokasi Proyek</label>
+              <label for="lokasi_proyek">Lokasi event</label>
               <input type="text" id="lokasi_proyek" v-model="formData.lokasi_proyek" placeholder="Lokasi Proyek" required/>
             </div>
 
             <div class="form-group">
-              <label for="tautan_proyek">Tautan Proyek</label>
+              <label for="tautan_proyek">Tautan event</label>
               <input type="text" id="tautan_proyek" v-model="formData.tautan_proyek" placeholder="Tautan Proyek" required />
             </div>
 
