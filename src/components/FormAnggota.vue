@@ -113,7 +113,7 @@
 
   <script setup>
   import { ref, reactive } from 'vue';
-  import { useRouter } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
   import axios from '../services/api.js';
   import Swal from 'sweetalert2';
 
