@@ -124,6 +124,8 @@
 
   const currentAnggotaIndex = ref(0);
 
+  console.log(route.params.id);
+
   const anggotaData = reactive(
     Array.from({ length: jumlahAnggota.value }, () => ({
       nama_anggota: '',

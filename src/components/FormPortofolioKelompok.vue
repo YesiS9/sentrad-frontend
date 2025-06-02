@@ -60,7 +60,7 @@
   const router = useRouter();
   const source = route.query.source;
   const mode = ref('add');
-
+  console.log(route.params.id);
 
   const getKategoriOptions = async () => {
     try {
