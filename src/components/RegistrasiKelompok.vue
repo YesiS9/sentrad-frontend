@@ -2,14 +2,14 @@
     <main>
       <div class="auth-container">
         <div class="auth-form">
-          <h3>{{ mode === 'add' ? 'Tambah Kelompok' : 'Edit Kelompok' }}</h3>
+          <h3>{{ mode === 'add' ? 'Tambah Registrasi Kelompok' : 'Edit Registrasi Kelompok' }}</h3>
           <form @submit.prevent="handleSubmit">
             <div class="form-row">
               <div class="form-group">
                 <label for="nama_kategori">Kategori Seni</label>
                 <Multiselect
                   v-model="formData.nama_kategori"
-                  :options="kategoriOptions"
+                  :options="kategoris"
                   :searchable="true"
                   :close-on-select="true"
                   :clear-on-select="false"
@@ -26,7 +26,6 @@
               </div>
             </div>
 
-            <!-- Second Row: Tanggal and Alamat -->
             <div class="form-row">
               <div class="form-group">
                 <label for="tgl_terbentuk">Tanggal Terbentuk</label>
@@ -78,6 +77,7 @@ import Multiselect from '@vueform/multiselect';
 import '@vueform/multiselect/themes/default.css';
 
 const formData = reactive({
+  nama_kategori: '',
   nama_kelompok: '',
   tgl_terbentuk: '',
   alamat_kelompok: '',
@@ -85,11 +85,11 @@ const formData = reactive({
   noTelp_kelompok: '',
   email_kelompok: '',
   jumlah_anggota: '',
-  status_kelompok: 'Dalam proses',
+  status_kelompok: 'Pengajuan Pendaftaran',
   seniman_id: ''
 });
 
-const kategoriOptions = ref([]);
+const kategoris = ref([]);
 const route = useRoute();
 const router = useRouter();
 const mode = ref('add');
@@ -104,11 +104,11 @@ const getSeniman = () => {
   }
 };
 
-const getKategoriOptions = async () => {
+const getKategori = async () => {
   try {
     const response = await axios.get('/nama-kategori');
     if (response.status === 200 && response.data.status === 'success') {
-      kategoriOptions.value = response.data.data.map(kategori => kategori.nama_kategori);
+      kategoris.value = response.data.data.map(kategori => kategori.nama_kategori);
     } else {
       console.error('Failed to fetch kategori seni options:', response.data.message);
     }
@@ -135,7 +135,7 @@ const getKelompok = async (id) => {
 
 onMounted(async () => {
   getSeniman();
-  await getKategoriOptions();
+  await getKategori();
   const { id } = route.params;
   if (id) {
     await getKelompok(id);
@@ -188,7 +188,12 @@ const handleSubmit = async () => {
         localStorage.setItem('jumlah_anggota', kelompokData.jumlah_anggota);
       }
 
-      router.push({ name: 'FormAnggota', params: { kelompok_id: kelompokData.id } });
+      router.push({ 
+        name: 'FormAnggota', 
+        params: { kelompok_id: kelompokData.id }, 
+        query: { source: 'registrasi' }
+      });
+
     } else {
       console.error(
         mode.value === 'add'

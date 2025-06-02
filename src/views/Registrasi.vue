@@ -42,10 +42,10 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <router-link :to="{ name: 'IndividuEdit', params: { id: individu.id } }" class="edit-btn material-icons">
+                                    <button @click="handleEditIndividu(individu)" class="edit-btn material-icons">
                                         settings
-                                    </router-link>
-                                    <button @click="deleteIndividu(individu.id)" class="delete-btn">
+                                    </button>
+                                    <button @click="handleDeleteIndividu(individu)" class="delete-btn">
                                         <span class="material-icons">delete</span>
                                     </button>
                                 </td>
@@ -97,10 +97,10 @@
                                 </td>
 
                                 <td>
-                                    <router-link :to="{ name: 'KelompokEdit', params: { id: kelompok.id } }" class="edit-btn material-icons">
+                                    <button @click="handleEditKelompok(kelompok)" class="edit-btn material-icons">
                                         settings
-                                    </router-link>
-                                    <button @click="deleteKelompok(kelompok.id)" class="delete-btn">
+                                    </button>
+                                    <button @click="handleDeleteKelompok(kelompok)" class="delete-btn">
                                         <span class="material-icons">delete</span>
                                     </button>
                                 </td>
@@ -150,13 +150,11 @@ const checkPortfolioAndAddIndividu = async () => {
         const portofolioData = response.data?.data?.individual_portfolios || {};
         const individuData = individuResponse.data?.data?.items || [];
 
-        // Periksa apakah sudah ada registrasi individu
         if (individuData.length > 0) {
             Swal.fire('Error', 'Anda sudah memiliki registrasi individu. Tidak dapat menambah lagi.', 'error');
             return;
         }
 
-        // Periksa apakah portofolio individu kosong
         if (portofolioData.total > 0) {
             router.push({ name: 'IndividuAdd' });
         } else {
@@ -169,6 +167,37 @@ const checkPortfolioAndAddIndividu = async () => {
 };
 
 
+const handleEditIndividu = (individu) => {
+    if (individu.status_individu === 'Dalam Proses Penilaian') {
+        Swal.fire('Peringatan', 'Data sedang dalam proses penilaian, tidak dapat mengubah data registrasi.', 'warning');
+    } else {
+        router.push({ name: 'IndividuEdit', params: { id: individu.id } });
+    }
+};
+
+const handleEditKelompok = (kelompok) => {
+    if (kelompok.status_kelompok === 'Dalam Proses Penilaian') {
+        Swal.fire('Peringatan', 'Data sedang dalam proses penilaian, tidak dapat mengubah data registrasi.', 'warning');
+    } else {
+        router.push({ name: 'KelompokEdit', params: { id: kelompok.id } });
+    }
+};
+
+const handleDeleteIndividu = (individu) => {
+    if (individu.status_individu === 'Dalam Proses Penilaian') {
+        Swal.fire('Peringatan', 'Data sedang dalam proses penilaian, tidak dapat menghapus data registrasi.', 'warning');
+    } else {
+        deleteIndividu(individu.id);
+    }
+};
+
+const handleDeleteKelompok = (kelompok) => {
+    if (kelompok.status_kelompok === 'Dalam Proses Penilaian') {
+        Swal.fire('Peringatan', 'Data sedang dalam proses penilaian, tidak dapat menghapus data registrasi.', 'warning');
+    } else {
+        deleteKelompok(kelompok.id);
+    }
+};
 
 const loadIndividus = async () => {
     try {
@@ -249,9 +278,7 @@ const deleteKelompok = async (id) => {
         cancelButtonText: 'Tidak',
     });
 
-    if (!result.isConfirmed) {
-        return;
-    }
+    if (!result.isConfirmed) return;
     try {
         const response = await axios.delete(`/registerKelompok/${id}`);
         if (response.status === 200 && response.data.status === 'success') {

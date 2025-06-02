@@ -58,6 +58,7 @@
   const kategoriOptions = ref([]);
   const route = useRoute();
   const router = useRouter();
+  const source = route.query.source;
   const mode = ref('add');
 
 
@@ -129,7 +130,12 @@
     console.log('Server response:', response);
 
     if (response.status === 200 && response.data.status === 'success') {
-      router.push({ name: 'Registrasi' });
+      if (source === 'registrasi') {
+        router.push({ name: 'Registrasi' });
+      } else if (source === 'form') {
+        router.push({ name: 'DataRegistrasi' });
+      }
+
     } else {
       console.error(mode.value === 'add' ? 'Failed to add portofolio:' : 'Failed to edit portofolio:', response.data.message);
       Swal.fire('Error', response.data.message || 'Failed to save portofolio', 'error');

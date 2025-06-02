@@ -68,14 +68,13 @@
                 <select
                     :id="'tingkat_skill_' + currentAnggotaIndex"
                     v-model="anggotaData[currentAnggotaIndex].tingkat_skill"
-                    required
-                >
+                    required>
                     <option disabled value="">Pilih Tingkat Skill</option>
                     <option value="Pemula">Pemula</option>
                     <option value="Menengah">Menengah</option>
-                    <option value="Lanjutan">Lanjutan</option>
+                    <option value="Profesional">Profesional</option>
                 </select>
-            </div>
+              </div>
 
 
               <div class="form-group">
@@ -119,6 +118,8 @@
   import Swal from 'sweetalert2';
 
   const router = useRouter();
+  const route = useRoute();
+  const source = route.query.source;
   const jumlahAnggota = ref(parseInt(localStorage.getItem('jumlah_anggota')) || 1);
 
   const currentAnggotaIndex = ref(0);
@@ -179,7 +180,12 @@ const formatDate = (date) => {
 
     if (response.status === 200 && response.data.status === 'success') {
       Swal.fire('Sukses', 'Data anggota berhasil disimpan!', 'success');
-      router.push({ name: 'FormPortofolioKelompok' });
+      router.push({ 
+        name: 'FormPortofolioKelompok', 
+        params: { kelompok_id: kelompokId },
+        query: { source }
+      });
+
     } else {
       console.error('Failed to save anggota:', response.data.message);
     }

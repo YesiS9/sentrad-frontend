@@ -29,7 +29,7 @@
 
             <div class="form-row">
               <div class="form-group">
-                <label for="nama_kategori">Kategori</label>
+                <label for="nama_kategori">Kategori Seni</label>
                 <Multiselect
                   v-model="formData.nama_kategori"
                   :options="kategoris"
@@ -37,7 +37,7 @@
                   :close-on-select="true"
                   :clear-on-select="false"
                   :preserve-search="true"
-                  placeholder="Pilih atau cari kategori"
+                  placeholder="Pilih atau cari kategori seni"
                   label="nama_kategori"
                   track-by="nama_kategori"
                   class="custom-multiselect"
@@ -98,15 +98,16 @@ import '@vueform/multiselect/themes/default.css';
 import Swal from 'sweetalert2';
 
 const formData = reactive({
-    nama_seniman: '',
-    nama_kelompok: '',
-    tgl_terbentuk: '',
-    alamat_kelompok: '',
-    deskripsi_kelompok: '',
-    noTelp_kelompok: '',
-    email_kelompok: '',
-    jumlah_anggota: '',
-    status_kelompok: 'Dalam proses',
+  nama_kategori: '',
+  nama_seniman: '',
+  nama_kelompok: '',
+  tgl_terbentuk: '',
+  alamat_kelompok: '',
+  deskripsi_kelompok: '',
+  noTelp_kelompok: '',
+  email_kelompok: '',
+  jumlah_anggota: '',
+  status_kelompok: 'Pengajuan Pendaftaran',
 });
 
 const senimans = ref([]);
@@ -203,9 +204,20 @@ const handleSubmit = async () => {
         }
 
         if (response.status === 200 && response.data.status === 'success') {
-            router.push({ name: 'DataRegistrasi' });
-            closeForm();
-        } else {
+          const kelompokData = response.data.data;
+          await Swal.fire({
+              icon: 'success',
+              title: 'Registrasi kelompok berhasil',
+              text: 'Silakan isi data anggota kelompok.',
+              confirmButtonText: 'Lanjutkan',
+          });
+          router.push({ 
+            name: 'FormAnggota', 
+            params: { kelompok_id: kelompokData.id }, 
+            query: { source: 'form' }
+          });
+      }
+      else {
         console.error(
             mode.value === 'add'
             ? 'Failed to add kelompok:'
