@@ -183,10 +183,10 @@ const handleSubmit = async () => {
 
       if (kelompokData && kelompokData.id) {
         localStorage.setItem('kelompok_id', kelompokData.id);
-      }
+      };
       if (kelompokData && kelompokData.jumlah_anggota) {
         localStorage.setItem('jumlah_anggota', kelompokData.jumlah_anggota);
-      }
+      };
 
       router.push({ 
         name: 'FormAnggota', 
