@@ -101,48 +101,57 @@
   });
 
   const handleSubmit = async () => {
-  const action = mode.value === 'add' ? 'menambahkan' : 'mengedit';
+    const action = mode.value === 'add' ? 'menambahkan' : 'mengedit';
 
-  const result = await Swal.fire({
-    title: `Apakah Anda yakin ingin ${action} portofolio ini?`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Ya',
-    cancelButtonText: 'Tidak',
-  });
+    const result = await Swal.fire({
+      title: `Apakah Anda yakin ingin ${action} portofolio ini?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya',
+      cancelButtonText: 'Tidak',
+    });
 
-  if (!result.isConfirmed) {
-    return;
-  }
-
-  try {
-    let response;
-    if (mode.value === 'add') {
-      response = await axios.post('/portofolio', formData);
-    } else if (mode.value === 'edit' && formData.id) {
-      response = await axios.put(`/portofolio/${formData.id}`, formData);
-    } else {
-      console.error('Invalid mode or missing formData.id for edit.');
+    if (!result.isConfirmed) {
       return;
     }
 
-    // Log the entire response for debugging
-    console.log('Server response:', response);
+    try {
+      let response;
+      if (mode.value === 'add') {
+        response = await axios.post('/portofolio', formData);
+      } else if (mode.value === 'edit' && formData.id) {
+        response = await axios.put(`/portofolio/${formData.id}`, formData);
+      } else {
+        console.error('Invalid mode or missing formData.id for edit.');
+        return;
+      }
 
-    if (response.status === 200 && response.data.status === 'success') {
-      router.push({ name: 'Portofolio' });
-    } else {
-      console.error(mode.value === 'add' ? 'Failed to add portofolio:' : 'Failed to edit portofolio:', response.data.message);
-      Swal.fire('Error', response.data.message || 'Failed to save portofolio', 'error');
+      console.log('Server response:', response);
+
+      if (response.status === 200 && response.data.status === 'success') {
+        router.push({ name: 'Portofolio' });
+      } else {
+        let errorMessage = response.data.message;
+        if (typeof errorMessage === 'object') {
+          errorMessage = Object.values(errorMessage).join(', ');
+        }
+        Swal.fire('Error', errorMessage || 'Failed to save portofolio', 'error');
+      }
+    } catch (error) {
+      console.error('Error saving data:', error.message);
+      if (error.response) {
+        console.error('Server response:', error.response.data);
+        let errorMessage = error.response.data.message;
+        if (typeof errorMessage === 'object') {
+          errorMessage = Object.values(errorMessage).join(', ');
+        }
+        Swal.fire('Error', errorMessage || 'An error occurred', 'error');
+      } else {
+        Swal.fire('Error', 'An error occurred', 'error');
+      }
     }
-  } catch (error) {
-    console.error('Error saving data:', error.message);
-    if (error.response) {
-      console.error('Server response:', error.response.data);
-      Swal.fire('Error', error.response.data.message || 'An error occurred', 'error');
-    }
-  }
-};
+  };
+
 
 
   const closeForm = () => {

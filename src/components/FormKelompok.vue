@@ -211,9 +211,10 @@ const handleSubmit = async () => {
               text: 'Silakan isi data anggota kelompok.',
               confirmButtonText: 'Lanjutkan',
           });
-          
+
           if (kelompokData && kelompokData.id) {
             localStorage.setItem('kelompok_id', kelompokData.id);
+            
           };
           
           if (kelompokData && kelompokData.jumlah_anggota) {
