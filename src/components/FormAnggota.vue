@@ -180,6 +180,7 @@ const formatDate = (date) => {
       anggota: formattedAnggotaData,
     });
 
+    const kelompokId = localStorage.getItem('kelompok_id');
     if (response.status === 200 && response.data.status === 'success') {
       Swal.fire('Sukses', 'Data anggota berhasil disimpan!', 'success');
       router.push({ 
