@@ -114,6 +114,93 @@
   </main>
 </template>
 
+  <script setup>
+  import { ref, reactive } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
+  import axios from '../services/api.js';
+  import Swal from 'sweetalert2';
+
+  const router = useRouter();
+  const route = useRoute();
+  const source = route.query.source;
+  const jumlahAnggota = ref(parseInt(localStorage.getItem('jumlah_anggota')) || 1);
+
+  const currentAnggotaIndex = ref(0);
+
+  console.log(route.params.id);
+
+  const anggotaData = reactive(
+    Array.from({ length: jumlahAnggota.value }, () => ({
+      nama_anggota: '',
+      tgl_lahir: '',
+      tgl_gabung: '',
+      alamat_anggota: '',
+      noTelp_anggota: '',
+      tingkat_skill: '',
+      peran_anggota: '',
+      status_anggota: '',
+    }))
+  );
+
+const formatDate = (date) => {
+  const [year, month, day] = date.split('-');
+  return `${day}/${month}/${year}`;
+};
+
+  const nextAnggota = () => {
+    if (currentAnggotaIndex.value < jumlahAnggota.value - 1) {
+      currentAnggotaIndex.value++;
+    }
+  };
+
+  const handleSubmit = async () => {
+  const result = await Swal.fire({
+    title: `Apakah Anda yakin ingin menyimpan data anggota?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Ya',
+    cancelButtonText: 'Tidak',
+  });
+
+  if (!result.isConfirmed) {
+    return;
+  }
+
+  const formattedAnggotaData = anggotaData.map((anggota) => ({
+    ...anggota,
+    tgl_lahir: formatDate(anggota.tgl_lahir),
+    tgl_gabung: formatDate(anggota.tgl_gabung),
+  }));
+
+  console.log('Data to be submitted:', {
+    kelompok_id: localStorage.getItem('kelompok_id'),
+    anggota: formattedAnggotaData,
+  });
+
+  try {
+    const response = await axios.post('/anggota', {
+      kelompok_id: localStorage.getItem('kelompok_id'),
+      anggota: formattedAnggotaData,
+    });
+
+    const kelompokId = localStorage.getItem('kelompok_id');
+    if (response.status === 200 && response.data.status === 'success') {
+      Swal.fire('Sukses', 'Data anggota berhasil disimpan!', 'success');
+      router.push({ 
+        name: 'FormPortofolioKelompok', 
+        params: { kelompok_id: kelompokId },
+        query: { source }
+      });
+
+    } else {
+      console.error('Failed to save anggota:', response.data.message);
+    }
+  } catch (error) {
+    console.error('Error saving anggota:', error.message);
+  }
+};
+  </script>
+
 <style lang="scss" scoped>
 main {
   background-color: #f7941e;
