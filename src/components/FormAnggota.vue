@@ -1,16 +1,13 @@
 <template>
-  <main>
-    <div class="auth-container">
-      <div class="auth-form">
-        <h3>Input Anggota Kelompok</h3>
-        <p>Jumlah anggota yang perlu diinput: {{ jumlahAnggota }}</p>
-        <p class="warning-text">
-          Pendaftar tidak akan secara otomatis terdaftar sebagai anggota kelompok. Semua anggota, termasuk pendaftar, harus dimasukkan secara manual pada form ini.
-        </p>
-        <form @submit.prevent="handleSubmit">
-          <div class="anggota-group">
-            <h4>Anggota {{ currentAnggotaIndex + 1 }}</h4>
-            <div class="grid-form">
+    <main>
+      <div class="auth-container">
+        <div class="auth-form">
+            <h3>Input Anggota Kelompok</h3>
+            <p>Jumlah anggota yang perlu diinput: {{ jumlahAnggota }}</p>
+            <p>Perhatian: Pendaftar tidak akan secara otomatis terdaftar sebagai anggota kelompok. Semua anggota, termasuk pendaftar, harus dimasukkan secara manual pada form ini.</p>
+          <form @submit.prevent="handleSubmit">
+            <div class="anggota-group">
+              <h4>Anggota {{ currentAnggotaIndex + 1 }}</h4>
               <div class="form-group">
                 <label for="nama_anggota">Nama Anggota</label>
                 <input
@@ -28,6 +25,7 @@
                   type="date"
                   :id="'tgl_lahir_' + currentAnggotaIndex"
                   v-model="anggotaData[currentAnggotaIndex].tgl_lahir"
+                  placeholder="Tanggal Lahir"
                   required
                 />
               </div>
@@ -38,6 +36,7 @@
                   type="date"
                   :id="'tgl_gabung_' + currentAnggotaIndex"
                   v-model="anggotaData[currentAnggotaIndex].tgl_gabung"
+                  placeholder="Tanggal Gabung"
                   required
                 />
               </div>
@@ -67,16 +66,16 @@
               <div class="form-group">
                 <label for="tingkat_skill">Tingkat Skill</label>
                 <select
-                  :id="'tingkat_skill_' + currentAnggotaIndex"
-                  v-model="anggotaData[currentAnggotaIndex].tingkat_skill"
-                  required
-                >
-                  <option disabled value="">Pilih Tingkat Skill</option>
-                  <option value="Pemula">Pemula</option>
-                  <option value="Menengah">Menengah</option>
-                  <option value="Profesional">Profesional</option>
+                    :id="'tingkat_skill_' + currentAnggotaIndex"
+                    v-model="anggotaData[currentAnggotaIndex].tingkat_skill"
+                    required>
+                    <option disabled value="">Pilih Tingkat Skill</option>
+                    <option value="Pemula">Pemula</option>
+                    <option value="Menengah">Menengah</option>
+                    <option value="Profesional">Profesional</option>
                 </select>
               </div>
+
 
               <div class="form-group">
                 <label for="peran_anggota">Peran Anggota</label>
@@ -88,31 +87,29 @@
                   required
                 />
               </div>
-
               <div class="form-group">
                 <label for="status_anggota">Status Anggota</label>
                 <select
-                  :id="'status_anggota_' + currentAnggotaIndex"
-                  v-model="anggotaData[currentAnggotaIndex].status_anggota"
-                  required
+                    :id="'status_anggota' + currentAnggotaIndex"
+                    v-model="anggotaData[currentAnggotaIndex].status_anggota"
+                    required
                 >
-                  <option disabled value="">Pilih Status Anggota</option>
-                  <option value="Aktif">Aktif</option>
-                  <option value="Nonaktif">Nonaktif</option>
+                    <option disabled value="">Pilih Status Anggota</option>
+                    <option value="Aktif">Aktif</option>
+                    <option value="Nonaktif">Nonaktif</option>
                 </select>
-              </div>
             </div>
-          </div>
+            </div>
 
-          <div class="form-actions">
-            <button v-if="currentAnggotaIndex < jumlahAnggota - 1" type="button" @click="nextAnggota">Selanjutnya</button>
-            <button v-else type="submit">Tambah</button>
-          </div>
-        </form>
+            <div class="form-actions">
+              <button v-if="currentAnggotaIndex < jumlahAnggota - 1" type="button" @click="nextAnggota">Selanjutnya</button>
+              <button v-else type="submit">Tambah</button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-  </main>
-</template>
+    </main>
+  </template>
 
   <script setup>
   import { ref, reactive } from 'vue';
@@ -184,6 +181,7 @@ const formatDate = (date) => {
     });
 
     const kelompokId = localStorage.getItem('kelompok_id');
+
     if (response.status === 200 && response.data.status === 'success') {
       Swal.fire('Sukses', 'Data anggota berhasil disimpan!', 'success');
       router.push({ 
@@ -202,87 +200,69 @@ const formatDate = (date) => {
   </script>
 
 <style lang="scss" scoped>
-main {
-  background-color: #f7941e;
-  min-height: 100vh;
-}
+  main {
+    background-color: #f7941e;
+  }
 
-.auth-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  background-color: #f7941e;
-}
+  .auth-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    height: 120vh;
+    background-color: #f7941e;
+  }
 
-.auth-form {
-  background-color: #fff;
-  width: 100%;
-  max-width: 800px;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  text-align: left;
-
-  h3 {
+  .auth-form {
+    background-color: #fff;
+    width: 90vw;
+    height: 90vw;
+    max-width: 600px;
+    max-height: 800px;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    margin-bottom: 1rem;
-  }
-
-  .warning-text {
-    font-size: 0.9rem;
-    color: #b30000;
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-
-  .anggota-group {
-    margin-bottom: 1rem;
-
-    h4 {
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-
-    .grid-form {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-  }
-
-  .form-group {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
 
-    label {
-      font-weight: 500;
+    h3 {
+      margin-bottom: 1rem;
     }
 
-    input,
-    select {
+    .form-group {
+      margin-bottom: 1rem;
+      text-align: left;
+      width: 100%;
+    }
+
+    .custom-multiselect {
+      width: 100%;
+    }
+
+    input[type="text"], input[type="date"], select{
+      width: 100%;
       padding: 0.5rem;
       border: 1px solid #ccc;
       border-radius: 4px;
+    }
+
+    .form-actions {
+      margin-top: 1rem;
+      text-align: right;
       width: 100%;
     }
-  }
-
-  .form-actions {
-    margin-top: 1.5rem;
-    text-align: right;
 
     button {
       background-color: #f7941e;
       color: #fff;
       border: none;
-      padding: 0.5rem 1.5rem;
+      padding: 0.5rem 1rem;
       border-radius: 4px;
       cursor: pointer;
-      font-weight: bold;
       margin-left: 0.5rem;
-      transition: background-color 0.3s ease;
     }
 
     button[type="submit"] {
@@ -290,7 +270,7 @@ main {
     }
 
     button[type="submit"]:hover {
-      background-color: #3c883b;
+      background-color: #45a049;
     }
 
     button[type="button"] {
@@ -298,8 +278,7 @@ main {
     }
 
     button[type="button"]:hover {
-      background-color: #d32f2f;
+      background-color: #da190b;
     }
   }
-}
 </style>
