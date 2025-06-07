@@ -109,7 +109,7 @@ const fetchRubriks = async () => {
             },
         });
         if (response.status === 200 && response.data.status === 'success') {
-            rubriks.value = response.data.data;
+            rubriks.value = response.data.data ?? [];
             currentPageRubrikSaya.value = response.data.current_page;
             totalPagesRubrikSaya.value = response.data.last_page;
         } else {
@@ -129,7 +129,7 @@ const fetchRubrikPenilai = async () => {
             },
         });
         if (response.status === 200 && response.data.status === 'success') {
-            rubrikPenilai.value = response.data.data;
+            rubrikPenilai.value = response.data.data ?? [];
             currentPageRubrikLainnya.value = response.data.current_page;
             totalPagesRubrikLainnya.value = response.data.last_page;
         } else {
@@ -206,6 +206,7 @@ onMounted(() => {
     fetchRubrikPenilai();
 });
 </script>
+
 <style lang="scss" scoped>
 .rubrik-page {
   display: flex;

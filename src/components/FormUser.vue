@@ -132,78 +132,71 @@ const handleFileChange = (event) => {
 
 
 const handleSubmit = async () => {
-    const action = mode.value === 'add' ? 'menambahkan' : 'mengedit';
+  const action = mode.value === 'add' ? 'menambahkan' : 'mengedit';
 
-    const result = await Swal.fire({
-        title: `Apakah Anda yakin ingin ${action} user ini?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya',
-        cancelButtonText: 'Tidak',
-    });
+  const result = await Swal.fire({
+    title: `Apakah Anda yakin ingin ${action} user ini?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Ya',
+    cancelButtonText: 'Tidak',
+  });
 
-    if (!result.isConfirmed) {
-        return;
+  if (!result.isConfirmed) {
+    return;
+  }
+
+  try {
+    let response;
+    const formDataToSend = new FormData();
+    formDataToSend.append('username', formData.username);
+    formDataToSend.append('email', formData.email);
+    formDataToSend.append('password', formData.password);
+    formDataToSend.append('nama_role', formData.nama_role);
+
+    if (formData.foto) {
+      formDataToSend.append('foto', formData.foto);
     }
 
-    try {
-        let response;
-        const formDataToSend = new FormData();
-        formDataToSend.append('username', formData.username);
-        formDataToSend.append('email', formData.email);
-        formDataToSend.append('password', formData.password);
-        formDataToSend.append('nama_role', formData.nama_role);
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
 
-        if (formData.foto) {
-            formDataToSend.append('foto', formData.foto);
-        }
-
-        const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        };
-
-        if (mode.value === 'add') {
-            response = await axios.post('/user/store-byAdmin', formDataToSend, config);
-        } else if (mode.value === 'edit') {
-            formDataToSend.append('_method', 'PUT'); // Tambahkan ini
-            response = await axios.post(`/user/${formData.id}`, formDataToSend, config); // Ganti ke POST
-        }
-
-        if (response.status === 200 && response.data.status === 'success') {
-            const userId = response.data.data.id;
-            localStorage.setItem('id_user', userId);
-            router.push({ name: 'DataUser' });
-            closeForm();
-        }
-    } catch (error) {
-        if (error.response && error.response.status === 422) { // ubah cek error ke 422
-            const errorMessage = error.response.data.message;
-            console.error('Validation errors details:', errorMessage);
-            if (errorMessage.username) {
-                Swal.fire('Error', `Username error: ${errorMessage.username[0]}`, 'error');
-            }
-            if (errorMessage.email) {
-                Swal.fire('Error', `Email error: ${errorMessage.email[0]}`, 'error');
-            }
-            if (errorMessage.password) {
-                Swal.fire('Error', `Password error: ${errorMessage.password[0]}`, 'error');
-            }
-            if (errorMessage.nama_role) {
-                Swal.fire('Error', `Role error: ${errorMessage.nama_role[0]}`, 'error');
-            }
-            if (errorMessage.foto) {
-                Swal.fire('Error', `Foto error: ${errorMessage.foto[0]}`, 'error');
-            }
-        } else if (error.response && error.response.status === 500) {
-            Swal.fire('Error', 'Form sedang bermasalah. Silakan coba lagi.', 'error');
-        } else {
-            Swal.fire('Error', 'Terjadi kesalahan yang tidak diketahui.', 'error');
-        }
+    if (mode.value === 'add') {
+      response = await axios.post('/user/store-byAdmin', formDataToSend, config);
+    } else if (mode.value === 'edit') {
+      formDataToSend.append('_method', 'PUT');
+      response = await axios.post(`/user/${formData.id}`, formDataToSend, config);
     }
+
+    if (response.status === 200 && response.data.status === 'success') {
+      const userId = response.data.data.id;
+      localStorage.setItem('id_user', userId);
+      router.push({ name: 'DataUser' });
+      closeForm();
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 422) {
+      const errors = error.response.data.errors || {};
+      let message = 'Terjadi kesalahan validasi:<br><ul>';
+      for (const field in errors) {
+        message += `<li><strong>${field}</strong>: ${errors[field][0]}</li>`;
+      }
+      message += '</ul>';
+      Swal.fire({
+        icon: 'error',
+        title: 'Validasi Gagal',
+        html: message,
+      });
+    } else if (error.response && error.response.status === 500) {
+      Swal.fire('Error', 'Terjadi kesalahan pada server.', 'error');
+    } else {
+      Swal.fire('Error', 'Terjadi kesalahan yang tidak diketahui.', 'error');
+    }
+  }
 };
-
 
 
 

@@ -105,6 +105,7 @@
           </div>
 
           <div class="form-actions">
+            <button v-if="currentAnggotaIndex > 0" type="button" @click="previousAnggota">Kembali</button>
             <button v-if="currentAnggotaIndex < jumlahAnggota - 1" type="button" @click="nextAnggota">Selanjutnya</button>
             <button v-else type="submit">Tambah</button>
           </div>
@@ -147,13 +148,27 @@ const formatDate = (date) => {
   return `${day}/${month}/${year}`;
 };
 
-  const nextAnggota = () => {
-    if (currentAnggotaIndex.value < jumlahAnggota.value - 1) {
-      currentAnggotaIndex.value++;
-    }
-  };
+const nextAnggota = () => {
+  const currentData = anggotaData[currentAnggotaIndex.value];
+  const isValid = Object.values(currentData).every(val => val !== '');
+  
+  if (!isValid) {
+    Swal.fire('Peringatan', 'Mohon lengkapi semua data anggota sebelum melanjutkan.', 'warning');
+    return;
+  }
 
-  const handleSubmit = async () => {
+  if (currentAnggotaIndex.value < jumlahAnggota.value - 1) {
+    currentAnggotaIndex.value++;
+  }
+};
+
+const previousAnggota = () => {
+  if (currentAnggotaIndex.value > 0) {
+    currentAnggotaIndex.value--;
+  }
+};
+
+const handleSubmit = async () => {
   const result = await Swal.fire({
     title: `Apakah Anda yakin ingin menyimpan data anggota?`,
     icon: 'warning',
@@ -195,11 +210,27 @@ const formatDate = (date) => {
     } else {
       console.error('Failed to save anggota:', response.data.message);
     }
-  } catch (error) {
-    console.error('Error saving anggota:', error.message);
+    } catch (error) {
+      if (error.response && error.response.status === 422) {
+      const errors = error.response.data.errors || {};
+      let message = 'Terjadi kesalahan validasi:<br><ul>';
+      for (const field in errors) {
+        message += `<li><strong>${field}</strong>: ${errors[field][0]}</li>`;
+      }
+      message += '</ul>';
+      Swal.fire({
+        icon: 'error',
+        title: 'Validasi Gagal',
+        html: message
+      });
+    } else if (error.response && error.response.status === 500) {
+      Swal.fire('Error', 'Terjadi kesalahan pada server.', 'error');
+    } else {
+      Swal.fire('Error', 'Terjadi kesalahan yang tidak diketahui.', 'error');
+    }
   }
 };
-  </script>
+</script>
 
 <style lang="scss" scoped>
 main {
