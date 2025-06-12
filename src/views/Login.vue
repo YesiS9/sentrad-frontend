@@ -101,7 +101,7 @@ export default {
             this.$router.push('/register');
         },
         goToHome() {
-            this.$router.push('/'); // Halaman utama
+            this.$router.push('/');
         }
     }
 };
