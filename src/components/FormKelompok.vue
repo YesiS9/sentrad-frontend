@@ -119,8 +119,8 @@ const mode = ref('add');
 const getSeniman = async () => {
   try {
     const response = await axios.get('/seniman');
-    console.log('Response data:', response.data);
     if (Array.isArray(response.data.data)) {
+      // Simpan array objek, bukan hanya nama_seniman
       senimans.value = response.data.data;
     } else {
       console.error('Unexpected response data format:', response.data);
@@ -129,6 +129,7 @@ const getSeniman = async () => {
     console.error('Error fetching seniman list:', error.message);
   }
 };
+
 
 
 const getKategori = async () => {
@@ -167,8 +168,10 @@ watch(selectedSeniman, (newVal) => {
   if (newVal && newVal.id) {
     formData.seniman_id = newVal.id;
     localStorage.setItem('seniman_id', newVal.id);
+    formData.nama_seniman = newVal.nama_seniman;
   }
 });
+
 
 
 onMounted(async () => {
