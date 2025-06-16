@@ -15,98 +15,96 @@
         </div>
     </main>
 </template>
-
 <script>
-import axios from '../services/api.js';
+import api from '../services/api.js'; 
 import logo from '../assets/Sentradlogo.png';
 import { useToast } from 'vue-toastification';
 
 const toast = useToast();
 
 export default {
-    name: 'Login',
-    data() {
-        return {
-            email: '',
-            password: '',
-            logoURL: logo
-        };
-    },
-    methods: {
-        async login() {
-            try {
-                const response = await axios.post('https://sentrad-backend-production.up.railway.app/api/login', {
-                    email: this.email,
-                    password: this.password
-                });
+  name: 'Login',
+  data() {
+    return {
+      email: '',
+      password: '',
+      logoURL: logo
+    };
+  },
+  methods: {
+    async login() {
+      try {
+        const response = await api.post('/login', {
+          email: this.email,
+          password: this.password
+        });
 
-                const { data, status, message } = response.data;
+        const { data, status, message } = response.data;
 
-                if (status === 'success') {
-                    const { user, role, token, seniman_id, penilai_id } = data;
-                    console.log('Login response:', user, role, token, seniman_id, penilai_id);
+        if (status === 'success') {
+          const { user, role, token, seniman_id, penilai_id } = data;
+          console.log('Login response:', user, role, token, seniman_id, penilai_id);
 
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('user_id', user.id);
-                    localStorage.setItem('username', user.username);
-                    toast.success(message);
+          localStorage.setItem('token', token);
+          localStorage.setItem('user_id', user.id);
+          localStorage.setItem('username', user.username);
+          toast.success(message);
 
-                    if (seniman_id !== null) {
-                        localStorage.setItem('seniman_id', seniman_id);
-                    } else {
-                        localStorage.removeItem('seniman_id');
-                    }
+          if (seniman_id !== null) {
+            localStorage.setItem('seniman_id', seniman_id);
+          } else {
+            localStorage.removeItem('seniman_id');
+          }
 
-                    if (penilai_id !== null) {
-                        localStorage.setItem('penilai_id', penilai_id);
-                    } else {
-                        localStorage.removeItem('penilai_id');
-                    }
+          if (penilai_id !== null) {
+            localStorage.setItem('penilai_id', penilai_id);
+          } else {
+            localStorage.removeItem('penilai_id');
+          }
 
-                    let roleName = '';
-                    if (role && typeof role === 'object' && role.nama_role) {
-                        roleName = role.nama_role.toLowerCase();
-                    } else {
-                        console.error('Error logging in:', 'Invalid role object');
-                        toast.error(message);
-                        return;
-                    }
+          let roleName = '';
+          if (role && typeof role === 'object' && role.nama_role) {
+            roleName = role.nama_role.toLowerCase();
+          } else {
+            console.error('Error logging in:', 'Invalid role object');
+            toast.error(message);
+            return;
+          }
 
-                    switch (roleName) {
-                        case 'seniman':
-                            this.$router.push('/dashboardSeniman');
-                            break;
-                        case 'penilai':
-                            this.$router.push('/dashboardPenilai');
-                            break;
-                        case 'admin':
-                            this.$router.push('/dashboardAdmin');
-                            break;
-                        default:
-                            console.error('Error logging in:', 'Invalid role:', roleName);
-                            toast.error('Peran pengguna tidak valid');
-                    }
+          switch (roleName) {
+            case 'seniman':
+              this.$router.push('/dashboardSeniman');
+              break;
+            case 'penilai':
+              this.$router.push('/dashboardPenilai');
+              break;
+            case 'admin':
+              this.$router.push('/dashboardAdmin');
+              break;
+            default:
+              console.error('Error logging in:', 'Invalid role:', roleName);
+              toast.error('Peran pengguna tidak valid');
+          }
 
-                } else {
-                    console.error('Error logging in:', message);
-                    toast.error(message);
-                }
-            } catch (error) {
-                console.error('Error logging in:', error.message);
-                const errorMessage = error.response?.data?.message || 'Terjadi kesalahan saat login';
-                toast.error(errorMessage);
-            }
-        },
-        goToRegister() {
-            this.$router.push('/register');
-        },
-        goToHome() {
-            this.$router.push('/');
+        } else {
+          console.error('Error logging in:', message);
+          toast.error(message);
         }
+      } catch (error) {
+        console.error('Error logging in:', error.message);
+        const errorMessage = error.response?.data?.message || 'Terjadi kesalahan saat login';
+        toast.error(errorMessage);
+      }
+    },
+    goToRegister() {
+      this.$router.push('/register');
+    },
+    goToHome() {
+      this.$router.push('/');
     }
+  }
 };
 </script>
-
 <style lang="scss" scoped>
 main {
     background-color: #f7941e;
