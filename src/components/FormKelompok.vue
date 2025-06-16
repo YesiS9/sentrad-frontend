@@ -86,8 +86,6 @@
       </div>
     </main>
   </template>
-
-
 <script setup>
 import { ref, reactive, onMounted, watch } from 'vue';
 import { useRoute, useRouter  } from 'vue-router';
@@ -99,7 +97,6 @@ import Swal from 'sweetalert2';
 const formData = reactive({
   seniman_id: '',
   nama_kategori: '',
-  nama_seniman: '',
   nama_kelompok: '',
   tgl_terbentuk: '',
   alamat_kelompok: '',
@@ -115,12 +112,13 @@ const kategoris = ref([]);
 const route = useRoute();
 const router = useRouter();
 const mode = ref('add');
+const selectedSeniman = ref(null);
 
+// Fetch all seniman
 const getSeniman = async () => {
   try {
     const response = await axios.get('/seniman');
     if (Array.isArray(response.data.data)) {
-      // Simpan array objek, bukan hanya nama_seniman
       senimans.value = response.data.data;
     } else {
       console.error('Unexpected response data format:', response.data);
@@ -130,40 +128,40 @@ const getSeniman = async () => {
   }
 };
 
-
-
+// Fetch kategori list
 const getKategori = async () => {
-    try {
-      const response = await axios.get('/nama-kategori');
-      if (Array.isArray(response.data.data)) {
-        kategoris.value = response.data.data.map(kategori => kategori.nama_kategori);
-      } else {
-        console.error('Unexpected response data format:', response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching kategori:', error.message);
+  try {
+    const response = await axios.get('/nama-kategori');
+    if (Array.isArray(response.data.data)) {
+      kategoris.value = response.data.data.map(kategori => kategori.nama_kategori);
+    } else {
+      console.error('Unexpected response data format:', response.data);
     }
-  };
-
-
-const getKelompok = async (id) => {
-    try {
-        const response = await axios.get(`/registerKelompok/showByAdmin/${id}`);
-        if (response.status === 200 && response.data.status === 'success') {
-        const kelompokData = response.data.data;
-        console.log('Kelompok response:', response.data);
-        Object.assign(formData, kelompokData);
-        mode.value = 'edit';
-        } else {
-        console.error('Failed to fetch kelompok:', response.data.message);
-        }
-    } catch (error) {
-        console.error('Error fetching kelompok:', error.message);
-    }
+  } catch (error) {
+    console.error('Error fetching kategori:', error.message);
+  }
 };
 
-const selectedSeniman = ref(null);
+// Fetch kelompok data for edit mode
+const getKelompok = async (id) => {
+  try {
+    const response = await axios.get(`/registerKelompok/showByAdmin/${id}`);
+    if (response.status === 200 && response.data.status === 'success') {
+      const kelompokData = response.data.data;
+      Object.assign(formData, kelompokData);
+      mode.value = 'edit';
 
+      // Set selectedSeniman based on seniman_id from kelompokData
+      selectedSeniman.value = senimans.value.find(s => s.id === kelompokData.seniman_id);
+    } else {
+      console.error('Failed to fetch kelompok:', response.data.message);
+    }
+  } catch (error) {
+    console.error('Error fetching kelompok:', error.message);
+  }
+};
+
+// Sync selectedSeniman to formData.seniman_id
 watch(selectedSeniman, (newVal) => {
   if (newVal && newVal.id) {
     formData.seniman_id = newVal.id;
@@ -172,103 +170,97 @@ watch(selectedSeniman, (newVal) => {
   }
 });
 
-
-
+// Lifecycle on mounted
 onMounted(async () => {
-    await getSeniman();
-    await getKategori();
+  await getSeniman(); // must come before getKelompok so selectedSeniman.value can be found
+  await getKategori();
 
-    const { id } = route.params;
-    if (id) {
-        await getKelompok(id);
-    }
+  const { id } = route.params;
+  if (id) {
+    await getKelompok(id);
+  }
 });
 
 const formatDate = (date) => {
-    const [year, month, day] = date.split('-');
-    return `${day}/${month}/${year}`;
+  const [year, month, day] = date.split('-');
+  return `${day}/${month}/${year}`;
 };
 
+// Submit form
 const handleSubmit = async () => {
-    const action = mode.value === 'add' ? 'menambahkan' : 'mengedit';
+  const action = mode.value === 'add' ? 'menambahkan' : 'mengedit';
 
-    const result = await Swal.fire({
-        title: `Apakah Anda yakin ingin ${action} registrasi kelompok ini?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya',
-        cancelButtonText: 'Tidak',
-    });
+  const result = await Swal.fire({
+    title: `Apakah Anda yakin ingin ${action} registrasi kelompok ini?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Ya',
+    cancelButtonText: 'Tidak',
+  });
 
-    if (!result.isConfirmed) {
-        return;
+  if (!result.isConfirmed) return;
+
+  try {
+    const formattedData = {
+      ...formData,
+      tgl_terbentuk: formatDate(formData.tgl_terbentuk),
+    };
+
+    let response;
+    if (mode.value === 'add') {
+      response = await axios.post('/registerKelompok/storeByAdmin', formattedData);
+    } else if (mode.value === 'edit' && formData.id) {
+      response = await axios.put(`/registerKelompok/storeByAdmin/${formData.id}`, formattedData);
+    } else {
+      console.error('Invalid mode or missing formData.id for edit.');
+      return;
     }
-    try {
-        const formattedData = {
-            ...formData,
-            tgl_terbentuk: formatDate(formData.tgl_terbentuk),
-        };
-        let response;
-        if (mode.value === 'add') {
-            response = await axios.post('/registerKelompok/storeByAdmin', formattedData);
-        } else if (mode.value === 'edit' && formData.id) {
-            response = await axios.put(`/registerKelompok/storeByAdmin/${formData.id}`, formattedData);
-        } else {
-            console.error('Invalid mode or missing formData.id for edit.');
-        return;
-        }
 
-        if (response.status === 200 && response.data.status === 'success') {
-          const kelompokData = response.data.data;
-          await Swal.fire({
-              icon: 'success',
-              title: 'Registrasi kelompok berhasil',
-              text: 'Silakan isi data anggota kelompok.',
-              confirmButtonText: 'Lanjutkan',
-          });
+    if (response.status === 200 && response.data.status === 'success') {
+      const kelompokData = response.data.data;
+      await Swal.fire({
+        icon: 'success',
+        title: 'Registrasi kelompok berhasil',
+        text: 'Silakan isi data anggota kelompok.',
+        confirmButtonText: 'Lanjutkan',
+      });
 
-          if (kelompokData && kelompokData.id) {
-            localStorage.setItem('kelompok_id', kelompokData.id);
-            
-          };
-          if (kelompokData && kelompokData.jumlah_anggota) {
-            localStorage.setItem('jumlah_anggota', kelompokData.jumlah_anggota);
-          };
-
-          router.push({ 
-            name: 'FormAnggota', 
-            params: { kelompok_id: kelompokData.id }, 
-            query: { source: 'form' }
-          });
+      if (kelompokData?.id) {
+        localStorage.setItem('kelompok_id', kelompokData.id);
       }
-      else {
-        console.error(
-            mode.value === 'add'
-            ? 'Failed to add kelompok:'
-            : 'Failed to edit kelompok:',
-            response.data.message
-        );
-        }
-    } catch (error) {
-        console.error('Error saving data:', error.message);
-        if (error.response) {
-            console.error('Server response:', error.response.data);
-        }
+      if (kelompokData?.jumlah_anggota) {
+        localStorage.setItem('jumlah_anggota', kelompokData.jumlah_anggota);
+      }
+
+      router.push({ 
+        name: 'FormAnggota', 
+        params: { kelompok_id: kelompokData.id }, 
+        query: { source: 'form' }
+      });
+    } else {
+      console.error(`${mode.value === 'add' ? 'Failed to add' : 'Failed to edit'} kelompok:`, response.data.message);
     }
+  } catch (error) {
+    console.error('Error saving data:', error.message);
+    if (error.response) {
+      console.error('Server response:', error.response.data);
+    }
+  }
 };
 
+// Reset form and navigate
 const closeForm = () => {
-    formData.nama_seniman = '';
-    formData.nama_kelompok = '';
-    formData.tgl_terbentuk = '';
-    formData.alamat_kelompok = '';
-    formData.deskripsi_kelompok = '';
-    formData.noTelp_kelompok = '';
-    formData.email_kelompok = '';
-    formData.jumlah_anggota = '';
-    formData.status_kelompok = 'Dalam proses';
-    mode.value = 'add';
-    router.push({ name: 'DataRegistrasi' });
+  formData.nama_seniman = '';
+  formData.nama_kelompok = '';
+  formData.tgl_terbentuk = '';
+  formData.alamat_kelompok = '';
+  formData.deskripsi_kelompok = '';
+  formData.noTelp_kelompok = '';
+  formData.email_kelompok = '';
+  formData.jumlah_anggota = '';
+  formData.status_kelompok = 'Dalam proses';
+  mode.value = 'add';
+  router.push({ name: 'DataRegistrasi' });
 };
 </script>
 
