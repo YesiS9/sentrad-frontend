@@ -114,7 +114,6 @@ const router = useRouter();
 const mode = ref('add');
 const selectedSeniman = ref(null);
 
-// Fetch all seniman
 const getSeniman = async () => {
   try {
     const response = await axios.get('/seniman');
@@ -128,7 +127,6 @@ const getSeniman = async () => {
   }
 };
 
-// Fetch kategori list
 const getKategori = async () => {
   try {
     const response = await axios.get('/nama-kategori');
@@ -142,7 +140,6 @@ const getKategori = async () => {
   }
 };
 
-// Fetch kelompok data for edit mode
 const getKelompok = async (id) => {
   try {
     const response = await axios.get(`/registerKelompok/showByAdmin/${id}`);
@@ -150,9 +147,8 @@ const getKelompok = async (id) => {
       const kelompokData = response.data.data;
       Object.assign(formData, kelompokData);
       mode.value = 'edit';
-
-      // Set selectedSeniman based on seniman_id from kelompokData
       selectedSeniman.value = senimans.value.find(s => s.id === kelompokData.seniman_id);
+      console.log('Selected seniman setelah set:', selectedSeniman.value);
     } else {
       console.error('Failed to fetch kelompok:', response.data.message);
     }
@@ -161,7 +157,7 @@ const getKelompok = async (id) => {
   }
 };
 
-// Sync selectedSeniman to formData.seniman_id
+
 watch(selectedSeniman, (newVal) => {
   if (newVal && newVal.id) {
     formData.seniman_id = newVal.id;
@@ -170,9 +166,8 @@ watch(selectedSeniman, (newVal) => {
   }
 });
 
-// Lifecycle on mounted
 onMounted(async () => {
-  await getSeniman(); // must come before getKelompok so selectedSeniman.value can be found
+  await getSeniman();
   await getKategori();
 
   const { id } = route.params;
