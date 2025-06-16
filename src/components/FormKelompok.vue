@@ -89,8 +89,8 @@
 
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, reactive, onMounted, watch } from 'vue';
+import { useRoute, useRouter  } from 'vue-router';
 import axios from '../services/api.js';
 import Multiselect from '@vueform/multiselect';
 import '@vueform/multiselect/themes/default.css';
