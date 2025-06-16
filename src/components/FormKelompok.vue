@@ -8,7 +8,7 @@
               <div class="form-group">
                 <label for="nama_seniman">Seniman</label>
                 <Multiselect
-                  v-model="formData.nama_seniman"
+                  v-model="selectedSeniman"
                   :options="senimans"
                   :searchable="true"
                   :close-on-select="true"
@@ -16,11 +16,10 @@
                   :preserve-search="true"
                   placeholder="Pilih atau cari seniman"
                   label="nama_seniman"
-                  track-by="nama_seniman"
+                  track-by="id"
                   class="custom-multiselect"
-                ></Multiselect>
+                />
               </div>
-
               <div class="form-group">
                 <label for="nama_kelompok">Nama Kelompok</label>
                 <input type="text" id="nama_kelompok" v-model="formData.nama_kelompok" placeholder="Nama Kelompok" required>
@@ -98,6 +97,7 @@ import '@vueform/multiselect/themes/default.css';
 import Swal from 'sweetalert2';
 
 const formData = reactive({
+  seniman_id: '',
   nama_kategori: '',
   nama_seniman: '',
   nama_kelompok: '',
@@ -117,18 +117,20 @@ const router = useRouter();
 const mode = ref('add');
 
 const getSeniman = async () => {
-    try {
-        const response = await axios.get('/seniman');
-        console.log('Response data:', response.data);
-        if (Array.isArray(response.data.data)) {
-            senimans.value = response.data.data.map(seniman => seniman.nama_seniman);
-        } else {
-            console.error('Unexpected response data format:', response.data);
-        }
-    } catch (error) {
-        console.error('Error fetching seniman list:', error.message);
+  try {
+    const response = await axios.get('/seniman');
+    console.log('Response data:', response.data);
+    if (Array.isArray(response.data.data)) {
+      senimans.value = response.data.data;
+    } else {
+      console.error('Unexpected response data format:', response.data);
     }
+  } catch (error) {
+    console.error('Error fetching seniman list:', error.message);
+  }
 };
+
+
 const getKategori = async () => {
     try {
       const response = await axios.get('/nama-kategori');
@@ -158,6 +160,16 @@ const getKelompok = async (id) => {
         console.error('Error fetching kelompok:', error.message);
     }
 };
+
+const selectedSeniman = ref(null);
+
+watch(selectedSeniman, (newVal) => {
+  if (newVal && newVal.id) {
+    formData.seniman_id = newVal.id;
+    localStorage.setItem('seniman_id', newVal.id);
+  }
+});
+
 
 onMounted(async () => {
     await getSeniman();
@@ -216,7 +228,6 @@ const handleSubmit = async () => {
             localStorage.setItem('kelompok_id', kelompokData.id);
             
           };
-          
           if (kelompokData && kelompokData.jumlah_anggota) {
             localStorage.setItem('jumlah_anggota', kelompokData.jumlah_anggota);
           };
