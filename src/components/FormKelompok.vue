@@ -173,82 +173,82 @@ const formatDate = (date) => {
 };
 
 const handleSubmit = async () => {
-    const action = mode.value === 'add' ? 'menambahkan' : 'mengedit';
+  const action = mode.value === 'add' ? 'menambahkan' : 'mengedit';
 
-    const result = await Swal.fire({
-        title: `Apakah Anda yakin ingin ${action} registrasi kelompok ini?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya',
-        cancelButtonText: 'Tidak',
-    });
+  const result = await Swal.fire({
+    title: `Apakah Anda yakin ingin ${action} registrasi kelompok ini?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Ya',
+    cancelButtonText: 'Tidak',
+  });
 
-    if (!result.isConfirmed) {
-        return;
+  if (!result.isConfirmed) return;
+
+  try {
+    const selectedSeniman = senimans.value.find(s => s.nama_seniman === formData.nama_seniman);
+
+    if (!selectedSeniman || !selectedSeniman.id) {
+      await Swal.fire('Error', 'Seniman tidak ditemukan.', 'error');
+      return;
     }
-    try {
-        const selectedSeniman = senimans.value.find(s => s.nama_seniman === formData.nama_seniman);
-        if (selectedSeniman && selectedSeniman.id) {
-          localStorage.setItem('seniman_id', selectedSeniman.id);
-          formattedData.seniman_id = selectedSeniman.id;
-        } else {
-          Swal.fire('Error', 'Seniman tidak ditemukan.', 'error');
-          return;
-        }
 
-        const formattedData = {
-            ...formData,
-            tgl_terbentuk: formatDate(formData.tgl_terbentuk),
-        };
-        let response;
-        if (mode.value === 'add') {
-            response = await axios.post('/registerKelompok/storeByAdmin', formattedData);
-        } else if (mode.value === 'edit' && formData.id) {
-            response = await axios.put(`/registerKelompok/storeByAdmin/${formData.id}`, formattedData);
-        } else {
-            console.error('Invalid mode or missing formData.id for edit.');
-        return;
-        }
+    localStorage.setItem('seniman_id', selectedSeniman.id);
 
-        if (response.status === 200 && response.data.status === 'success') {
-          const kelompokData = response.data.data;
-          await Swal.fire({
-              icon: 'success',
-              title: 'Registrasi kelompok berhasil',
-              text: 'Silakan isi data anggota kelompok.',
-              confirmButtonText: 'Lanjutkan',
-          });
+    const formattedData = {
+      ...formData,
+      tgl_terbentuk: formatDate(formData.tgl_terbentuk),
+      seniman_id: selectedSeniman.id, // ✅ tambahkan di sini
+    };
 
-          if (kelompokData && kelompokData.id) {
-            localStorage.setItem('kelompok_id', kelompokData.id);
-            
-          };
-          
-          if (kelompokData && kelompokData.jumlah_anggota) {
-            localStorage.setItem('jumlah_anggota', kelompokData.jumlah_anggota);
-          };
+    let response;
+    if (mode.value === 'add') {
+      response = await axios.post('/registerKelompok/storeByAdmin', formattedData);
+    } else if (mode.value === 'edit' && formData.id) {
+      response = await axios.put(`/registerKelompok/storeByAdmin/${formData.id}`, formattedData);
+    } else {
+      console.error('Invalid mode or missing formData.id for edit.');
+      return;
+    }
 
-          router.push({ 
-            name: 'FormAnggota', 
-            params: { kelompok_id: kelompokData.id }, 
-            query: { source: 'form' }
-          });
+    if (response.status === 200 && response.data.status === 'success') {
+      const kelompokData = response.data.data;
+
+      await Swal.fire({
+        icon: 'success',
+        title: 'Registrasi kelompok berhasil',
+        text: 'Silakan isi data anggota kelompok.',
+        confirmButtonText: 'Lanjutkan',
+      });
+
+      if (kelompokData?.id) {
+        localStorage.setItem('kelompok_id', kelompokData.id);
       }
-      else {
-        console.error(
-            mode.value === 'add'
-            ? 'Failed to add kelompok:'
-            : 'Failed to edit kelompok:',
-            response.data.message
-        );
-        }
-    } catch (error) {
-        console.error('Error saving data:', error.message);
-        if (error.response) {
-            console.error('Server response:', error.response.data);
-        }
+      if (kelompokData?.jumlah_anggota) {
+        localStorage.setItem('jumlah_anggota', kelompokData.jumlah_anggota);
+      }
+
+      router.push({
+        name: 'FormAnggota',
+        params: { kelompok_id: kelompokData.id },
+        query: { source: 'form' }
+      });
+    } else {
+      console.error(
+        mode.value === 'add'
+          ? 'Failed to add kelompok:'
+          : 'Failed to edit kelompok:',
+        response.data.message
+      );
     }
+  } catch (error) {
+    console.error('Error saving data:', error.message);
+    if (error.response) {
+      console.error('Server response:', error.response.data);
+    }
+  }
 };
+
 
 const closeForm = () => {
     formData.nama_seniman = '';
