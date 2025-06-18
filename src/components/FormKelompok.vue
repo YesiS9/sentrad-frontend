@@ -8,19 +8,15 @@
               <div class="form-group">
                 <label for="nama_seniman">Seniman</label>
                 <Multiselect
-                  v-model="formData.seniman_id"
-                  :options="senimans"
+                  v-model="formData.nama_seniman"
+                  :options="senimans.map(s => s.nama_seniman)"
                   :searchable="true"
                   :close-on-select="true"
                   :clear-on-select="false"
                   :preserve-search="true"
                   placeholder="Pilih atau cari seniman"
-                  label="nama_seniman"
-                  track-by="id"
-                  :reduce="seniman => seniman.id"
                   class="custom-multiselect"
-                />
-
+                ></Multiselect>
               </div>
 
               <div class="form-group">
@@ -191,7 +187,15 @@ const handleSubmit = async () => {
         return;
     }
     try {
-        localStorage.setItem('seniman_id', formData.seniman_id);
+        const selectedSeniman = senimans.value.find(s => s.nama_seniman === formData.nama_seniman);
+        if (selectedSeniman && selectedSeniman.id) {
+          localStorage.setItem('seniman_id', selectedSeniman.id);
+          formattedData.seniman_id = selectedSeniman.id;
+        } else {
+          Swal.fire('Error', 'Seniman tidak ditemukan.', 'error');
+          return;
+        }
+
         const formattedData = {
             ...formData,
             tgl_terbentuk: formatDate(formData.tgl_terbentuk),
