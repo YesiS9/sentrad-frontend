@@ -8,7 +8,7 @@
               <div class="form-group">
                 <label for="nama_seniman">Seniman</label>
                 <Multiselect
-                  v-model="formData.nama_seniman"
+                  v-model="formData.seniman_id"
                   :options="senimans"
                   :searchable="true"
                   :close-on-select="true"
@@ -16,9 +16,11 @@
                   :preserve-search="true"
                   placeholder="Pilih atau cari seniman"
                   label="nama_seniman"
-                  track-by="nama_seniman"
+                  track-by="id"
+                  :reduce="seniman => seniman.id"
                   class="custom-multiselect"
-                ></Multiselect>
+                />
+
               </div>
 
               <div class="form-group">
@@ -98,8 +100,8 @@ import '@vueform/multiselect/themes/default.css';
 import Swal from 'sweetalert2';
 
 const formData = reactive({
+  seniman_id: '',
   nama_kategori: '',
-  nama_seniman: '',
   nama_kelompok: '',
   tgl_terbentuk: '',
   alamat_kelompok: '',
@@ -189,10 +191,7 @@ const handleSubmit = async () => {
         return;
     }
     try {
-        const selectedSeniman = senimans.value.find(s => s.nama_seniman === formData.nama_seniman);
-        if (selectedSeniman && selectedSeniman.id) {
-          localStorage.setItem('seniman_id', selectedSeniman.id);
-        }
+        localStorage.setItem('seniman_id', formData.seniman_id);
         const formattedData = {
             ...formData,
             tgl_terbentuk: formatDate(formData.tgl_terbentuk),
