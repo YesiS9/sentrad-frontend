@@ -97,7 +97,7 @@
                                     <router-link
                                         :to="{
                                         name: 'PortofolioKelompok',
-                                        params: { individuId: individu.id },
+                                        params: { kelompokId: kelompok.id }
                                         query: { source: 'seniman-kelompok' }
                                         }"
                                         class="link-nama"
