@@ -66,7 +66,7 @@
                                 <td>{{ individu.email }}</td>
                                 <td>{{ individu.status_individu }}</td>
                                 <td>
-                                    <router-link :to="{ name: 'PortofolioIndividu', params: { individuId: individu.id } }" class="button">Lihat Karya</router-link>
+                                    <router-link :to="{ name: 'PortofolioIndividu', params: { individuId: individu.id }, query: { source: 'penilai-individu' } }" class="button">Lihat Karya</router-link>
                                 </td>
                                 <td>
                                     <router-link :to="{ name: 'FormPenilaianIndividu', params: { individuId: individu.id } }" class="button">Berikan Penilaian</router-link>
@@ -104,7 +104,7 @@
                                 <td>{{ kelompok.nama_kelompok }}</td>
                                 <td>{{ kelompok.status_kelompok }}</td>
                                 <td>
-                                    <router-link :to="{ name: 'PortofolioKelompok', params: { kelompokId: kelompok.id } }" class="button">Lihat Karya</router-link>
+                                    <router-link :to="{ name: 'PortofolioKelompok', params: { kelompokId: kelompok.id }, query: { source: 'penilai-kelompok' } }" class="button">Lihat Karya</router-link>
                                 </td>
                                 <td>
                                     <router-link :to="{ name: 'FormPenilaianKelompok', params: { kelompokId: kelompok.id } }" class="button">Berikan Penilaian</router-link>

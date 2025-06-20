@@ -28,7 +28,18 @@
                             </tr>
                             <tr v-else v-for="(individu, index) in registrasi_individus" :key="individu.id">
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ individu.nama }}</td>
+                                <td>
+                                    <router-link
+                                        :to="{
+                                        name: 'PortofolioIndividu',
+                                        params: { individuId: individu.id },
+                                        query: { source: 'seniman-individu' }
+                                        }"
+                                        class="link-nama"
+                                    >
+                                        {{ individu.nama }}
+                                    </router-link>
+                                </td>
                                 <td>{{ formatDate(individu.created_at) }}</td>
                                 <td>{{ individu.status_individu }}</td>
                                 <td>
@@ -82,7 +93,18 @@
                             </tr>
                             <tr v-else v-for="(kelompok, index) in registrasi_kelompoks" :key="kelompok.id">
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ kelompok.nama_kelompok }}</td>
+                                <td>
+                                    <router-link
+                                        :to="{
+                                        name: 'PortofolioKelompok',
+                                        params: { individuId: individu.id },
+                                        query: { source: 'seniman-kelompok' }
+                                        }"
+                                        class="link-nama"
+                                    >
+                                        {{ kelompok.nama_kelompok }}
+                                    </router-link>
+                                </td>
                                 <td>{{ formatDate(kelompok.created_at) }}</td>
                                 <td>{{ kelompok.status_kelompok }}</td>
                                 <td>

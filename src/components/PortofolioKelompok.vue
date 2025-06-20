@@ -85,7 +85,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import axios from '../services/api.js';
 import Sidebar from './SidebarPenilai.vue';
 
@@ -100,6 +100,7 @@ const currentPage = ref(1);
 const totalPages = ref(1);
 const perPage = 10;
 const router = useRouter();
+const route = useRoute();
 
 onMounted(() => {
     console.log('Kelompok ID:', props.kelompokId);
@@ -115,7 +116,7 @@ onMounted(() => {
 
 const loadRegistrasiKelompok = async () => {
     try {
-        const response = await axios.get(`/registerKelompok/${props.kelompokId}`); // Use props.kelompokId here
+        const response = await axios.get(`/registerKelompok/${props.kelompokId}`);
         if (response.data.status === 'success') {
             registrasiKelompok.value = response.data.data;
         }
@@ -126,7 +127,7 @@ const loadRegistrasiKelompok = async () => {
 
 const loadPortofolios = async () => {
     try {
-        const response = await axios.get('/registrasi-portofolio/kelompok', { params: { kelompok_id: props.kelompokId, per_page: perPage, page: currentPage.value } }); // Use props.kelompokId here
+        const response = await axios.get('/registrasi-portofolio/kelompok', { params: { kelompok_id: props.kelompokId, per_page: perPage, page: currentPage.value } });
         if (response.status === 200 && response.data.status === 'success') {
             portofolios.value = response.data.data;
             currentPage.value = response.data.current_page;
@@ -141,7 +142,7 @@ const loadPortofolios = async () => {
 
 const loadAnggotaKelompok = async () => {
     try {
-        const response = await axios.get(`/anggota/kelompok/${props.kelompokId}`); // Use props.kelompokId here
+        const response = await axios.get(`/anggota/kelompok/${props.kelompokId}`); 
         if (response.status === 200 && response.data.status === 'success') {
             anggotaKelompok.value = response.data.data;
         } else {
@@ -167,7 +168,13 @@ const nextPage = () => {
 };
 
 const goBack = () => {
+  const source = route.query.source;
+
+  if (source === 'penilai-kelompok') {
     router.push({ name: 'PenilaianKarya' });
+  } else if (source === 'seniman-kelompok') {
+    router.push({ name: 'DataRegistrasi' });
+  } 
 };
 </script>
 
