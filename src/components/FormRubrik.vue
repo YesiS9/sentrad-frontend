@@ -106,23 +106,28 @@ const handleSubmit = async () => {
             console.error(`Gagal ${action} rubrik:`, response.data.message);
         }
     } catch (error) {
-      if (error.response && error.response.status === 422) {
-        const errors = error.response.data.errors || {};
-        let message = 'Terjadi kesalahan validasi:<br><ul>';
-        for (const field in errors) {
-          message += `<li><strong>${field}</strong>: ${errors[field][0]}</li>`;
+        if (error.response && error.response.status === 422) {
+            const messages = error.response.data.message || {};
+            let message = 'Terjadi kesalahan:<br><ul>';
+            for (const field in messages) {
+            if (Array.isArray(messages[field])) {
+                messages[field].forEach((msg) => {
+                message += `<li>${msg}</li>`;
+                });
+            } else {
+                message += `<li>${messages[field]}</li>`;
+            }
+            }
+            message += '</ul>';
+            Swal.fire({
+            icon: 'error',
+            html: message,
+            });
+        } else if (error.response && error.response.status === 500) {
+            Swal.fire('Error', 'Terjadi kesalahan pada server.', 'error');
+        } else {
+            Swal.fire('Error', 'Terjadi kesalahan yang tidak diketahui.', 'error');
         }
-        message += '</ul>';
-        Swal.fire({
-          icon: 'error',
-          title: 'Validasi Gagal',
-          html: message
-        });
-      } else if (error.response && error.response.status === 500) {
-        Swal.fire('Error', 'Terjadi kesalahan pada server.', 'error');
-      } else {
-        Swal.fire('Error', 'Terjadi kesalahan yang tidak diketahui.', 'error');
-      }
     }
 };
 

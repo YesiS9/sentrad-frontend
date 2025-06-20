@@ -146,7 +146,7 @@ const handleSubmit = async () => {
     return;
   }
 
-  try {
+try {
     let response;
     const formDataToSend = new FormData();
     formDataToSend.append('username', formData.username);
@@ -177,10 +177,10 @@ const handleSubmit = async () => {
       router.push({ name: 'DataUser' });
       closeForm();
     }
-  } catch (error) {
+} catch (error) {
     if (error.response && error.response.status === 422) {
         const messages = error.response.data.message || {};
-        let message = 'Terjadi kesalahan validasi:<br><ul>';
+        let message = 'Terjadi kesalahan:<br><ul>';
         for (const field in messages) {
         if (Array.isArray(messages[field])) {
             messages[field].forEach((msg) => {
@@ -193,7 +193,6 @@ const handleSubmit = async () => {
         message += '</ul>';
         Swal.fire({
         icon: 'error',
-        title: 'Validasi Gagal',
         html: message,
         });
     } else if (error.response && error.response.status === 500) {
@@ -201,7 +200,7 @@ const handleSubmit = async () => {
     } else {
         Swal.fire('Error', 'Terjadi kesalahan yang tidak diketahui.', 'error');
     }
-    }
+}
 
 };
 

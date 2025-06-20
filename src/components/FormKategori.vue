@@ -102,12 +102,27 @@ const handleSubmit = async () => {
             toast.error(response.data.message || `Gagal ${action} kategori seni!`);
         }
     } catch (error) {
-        console.error('Error saving data:', error.message);
-        if (error.response) {
-            console.error('Server response:', error.response.data);
-            toast.error(error.response.data.message || 'Terjadi kesalahan saat menyimpan data!');
+        if (error.response && error.response.status === 422) {
+            const messages = error.response.data.message || {};
+            let message = 'Terjadi kesalahan:<br><ul>';
+            for (const field in messages) {
+            if (Array.isArray(messages[field])) {
+                messages[field].forEach((msg) => {
+                message += `<li>${msg}</li>`;
+                });
+            } else {
+                message += `<li>${messages[field]}</li>`;
+            }
+            }
+            message += '</ul>';
+            Swal.fire({
+            icon: 'error',
+            html: message,
+            });
+        } else if (error.response && error.response.status === 500) {
+            Swal.fire('Error', 'Terjadi kesalahan pada server.', 'error');
         } else {
-            toast.error('Terjadi kesalahan saat menyimpan data!');
+            Swal.fire('Error', 'Terjadi kesalahan yang tidak diketahui.', 'error');
         }
     }
 };

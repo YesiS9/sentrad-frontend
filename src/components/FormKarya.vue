@@ -154,19 +154,29 @@ const handleSubmit = async () => {
       toast.error(response.data.message || `Gagal ${isEdit.value ? 'mengedit' : 'menambahkan'} karya!`);
     }
   } catch (error) {
-    console.error('Error saving data:', error.message);
-    if (error.response) {
-      console.error('Server response:', error.response.data);
-      if (error.response.data.message) {
-        for (const [key, value] of Object.entries(error.response.data.message)) {
-          errors[key] = value;
+    if (error.response && error.response.status === 422) {
+        const messages = error.response.data.message || {};
+        let message = 'Terjadi kesalahan:<br><ul>';
+        for (const field in messages) {
+        if (Array.isArray(messages[field])) {
+            messages[field].forEach((msg) => {
+            message += `<li>${msg}</li>`;
+            });
+        } else {
+            message += `<li>${messages[field]}</li>`;
         }
-      }
-      toast.error('Terjadi kesalahan saat menyimpan data!');
+        }
+        message += '</ul>';
+        Swal.fire({
+        icon: 'error',
+        html: message,
+        });
+    } else if (error.response && error.response.status === 500) {
+        Swal.fire('Error', 'Terjadi kesalahan pada server.', 'error');
     } else {
-      toast.error('Terjadi kesalahan saat menyimpan data!');
+        Swal.fire('Error', 'Terjadi kesalahan yang tidak diketahui.', 'error');
     }
-  }
+  } 
 };
 
 const closeForm = () => {
