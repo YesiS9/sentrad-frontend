@@ -159,7 +159,7 @@ const handleSubmit = async () => {
       console.error('Server response:', error.response.data);
       if (error.response.data.message) {
         for (const [key, value] of Object.entries(error.response.data.message)) {
-          errors[key] = value; // Update error messages
+          errors[key] = value;
         }
       }
       toast.error('Terjadi kesalahan saat menyimpan data!');

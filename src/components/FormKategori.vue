@@ -87,15 +87,13 @@ const handleSubmit = async () => {
 
     try {
         let response;
-
-        // Perform the add or edit operation based on the mode
         if (mode.value === 'add') {
             response = await axios.post('/kategoriSeni', formData);
         } else {
             response = await axios.put(`/kategoriSeni/${formData.id}`, formData);
         }
 
-        // Handle the response
+     
         if (response.status === 200 && response.data.status === 'success') {
             toast.success(`Berhasil ${action} kategori seni!`);
             router.push({ name: 'DataKategori' });

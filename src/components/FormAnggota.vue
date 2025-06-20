@@ -115,7 +115,7 @@
   </main>
 </template>
 
-  <script setup>
+<script setup>
   import { ref, reactive } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import axios from '../services/api.js';
@@ -210,8 +210,8 @@ const handleSubmit = async () => {
     } else {
       console.error('Failed to save anggota:', response.data.message);
     }
-    } catch (error) {
-      if (error.response && error.response.status === 422) {
+  } catch (error) {
+    if (error.response && error.response.status === 422) {
       const errors = error.response.data.errors || {};
       let message = 'Terjadi kesalahan validasi:<br><ul>';
       for (const field in errors) {

@@ -80,9 +80,24 @@
         toast.error(response.data.message || `Gagal ${action} info!`);
       }
     } catch (error) {
-      console.error('Kesalahan saat menyimpan data:', error.message);
-      toast.error('Terjadi kesalahan saat menyimpan data!');
-    }
+      if (error.response && error.response.status === 422) {
+        const errors = error.response.data.errors || {};
+        let message = 'Terjadi kesalahan validasi:<br><ul>';
+        for (const field in errors) {
+          message += `<li><strong>${field}</strong>: ${errors[field][0]}</li>`;
+        }
+        message += '</ul>';
+        Swal.fire({
+          icon: 'error',
+          title: 'Validasi Gagal',
+          html: message
+        });
+      } else if (error.response && error.response.status === 500) {
+        Swal.fire('Error', 'Terjadi kesalahan pada server.', 'error');
+      } else {
+        Swal.fire('Error', 'Terjadi kesalahan yang tidak diketahui.', 'error');
+      }
+    }   
   };
 
   const closeForm = () => {

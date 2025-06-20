@@ -11,8 +11,6 @@
                     <p><strong>Alamat:</strong> {{ registrasiIndividu.alamat }}</p>
                     <p><strong>Kategori Seni:</strong> {{ registrasiIndividu.kategori_seni.nama_kategori }}</p>
                 </div>
-
-                <!-- Portfolio Data Display -->
                 <div class="table-wrapper">
                     <div class="table-header">
                         <h3>Portofolio Individu</h3>
