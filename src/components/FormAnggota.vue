@@ -105,8 +105,8 @@
           </div>
 
           <div class="form-actions">
-            <button v-if="currentAnggotaIndex > 0" type="button" @click="previousAnggota">Kembali</button>
-            <button v-if="currentAnggotaIndex < jumlahAnggota - 1" type="button" @click="nextAnggota">Selanjutnya</button>
+            <button v-if="currentAnggotaIndex > 0" type="button" class="btn-back" @click="previousAnggota">Kembali</button>
+            <button v-if="currentAnggotaIndex < jumlahAnggota - 1" type="button" class="btn-next" @click="nextAnggota">Selanjutnya</button>
             <button v-else type="submit">Tambah</button>
           </div>
         </form>
@@ -329,13 +329,24 @@ main {
       background-color: #3c883b;
     }
 
-    button[type="button"] {
+    .btn-back {
       background-color: #f44336;
+      color: #fff;
     }
 
-    button[type="button"]:hover {
+    .btn-back:hover {
       background-color: #d32f2f;
     }
+
+    .btn-next {
+      background-color: #2196f3; 
+      color: #fff;
+    }
+
+    .btn-next:hover {
+      background-color: #1976d2;
+    }
+
   }
 }
 </style>

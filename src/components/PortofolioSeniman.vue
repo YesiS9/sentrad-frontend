@@ -3,7 +3,10 @@
         <main class="data-portofolio">
             <div class="user-management-container">
                 <div v-if="registrasiIndividu" class="registration-info">
-                    <h3>Detail Registrasi Individu</h3>
+                    <div class="card-header">
+                        <h3>Detail Registrasi Individu</h3>
+                        <button @click="goBack" class="back-button">Back</button>
+                    </div>
                     <p><strong>Nama Seniman:</strong> {{ registrasiIndividu.nama }}</p>
                     <p><strong>Tanggal Lahir:</strong> {{ registrasiIndividu.tgl_lahir }}</p>
                     <p><strong>Tanggal Mulai Berkarya:</strong> {{ registrasiIndividu.tgl_mulai }}</p>
@@ -13,7 +16,6 @@
                 <div class="table-wrapper">
                     <div class="table-header">
                         <h3>Portofolio Individu</h3>
-                        <button @click="goBack" class="back-button">Back</button>
                     </div>
                     <table class="user-table">
                         <thead>
@@ -137,8 +139,9 @@ const goBack = () => {
     color: #fff;
     border: none;
     padding: 0.5rem 1rem;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    font-weight: 600;
     display: inline-block;
 
     &:hover {
@@ -146,9 +149,6 @@ const goBack = () => {
     }
 }
 
-.registration-info {
-    margin-bottom: 1rem;
-}
 
 .data-portofolio {
     background-color: #f5d99d;
@@ -158,13 +158,27 @@ const goBack = () => {
         padding: 2rem;
     }
 
+    .registration-info {
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+        p {
+        margin: 0.5rem 0;
+        }
+    }
+
     .table-wrapper {
         background-color: #fff;
         padding: 1rem;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
     }
 
+    .card-header,
     .table-header {
         display: flex;
         justify-content: space-between;
@@ -173,6 +187,7 @@ const goBack = () => {
 
         h3 {
             margin: 0;
+            font-size: 1.25rem;
         }
 
         .back-button {

@@ -3,7 +3,10 @@
         <main class="data-portofolio">
             <div class="user-management-container">
                 <div v-if="registrasiKelompok" class="registration-info">
-                    <h3>Data Registrasi Kelompok</h3>
+                    <div class="card-header">
+                        <h3>Data Registrasi Kelompok</h3>
+                        <button @click="goBack" class="back-button">Back</button>
+                    </div>
                     <p><strong>Nama Kelompok:</strong> {{ registrasiKelompok.nama_kelompok }}</p>
                     <p><strong>Tanggal Terbentuk:</strong> {{ registrasiKelompok.tgl_terbentuk }}</p>
                     <p><strong>Alamat Kelompok:</strong> {{ registrasiKelompok.alamat_kelompok }}</p>
@@ -46,7 +49,6 @@
                 <div class="table-wrapper">
                     <div class="table-header">
                         <h3>Portofolio Kelompok</h3>
-                        <button @click="goBack" class="back-button">Back</button>
                     </div>
                     <table class="user-table">
                         <thead>
@@ -194,17 +196,14 @@ const goBack = () => {
     color: #fff;
     border: none;
     padding: 0.5rem 1rem;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    font-weight: 600;
     display: inline-block;
 
     &:hover {
         background-color: #e6830d;
     }
-}
-
-.registration-info {
-    margin-bottom: 1rem;
 }
 
 .data-portofolio {
@@ -215,14 +214,27 @@ const goBack = () => {
         padding: 2rem;
     }
 
+    .registration-info {
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+        p {
+        margin: 0.5rem 0;
+        }
+    }
+
     .table-wrapper {
         background-color: #fff;
         padding: 1rem;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 2rem;  // Add margin between cards
+        margin-bottom: 2rem;
     }
 
+    .card-header,
     .table-header {
         display: flex;
         justify-content: space-between;
@@ -231,6 +243,7 @@ const goBack = () => {
 
         h3 {
             margin: 0;
+            font-size: 1.25rem;
         }
     }
 
@@ -254,9 +267,9 @@ const goBack = () => {
 
     .pagination {
         display: flex;
-        justify-content: center; /* Center align buttons */
+        justify-content: center;
         align-items: center;
-        margin-top: 2rem; /* Add space above pagination */
+        margin-top: 2rem;
 
         button {
             background-color: #f7941e;
