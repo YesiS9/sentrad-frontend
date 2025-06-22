@@ -173,7 +173,7 @@ const goBack = () => {
   if (source === 'penilai-kelompok') {
     router.push({ name: 'PenilaianKarya' });
   } else if (source === 'seniman-kelompok') {
-    router.push({ name: 'DataRegistrasi' });
+    router.push({ name: 'Registrasi' });
   } 
 };
 </script>
