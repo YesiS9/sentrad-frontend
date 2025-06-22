@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-        <Sidebar />
         <main class="data-portofolio">
             <div class="user-management-container">
                 <div v-if="registrasiKelompok" class="registration-info">
@@ -87,7 +86,6 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from '../services/api.js';
-import Sidebar from './SidebarPenilai.vue';
 
 const props = defineProps({
   kelompokId: String,

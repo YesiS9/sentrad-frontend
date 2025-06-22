@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-        <Sidebar />
         <main class="data-portofolio">
             <div class="user-management-container">
                 <div v-if="registrasiIndividu" class="registration-info">
@@ -56,7 +55,6 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from '../services/api.js';
-import Sidebar from '../components/SidebarPenilai.vue';
 
 const props = defineProps({
     individuId: String,
