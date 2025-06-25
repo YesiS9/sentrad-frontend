@@ -29,61 +29,66 @@
     </div>
 
   </template>
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from '../services/api.js';
+import { useRoute, useRouter } from 'vue-router';
+import Sidebar from '../components/SidebarSeniman.vue';
 
-  <script setup>
-  import { ref, onMounted } from 'vue';
-  import axios from '../services/api.js';
-  import { useRoute, useRouter } from 'vue-router';
-  import Sidebar from '../components/SidebarSeniman.vue';
+const route = useRoute();
+const router = useRouter();
+const id = route.params.id;
 
-  const route = useRoute();
-  const router = useRouter();
-  const id = route.params.id;
+const karya = ref(null);
+const mediaUrl = ref('');
+const mediaType = ref('');
 
-  const karya = ref(null);
-  const mediaUrl = ref('');
-  const mediaType = ref('');
-
-  const getKaryaDetail = async (id) => {
+const getKaryaDetail = async (id) => {
     try {
-      const response = await axios.get(`/karya/${id}`);
-      if (response.status === 200 && response.data.status === 'success') {
-        karya.value = {
-          ...response.data.data,
-        };
+        const response = await axios.get(`/karya/${id}`);
+        if (response.status === 200 && response.data.status === 'success') {
+            karya.value = { ...response.data.data };
 
-        const mediaPaths = JSON.parse(karya.value.media_karya);
-        if (mediaPaths && mediaPaths.length > 0) {
-          mediaUrl.value = `https://sentrad-backend-production.up.railway.app/storage/${mediaPaths[0]}`;
-          mediaType.value = mediaUrl.value.endsWith('.mp4') ? 'video' : 'image';
+            // Tangani parsing media_karya dengan aman
+            let mediaPaths = [];
+            try {
+                if (typeof karya.value.media_karya === 'string') {
+                    mediaPaths = JSON.parse(karya.value.media_karya);
+                }
+            } catch (err) {
+                console.error('Gagal parsing media_karya:', err);
+            }
+
+            if (Array.isArray(mediaPaths) && mediaPaths.length > 0) {
+                mediaUrl.value = `https://sentrad-backend-production.up.railway.app/storage/${mediaPaths[0]}`;
+                const lower = mediaUrl.value.toLowerCase();
+                mediaType.value = lower.endsWith('.mp4') || lower.endsWith('.mov') ? 'video' : 'image';
+            } else {
+                console.warn('Tidak ada media ditemukan');
+            }
+
+        } else {
+            console.error('Failed to fetch karya detail:', response.data.message);
         }
-        console.log('Final Media URL:', mediaUrl.value);
-
-
-      } else {
-        console.error('Failed to fetch karya detail:', response.data.message);
-      }
     } catch (error) {
-      console.error('Error fetching karya detail:', error.message);
+        console.error('Error fetching karya detail:', error.message);
     }
-  };
+};
 
-  const formatDate = (date) => {
+const formatDate = (date) => {
     if (!date) return 'Tanggal tidak tersedia';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
-  };
+};
 
-  const goBack = () => {
+const goBack = () => {
     router.push('/portofolio');
-  };
+};
 
-  onMounted(() => {
-    if (id) {
-      getKaryaDetail(id);
-    }
-  });
-  </script>
+onMounted(() => {
+    if (id) getKaryaDetail(id);
+});
+</script>
 
   <style lang="scss" scoped>
   .page {
@@ -150,5 +155,6 @@
 
   .media-karya img {
     max-height: 500px;
+    object-fit: contain;
   }
   </style>
