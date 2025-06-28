@@ -40,27 +40,28 @@ import Sidebar from '../components/SidebarSeniman.vue';
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
+
 const karya = ref(null);
-const mediaUrl = ref('');
+const mediaUrls = ref([]); // <--- Untuk list media
+const mediaType = ref('');  // <--- Untuk jenis media utama (optional kalau mau dipakai)
 
 const getKaryaDetail = async (id) => {
   try {
     const response = await axios.get(`/karya/${id}`);
     if (response.status === 200 && response.data.status === 'success') {
-      karya.value = {
-        ...response.data.data,
-      };
+      karya.value = { ...response.data.data };
 
+      // media_karya diasumsikan sudah array URL dari backend
       const mediaArray = Array.isArray(karya.value.media_karya) 
         ? karya.value.media_karya 
         : JSON.parse(karya.value.media_karya || '[]');
 
+      mediaUrls.value = mediaArray;
+
       if (mediaArray.length > 0) {
-        mediaUrl.value = mediaArray[0];
-        mediaType.value = mediaUrl.value.endsWith('.mp4') ? 'video' : 'image';
+        mediaType.value = mediaArray[0].endsWith('.mp4') ? 'video' : 'image';
       }
 
-      console.log('Final Media URL:', mediaUrl.value);
     } else {
       console.error('Failed to fetch karya detail:', response.data.message);
     }
@@ -69,19 +70,18 @@ const getKaryaDetail = async (id) => {
   }
 };
 
-
 const formatDate = (date) => {
-    if (!date) return 'Tanggal tidak tersedia';
-    const [year, month, day] = date.split('-');
-    return `${day}/${month}/${year}`;
+  if (!date) return 'Tanggal tidak tersedia';
+  const [year, month, day] = date.split('-');
+  return `${day}/${month}/${year}`;
 };
 
 const goBack = () => {
-    router.push('/InfoPortofolioSeniman');
+  router.push('/InfoPortofolioSeniman');
 };
 
 onMounted(() => {
-    if (id) getKaryaDetail(id);
+  if (id) getKaryaDetail(id);
 });
 </script>
 
