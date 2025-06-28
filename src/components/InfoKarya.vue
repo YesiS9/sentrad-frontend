@@ -47,10 +47,20 @@ const getKaryaDetail = async (id) => {
   try {
     const response = await axios.get(`/karya/${id}`);
     if (response.status === 200 && response.data.status === 'success') {
-      karya.value = response.data.data;
-      const mediaArray = JSON.parse(karya.value.media_karya || '[]');
-      const baseUrl = 'https://sentrad-backend-production.up.railway.app/storage/';
-      mediaUrls.value = mediaArray.map(path => `${baseUrl}${path}`);
+      karya.value = {
+        ...response.data.data,
+      };
+
+      const mediaArray = Array.isArray(karya.value.media_karya) 
+        ? karya.value.media_karya 
+        : JSON.parse(karya.value.media_karya || '[]');
+
+      if (mediaArray.length > 0) {
+        mediaUrl.value = mediaArray[0];
+        mediaType.value = mediaUrl.value.endsWith('.mp4') ? 'video' : 'image';
+      }
+
+      console.log('Final Media URL:', mediaUrl.value);
     } else {
       console.error('Failed to fetch karya detail:', response.data.message);
     }
@@ -58,6 +68,7 @@ const getKaryaDetail = async (id) => {
     console.error('Error fetching karya detail:', error.message);
   }
 };
+
 
 const formatDate = (date) => {
     if (!date) return 'Tanggal tidak tersedia';
