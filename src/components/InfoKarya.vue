@@ -76,7 +76,7 @@
   };
 
   const goBack = () => {
-    router.push('/InfoPortofolioSeniman');
+    router.push({ name: 'InfoPortofolioSeniman' });
   };
 
   onMounted(() => {
