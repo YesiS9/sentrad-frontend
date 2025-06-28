@@ -76,7 +76,11 @@
   };
 
   const goBack = () => {
-    router.push({ name: 'InfoPortofolioSeniman' });
+    if (karya.value && karya.value.portofolio_id) {
+      router.push(`/infoPortofolio/${karya.value.portofolio_id}`);
+    } else {
+      router.push('/portofolio');
+    }
   };
 
   onMounted(() => {
