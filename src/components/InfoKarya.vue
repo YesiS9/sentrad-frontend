@@ -1,3 +1,4 @@
+
 <template>
     <div class="page">
         <Sidebar />
@@ -83,7 +84,8 @@
       getKaryaDetail(id);
     }
   });
-  </script>
+  </script> 
+
 
   <style lang="scss" scoped>
   .page {
