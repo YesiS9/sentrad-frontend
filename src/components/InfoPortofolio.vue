@@ -34,15 +34,12 @@
               <div v-for="(mediaUrl, index) in karya.media_urls" :key="index">
                 <img
                   v-if="mediaUrl.match(/\.(jpg|jpeg|png|gif)$/)"
-                  :src="getMediaUrl(mediaUrl)"
+                  :src="mediaUrl"
                   alt="Karya Image"
                   class="media-image"
                 />
-                <video
-                  v-if="mediaUrl.match(/\.(mp4|webm|ogg)$/)"
-                  controls
-                >
-                  <source :src="getMediaUrl(mediaUrl)" type="video/mp4" />
+                <video v-else-if="mediaUrl.match(/\.(mp4|webm|ogg)$/)" controls>
+                  <source :src="mediaUrl" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
@@ -94,13 +91,11 @@ const getPortofolioDetail = async (id) => {
 const getKaryaList = async (portofolioId) => {
   try {
     const response = await axios.get(`/karyas/${portofolioId}`);
-    if (response.status === 200 && response.data.status === 'success') {
+    if (response.status === 200 && response.data.status === 'success' && response.data.data) {
       karyaList.value = response.data.data.map((karya) => {
-        const mediaArray = JSON.parse(karya.media_karya || '[]');
-        
         return {
           ...karya,
-          media_urls: mediaArray,
+          media_urls: karya.media_karya || [],
         };
       });
     } else {
@@ -109,12 +104,6 @@ const getKaryaList = async (portofolioId) => {
   } catch (error) {
     console.error('Error fetching karya list:', error.message);
   }
-};
-
-
-const getMediaUrl = (path) => {
-  const baseUrl = 'https://sentrad-backend-production.up.railway.app';
-  return `${baseUrl}/${path}`;
 };
 
 const goToKarya = (id) => {
