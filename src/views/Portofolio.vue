@@ -9,7 +9,7 @@
                 <div class="table-wrapper">
                     <div class="table-header">
                         <h3>Portofolio Individu</h3>
-                        <router-link :to="{ name: 'FormPortofolio' }" class="button">Tambah Portofolio Individu</router-link>
+                        <router-link :to="{ name: 'FormPortofolio', query: { source: 'portofolio' } }"  class="button">Tambah Portofolio Individu</router-link>
                     </div>
                     <table class="user-table">
                         <thead>
@@ -50,7 +50,6 @@
                         </tbody>
                     </table>
 
-                    <!-- Table for Group Portfolios -->
                     <div class="table-header" style="margin-top:20px;">
                         <h3>Portofolio Kelompok</h3>
                     </div>

@@ -129,7 +129,13 @@
       console.log('Server response:', response);
 
       if (response.status === 200 && response.data.status === 'success') {
-        router.push({ name: 'Portofolio' });
+        const source = route.query.source;
+
+        if (source === 'formRegisIndividu') {
+          router.push({ name: 'DataRegistrasi' });
+        } else {
+          router.push({ name: 'Portofolio' });
+        }
       } else {
         let errorMessage = response.data.message;
         if (typeof errorMessage === 'object') {
@@ -166,7 +172,13 @@
 
 
   const closeForm = () => {
-    router.push({ name: 'Portofolio' });
+    const source = route.query.source;
+
+    if (source === 'formRegisIndividu') {
+      router.push({ name: 'DataRegistrasi' });
+    } else {
+      router.push({ name: 'Portofolio' });
+    }
   };
   </script>
 

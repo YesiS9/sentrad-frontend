@@ -25,7 +25,7 @@
               <label for="nama_seniman">Seniman</label>
               <Multiselect
                 v-model="formData.nama_seniman"
-                :options="senimans"
+                :options="senimans.map(s => s.nama_seniman)"
                 :searchable="true"
                 :close-on-select="true"
                 :clear-on-select="false"
@@ -86,6 +86,7 @@
   import Swal from 'sweetalert2';
 
   const formData = reactive({
+    seniman_id: '',
     nama_kategori: '',
     nama_seniman: '',
     nama: '',
@@ -176,6 +177,15 @@
     }
 
     try {
+      const selectedSeniman = senimans.value.find(s => s.nama_seniman === formData.nama_seniman);
+
+      if (!selectedSeniman || !selectedSeniman.id) {
+        await Swal.fire('Error', 'Seniman tidak ditemukan.', 'error');
+        return;
+      }
+
+      localStorage.setItem('seniman_id', selectedSeniman.id);
+
       const formattedData = {
         ...formData,
         tgl_lahir: formatDate(formData.tgl_lahir),
@@ -193,10 +203,23 @@
       }
 
       if (response.status === 200 && response.data.status === 'success') {
-        router.push({ name: 'DataRegistrasi' });
-        closeForm();
+        const individuData = response.data.data;
+
+        await Swal.fire({
+          icon: 'success',
+          title: 'Registrasi individu berhasil',
+          text: 'Silakan lengkapi data portofolio.',
+          confirmButtonText: 'Lanjutkan',
+        });
+
+        router.push({
+          name: 'FormPortofolio',
+          params: { seniman_id: individuData.seniman_id },
+          query: { source: 'formRegisIndividu' }
+        });
+
       } else {
-        console.error(mode.value === 'add' ? 'Failed to add individu:' : 'Failed to edit individu:', response.data.message);
+        console.error('Failed to submit individu:', response.data.message);
       }
     } catch (error) {
       if (error.response && error.response.status === 422) {
@@ -235,7 +258,17 @@
     formData.noTelp = '';
     formData.status_individu = 'Dalam proses';
     mode.value = 'add';
-    router.push({ name: 'DataRegistrasi' });
+    
+    const senimanId = localStorage.getItem('seniman_id');
+    if (senimanId) {
+      router.push({
+        name: 'FormPortofolio',
+        params: { seniman_id: senimanId },
+        query: { source: 'formRegisIndividu' }
+      });
+    } else {
+      router.push({ name: 'DataRegistrasi' });
+    }
   };
   </script>
 
