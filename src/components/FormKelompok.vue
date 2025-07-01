@@ -279,17 +279,7 @@ const closeForm = () => {
     formData.jumlah_anggota = '';
     formData.status_kelompok = 'Dalam proses';
     mode.value = 'add';
-
-    const kelompokId = localStorage.getItem('kelompok_id');
-    if (kelompokId) {
-      router.push({
-        name: 'FormAnggota',
-        params: { kelompok_id: kelompokId },
-        query: { source: 'form' }
-      });
-    } else {
-      router.push({ name: 'DataRegistrasi' });
-    }
+    router.push({ name: 'DataRegistrasi' });
 };
 </script>
 

@@ -254,17 +254,7 @@
     formData.noTelp = '';
     formData.status_individu = 'Dalam proses';
     mode.value = 'add';
-
-    const senimanId = localStorage.getItem('seniman_id');
-    if (senimanId) {
-      router.push({
-        name: 'FormPortofolio',
-        params: { seniman_id: senimanId },
-        query: { source: 'formRegisIndividu' }
-      });
-    } else {
-      router.push({ name: 'DataRegistrasi' });
-    }
+    router.push({ name: 'DataRegistrasi' });
   };
   </script>
 
