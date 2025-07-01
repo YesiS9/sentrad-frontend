@@ -19,8 +19,6 @@
                 class="custom-multiselect"
               ></Multiselect>
             </div>
-
-            <!-- Seniman Input -->
             <div class="form-group">
               <label for="nama_seniman">Seniman</label>
               <Multiselect
@@ -31,8 +29,6 @@
                 :clear-on-select="false"
                 :preserve-search="true"
                 placeholder="Pilih atau cari seniman"
-                label="nama_seniman"
-                track-by="nama_seniman"
                 class="custom-multiselect"
               ></Multiselect>
             </div>
@@ -109,7 +105,7 @@
     try {
       const response = await axios.get('/seniman');
       if (Array.isArray(response.data.data)) {
-        senimans.value = response.data.data.map(seniman => seniman.nama_seniman);
+        senimans.value = response.data.data;
       } else {
         console.error('Unexpected response data format:', response.data);
       }
@@ -258,7 +254,7 @@
     formData.noTelp = '';
     formData.status_individu = 'Dalam proses';
     mode.value = 'add';
-    
+
     const senimanId = localStorage.getItem('seniman_id');
     if (senimanId) {
       router.push({

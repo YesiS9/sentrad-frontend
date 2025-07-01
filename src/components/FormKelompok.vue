@@ -119,7 +119,7 @@ const getSeniman = async () => {
         const response = await axios.get('/seniman');
         console.log('Response data:', response.data);
         if (Array.isArray(response.data.data)) {
-            senimans.value = response.data.data;
+          senimans.value = response.data.data;
         } else {
             console.error('Unexpected response data format:', response.data);
         }
