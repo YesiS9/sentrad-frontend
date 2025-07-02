@@ -82,6 +82,7 @@
   import Swal from 'sweetalert2';
 
   const formData = reactive({
+    id: '',
     seniman_id: '',
     nama_kategori: '',
     nama_seniman: '',
@@ -127,15 +128,14 @@
     }
   };
 
+  
   const getIndividu = async (id) => {
     try {
       const response = await axios.get(`/registerIndividu/showByAdmin/${id}`);
       if (response.status === 200 && response.data.status === 'success') {
-        const individuData = response.data.data;
-        Object.assign(formData, individuData);
+        Object.assign(formData, response.data.data);
+        formData.id = response.data.data.id;
         mode.value = 'edit';
-      } else {
-        console.error('Failed to fetch individu:', response.data.message);
       }
     } catch (error) {
       console.error('Error fetching individu:', error.message);
@@ -153,6 +153,7 @@
   });
 
   const formatDate = (date) => {
+    if (!date) return '';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
   };
@@ -208,11 +209,15 @@
           confirmButtonText: 'Lanjutkan',
         });
 
-        router.push({
-          name: 'FormPortofolio',
-          params: { seniman_id: individuData.seniman_id },
-          query: { source: 'formRegisIndividu' }
-        });
+        if (mode.value === 'add') {
+          router.push({
+            name: 'FormPortofolio',
+            params: { seniman_id: response.data.data.seniman_id },
+            query: { source: 'formRegisIndividu' }
+          });
+        } else if (mode.value === 'edit') {
+          router.push({ name: 'DataRegistrasi' });
+        }
 
       } else {
         console.error('Failed to submit individu:', response.data.message);
@@ -244,6 +249,7 @@
 };
 
   const closeForm = () => {
+    formData.id = '';
     formData.nama_kategori = '';
     formData.nama_seniman = '';
     formData.nama = '';
