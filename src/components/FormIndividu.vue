@@ -205,9 +205,10 @@
         await Swal.fire({
           icon: 'success',
           title: 'Registrasi individu berhasil',
-          text: 'Silakan lengkapi data portofolio.',
+          text: mode.value === 'add' ? 'Silakan isi data anggota kelompok.' : 'Data berhasil diperbarui.',
           confirmButtonText: 'Lanjutkan',
         });
+
 
         if (mode.value === 'add') {
           router.push({
