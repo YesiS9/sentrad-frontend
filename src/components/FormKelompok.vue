@@ -199,10 +199,6 @@ const handleSubmit = async () => {
       seniman_id: selectedSeniman.id,
     };
 
-    if (mode.value === 'edit') {
-      delete formattedData.jumlah_anggota;
-    }
-
     let response;
     if (mode.value === 'add') {
       response = await axios.post('/registerKelompok/storeByAdmin', formattedData);
