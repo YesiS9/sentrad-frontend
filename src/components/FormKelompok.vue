@@ -66,7 +66,14 @@
               </div>
               <div class="form-group">
                 <label for="jumlah_anggota">Jumlah Anggota</label>
-                <input type="number" id="jumlah_anggota" v-model="formData.jumlah_anggota" placeholder="Jumlah Anggota" required>
+                <input
+                  type="number"
+                  id="jumlah_anggota"
+                  v-model="formData.jumlah_anggota"
+                  :disabled="mode === 'edit'"
+                  placeholder="Jumlah Anggota"
+                  required
+                >
               </div>
             </div>
             <div class="form-row">
@@ -192,6 +199,10 @@ const handleSubmit = async () => {
       seniman_id: selectedSeniman.id,
     };
 
+    if (mode.value === 'edit') {
+      delete formattedData.jumlah_anggota;
+    }
+
     let response;
     if (mode.value === 'add') {
       response = await axios.post('/registerKelompok/storeByAdmin', formattedData);
@@ -243,6 +254,7 @@ const handleSubmit = async () => {
     }
   }
 };
+
 
 const closeForm = () => {
   Object.assign(formData, {
