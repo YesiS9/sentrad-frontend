@@ -35,6 +35,7 @@
     import { useRoute, useRouter } from 'vue-router';
     import axios from '../services/api.js';
     import Swal from 'sweetalert2';
+    import { useToast } from 'vue-toastification';
 
     const formData = reactive({
         nama_tingkatan: '',
@@ -46,6 +47,7 @@
     const route = useRoute();
     const router = useRouter();
     const mode = ref('add');
+    const toast = useToast();
 
     const getTingkatan = async (id) => {
         try {
@@ -97,13 +99,14 @@
             }
 
             if (response.status === 200 && response.data.status === 'success') {
-                if (mode.value === 'add') {
-                    console.log('Adding tingkatan:', response.data.data);
+                if (response.status === 200 && response.data.status === 'success') {
+                    toast.success(`Berhasil ${action} Tingkatan!`);
+                    router.push({ name: 'DataTingkatan' });
+                    closeForm();
                 } else {
-                    console.log('Editing tingkatan:', response.data.data);
+                    toast.error(response.data.message || `Gagal ${action} Tingkatan!`);
                 }
-                router.push({ name: 'DataTingkatan' });
-                closeForm();
+                
             } else {
                 console.error(mode.value === 'add' ? 'Failed to add tingkatan:' : 'Failed to edit tingkatan:', response.data.message);
             }

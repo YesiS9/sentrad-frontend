@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-        <Sidebar />
         <main class="info-portofolio">
         <div class="card portofolio-detail" v-if="portofolio">
             <div class="card-header">
@@ -45,7 +44,6 @@
 import { ref, onMounted } from 'vue';
 import axios from '../services/api.js';
 import { useRouter } from 'vue-router';
-import Sidebar from '../components/SidebarPenilai.vue';
 
 const props = defineProps({
   id: String,
@@ -95,8 +93,13 @@ const getKaryaList = async (portofolioId) => {
 };
 
 const goToKarya = (id) => {
-  router.push({ name: 'InfoKarya', params: { id } });
+  router.push({
+    name: 'InfoKarya',
+    params: { id },
+    query: { source: 'penilai' }
+  });
 };
+
 
 
 const formatDate = (date) => {

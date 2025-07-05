@@ -7,6 +7,9 @@
                     <h2>Welcome, {{ userName }}</h2>
                 </header>
                 <div class="table-wrapper">
+                    <div class="info-pengumuman">
+                        * Perubahan dan penghapusan data registrasi hanya dapat dilakukan dalam waktu 24 jam setelah registrasi ditambahkan.
+                    </div>
                     <div class="table-header">
                         <h3>Registrasi Individu</h3>
                         <button @click="checkPortfolioAndAddIndividu" class="button">Tambah</button>
@@ -72,6 +75,9 @@
             </div>
             <div class="user-management-container" style="margin-top:20px">
                 <div class="table-wrapper">
+                    <div class="info-pengumuman">
+                        * Perubahan dan penghapusan data registrasi hanya dapat dilakukan dalam waktu 24 jam setelah registrasi ditambahkan.
+                    </div>
                     <div class="table-header">
                         <h3>Registrasi Kelompok</h3>
                         <router-link :to="{ name: 'KelompokAdd' }" class="button">Tambah</router-link>
@@ -190,35 +196,33 @@ const checkPortfolioAndAddIndividu = async () => {
 
 
 const handleEditIndividu = (individu) => {
-    if (individu.status_individu === 'Dalam Proses Penilaian') {
-        Swal.fire('Peringatan', 'Data sedang dalam proses penilaian, tidak dapat mengubah data registrasi.', 'warning');
-    } else {
-        router.push({ name: 'IndividuEdit', params: { id: individu.id } });
-    }
+    if (individu.status_individu !== 'Pengajuan Pendaftaran') {
+        Swal.fire('Peringatan', 'Data tidak dapat diedit.', 'warning');
+        return;
+    } 
+    router.push({ name: 'IndividuEdit', params: { id: individu.id } });
 };
 
 const handleEditKelompok = (kelompok) => {
-    if (kelompok.status_kelompok === 'Dalam Proses Penilaian') {
-        Swal.fire('Peringatan', 'Data sedang dalam proses penilaian, tidak dapat mengubah data registrasi.', 'warning');
-    } else {
-        router.push({ name: 'KelompokEdit', params: { id: kelompok.id } });
+    if (kelompok.status_kelompok !== 'Pengajuan Pendaftaran') {
+        Swal.fire('Peringatan', 'Data tidak dapat diedit.', 'warning');
     }
+    router.push({ name: 'KelompokEdit', params: { id: kelompok.id } });
 };
 
 const handleDeleteIndividu = (individu) => {
     if (individu.status_individu === 'Dalam Proses Penilaian') {
         Swal.fire('Peringatan', 'Data sedang dalam proses penilaian, tidak dapat menghapus data registrasi.', 'warning');
-    } else {
-        deleteIndividu(individu.id);
     }
+    deleteIndividu(individu.id);
+    
 };
 
 const handleDeleteKelompok = (kelompok) => {
     if (kelompok.status_kelompok === 'Dalam Proses Penilaian') {
         Swal.fire('Peringatan', 'Data sedang dalam proses penilaian, tidak dapat menghapus data registrasi.', 'warning');
-    } else {
-        deleteKelompok(kelompok.id);
-    }
+    } 
+    deleteKelompok(kelompok.id);
 };
 
 const loadIndividus = async () => {
@@ -390,6 +394,18 @@ onMounted(() => {
         h3 {
             margin: 0;
         }
+
+        .info-pengumuman {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+
 
         .button {
             background-color: #f7941e;

@@ -107,8 +107,13 @@ const getKaryaList = async (portofolioId) => {
 };
 
 const goToKarya = (id) => {
-  router.push({ name: 'InfoKarya', params: { id } });
+  router.push({
+    name: 'InfoKarya',
+    params: { id },
+    query: { source: 'seniman' }
+  });
 };
+
 
 
 const formatDate = (date) => {

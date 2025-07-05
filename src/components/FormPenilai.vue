@@ -306,10 +306,12 @@ const handleSubmit = async () => {
       response = await axios.put(`/penilai/${formData.id}`, formattedData);
     }
 
-    if (response.data.status === 'success') {
+    if (response.status === 200 && response.data.status === 'success') {
       toast.success(`Berhasil ${action} penilai!`);
       router.push({ name: 'DataPenilai' });
       closeForm();
+    } else{
+      toast.error(response.data.message || `Gagal ${action} User!`);
     }
   } catch (error) {
     if (error.response && error.response.status === 422) {

@@ -44,6 +44,7 @@
   import Swal from 'sweetalert2';
   import Multiselect from '@vueform/multiselect';
   import '@vueform/multiselect/themes/default.css';
+  import { useToast } from 'vue-toastification';
 
   const formData = reactive({
     id: '',
@@ -59,6 +60,7 @@
   const route = useRoute();
   const router = useRouter();
   const mode = ref('add');
+  const toast = useToast();
 
 
   const getKategoriOptions = async () => {
@@ -132,8 +134,10 @@
         const source = route.query.source;
 
         if (source === 'formRegisIndividu') {
+          toast.success(`Berhasil ${mode.value === 'add' ? 'menambahkan' : 'mengedit'} Portofolio!`);
           router.push({ name: 'DataRegistrasi' });
         } else {
+          toast.success(`Berhasil ${mode.value === 'add' ? 'menambahkan' : 'mengedit'} Portofolio!`);
           router.push({ name: 'Portofolio' });
         }
       } else {

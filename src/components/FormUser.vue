@@ -44,6 +44,7 @@ import { ref, reactive, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from '../services/api.js';
 import Swal from 'sweetalert2';
+import { useToast } from 'vue-toastification';
 
 const formData = reactive({
     username: '',
@@ -60,6 +61,7 @@ const errors = reactive({
 const route = useRoute();
 const router = useRouter();
 const mode = ref('add');
+const toast = useToast();
 
 const getRoles = async () => {
     try {
@@ -174,8 +176,11 @@ try {
     if (response.status === 200 && response.data.status === 'success') {
       const userId = response.data.data.id;
       localStorage.setItem('id_user', userId);
+      toast.success(`Berhasil ${action} User!`);
       router.push({ name: 'DataUser' });
       closeForm();
+    } else{
+        toast.error(response.data.message || `Gagal ${action} User!`);
     }
 } catch (error) {
     if (error.response && error.response.status === 422) {

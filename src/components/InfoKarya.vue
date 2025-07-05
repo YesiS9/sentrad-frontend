@@ -1,7 +1,6 @@
 
 <template>
     <div class="page">
-        <Sidebar />
         <main class="info-karya">
         <div class="card karya-detail" v-if="karya">
             <div class="card-header">
@@ -35,7 +34,6 @@
   import { ref, onMounted } from 'vue';
   import axios from '../services/api.js';
   import { useRoute, useRouter } from 'vue-router';
-  import Sidebar from '../components/SidebarSeniman.vue';
 
   const route = useRoute();
   const router = useRouter();
@@ -76,12 +74,26 @@
   };
 
   const goBack = () => {
-    if (karya.value && karya.value.portofolio_id) {
-      router.push(`/infoPortofolio/${karya.value.portofolio_id}`);
-    } else {
-      router.push('/portofolio');
-    }
-  };
+  const source = route.query.source; 
+
+  if (source === 'penilai' && karya.value && karya.value.individu_id && karya.value.portofolio_id) {
+    router.push({
+      name: 'InfoPortofolioPenilai',
+      params: {
+        individuId: karya.value.individu_id,
+        id: karya.value.portofolio_id
+      }
+    });
+  } else if (source === 'seniman' && karya.value && karya.value.portofolio_id) {
+    router.push({
+      name: 'InfoPortofolioSeniman',
+      params: { id: karya.value.portofolio_id }
+    });
+  } else {
+    router.push('/portofolio');
+  }
+};
+
 
   onMounted(() => {
     if (id) {

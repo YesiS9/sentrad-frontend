@@ -123,12 +123,12 @@
       }
 
       if (response.status === 200 && response.data.status === 'success') {
-            toast.success(`Berhasil ${action} seni!`);
-            router.push({ name: 'DataSeni' });
-            closeForm();
-        } else {
-            toast.error(response.data.message || `Gagal ${action} seni!`);
-        }
+        toast.success(`Berhasil ${action} Seni!`);
+        router.push({ name: 'DataSeni' });
+        closeForm();
+      } else {
+        toast.error(response.data.message || `Gagal ${action} Seni!`);
+      }
     } catch (error) {
       if (error.response && error.response.status === 422) {
           const messages = error.response.data.message || {};

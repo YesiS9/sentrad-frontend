@@ -32,7 +32,6 @@
                       v-model="rubrikSkors[rubrik.id]"
                       placeholder="Skor"
                       min="0"
-                      max="100"
                       required
                     />
                   </div>
@@ -193,10 +192,11 @@
       }
 
       if (response.status === 200 && response.data.status === 'success') {
+        toast.success(`Berhasil ${action} Penilaian!`);
         router.push({ name: 'PenilaianKarya' });
         closeForm();
-      } else {
-        console.error('Error:', response.data.message);
+      } else{
+        toast.error(response.data.message || `Gagal ${action} User!`);
       }
     } catch (error) {
       if (error.response && error.response.status === 422) {

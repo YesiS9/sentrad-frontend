@@ -77,6 +77,7 @@ import '@vueform/multiselect/themes/default.css';
 import Swal from 'sweetalert2';
 import FlatPickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
+import { useToast } from 'vue-toastification';
 
 const formData = reactive({
   seniman_id: '',
@@ -95,6 +96,7 @@ const kategoriOptions = ref([]);
 const route = useRoute();
 const router = useRouter();
 const mode = ref('add');
+const toast = useToast();
 
 const flatpickrConfig = {
   enableTime: true,
@@ -162,10 +164,11 @@ const handleSubmit = async () => {
       response = await axios.put(`/proyek/${formData.id}`, formData);
     }
     if (response.status === 200 && response.data.status === 'success') {
+      toast.success(`Berhasil ${mode.value === 'add' ? 'menambahkan' : 'mengedit'} Proyek!`);
       router.push({ name: 'Proyek' });
       closeForm();
     } else {
-      console.error('Error:', response.data.message);
+      toast.error(response.data.message || `Gagal ${action} Proyek!`);
     }
   } catch (error) {
     if (error.response && error.response.status === 422) {

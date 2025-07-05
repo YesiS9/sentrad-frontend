@@ -54,7 +54,14 @@
               </div>
               <div class="form-group">
                 <label for="jumlah_anggota">Jumlah Anggota</label>
-                <input type="number" id="jumlah_anggota" v-model="formData.jumlah_anggota" placeholder="Jumlah Anggota" required />
+                <input 
+                  type="number" 
+                  id="jumlah_anggota" 
+                  v-model="formData.jumlah_anggota" 
+                  placeholder="Jumlah Anggota" 
+                  :disabled="mode === 'edit'" 
+                  required 
+                />
               </div>
             </div>
 

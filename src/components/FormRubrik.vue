@@ -99,11 +99,11 @@ const handleSubmit = async () => {
         }
 
         if (response.status === 200 && response.data.status === 'success') {
-            toast.success(`Berhasil ${mode.value === 'add' ? 'menambahkan' : 'mengedit'} rubrik!`);
+            toast.success(`Berhasil ${mode.value === 'add' ? 'menambahkan' : 'mengedit'} Rubrik!`);
             router.push({ name: 'Rubrik' });
             closeForm();
         } else {
-            console.error(`Gagal ${action} rubrik:`, response.data.message);
+            toast.error(response.data.message || `Gagal ${action} Rubrik!`);
         }
     } catch (error) {
         if (error.response && error.response.status === 422) {

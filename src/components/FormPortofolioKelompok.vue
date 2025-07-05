@@ -44,6 +44,7 @@
   import Swal from 'sweetalert2';
   import Multiselect from '@vueform/multiselect';
   import '@vueform/multiselect/themes/default.css';
+  import { useToast } from 'vue-toastification';
 
   const formData = reactive({
     id: '',
@@ -60,6 +61,7 @@
   const router = useRouter();
   const source = route.query.source;
   const mode = ref('add');
+  const toast = useToast();
   console.log(route.params.id);
 
   const getKategoriOptions = async () => {
@@ -131,11 +133,12 @@
 
     if (response.status === 200 && response.data.status === 'success') {
       if (source === 'registrasi') {
+        toast.success(`Berhasil ${mode.value === 'add' ? 'menambahkan' : 'mengedit'} Portofolio!`);
         router.push({ name: 'Registrasi' });
       } else if (source === 'form') {
+        toast.success(`Berhasil ${mode.value === 'add' ? 'menambahkan' : 'mengedit'} Portofolio!`);
         router.push({ name: 'DataRegistrasi' });
       }
-
     } else {
       console.error(mode.value === 'add' ? 'Failed to add portofolio:' : 'Failed to edit portofolio:', response.data.message);
       Swal.fire('Error', response.data.message || 'Failed to save portofolio', 'error');

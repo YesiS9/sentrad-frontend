@@ -70,7 +70,7 @@
     alamat: '',
     email: '',
     noTelp: '',
-    status_individu: 'Dalam proses',
+    status_individu: 'Pengajuan Pendaftaran',
     seniman_id: ''
   });
 
@@ -243,7 +243,7 @@
     formData.alamat = '';
     formData.email = '';
     formData.noTelp = '';
-    formData.status_individu = 'Dalam proses';
+    formData.status_individu = 'Pengajuan Pendaftaran';
     mode.value = 'add';
     router.push({ name: 'Registrasi' });
   };
