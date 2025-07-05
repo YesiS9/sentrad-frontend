@@ -79,10 +79,7 @@
   if (source === 'penilai') {
     router.push({
       name: 'InfoPortofolioPenilai',
-      params: {
-        individuId: karya.value.individu_id,
-        id: karya.value.portofolio_id
-      }
+      params: {  id: karya.value.portofolio_id }
     });
   } else if (source === 'seniman') {
     router.push({
