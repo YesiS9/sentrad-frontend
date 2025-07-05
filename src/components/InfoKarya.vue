@@ -76,7 +76,7 @@
   const goBack = () => {
   const source = route.query.source; 
 
-  if (source === 'penilai' && karya.value && karya.value.individu_id && karya.value.portofolio_id) {
+  if (source === 'penilai') {
     router.push({
       name: 'InfoPortofolioPenilai',
       params: {
@@ -84,7 +84,7 @@
         id: karya.value.portofolio_id
       }
     });
-  } else if (source === 'seniman' && karya.value && karya.value.portofolio_id) {
+  } else if (source === 'seniman') {
     router.push({
       name: 'InfoPortofolioSeniman',
       params: { id: karya.value.portofolio_id }
