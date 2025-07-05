@@ -76,11 +76,14 @@
   const goBack = () => {
   const source = route.query.source; 
 
+
   if (source === 'penilai') {
     router.push({
       name: 'InfoPortofolioPenilai',
-      params: {  id: karya.value.portofolio_id }
+      params: {  individuId: karya.value.individu_id, id: karya.value.portofolio_id }
     });
+    console.log(karya.value.individu_id, karya.value.portofolio_id);
+
   } else if (source === 'seniman') {
     router.push({
       name: 'InfoPortofolioSeniman',
