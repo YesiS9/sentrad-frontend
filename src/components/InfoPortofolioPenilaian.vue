@@ -93,10 +93,11 @@ const getKaryaList = async (portofolioId) => {
 };
 
 const goToKarya = (id) => {
+  const source = props.individuId ? 'penilaiindividu' : 'penilaikelompok';
   router.push({
     name: 'InfoKarya',
     params: { id },
-    query: { source: 'penilai' }
+    query: { source}
   });
 };
 
@@ -121,6 +122,14 @@ const goBack = () => {
 onMounted(() => {
   if (props.id) {
     getPortofolioDetail(props.id);
+    localStorage.setItem('portofolioId', props.id);
+  }
+  if (props.individuId) {
+    localStorage.setItem('individuId', props.individuId);
+  }
+
+  if (props.kelompokId) {
+    localStorage.setItem('kelompokId', props.kelompokId);
   }
 });
 </script>

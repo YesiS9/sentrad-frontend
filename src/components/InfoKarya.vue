@@ -73,26 +73,40 @@
     return `${day}/${month}/${year}`;
   };
 
-  const goBack = () => {
-  const source = route.query.source; 
+const goBack = () => {
+  const source = route.query.source;
+  const individuId = localStorage.getItem('individuId');
+  const kelompokId = localStorage.getItem('kelompokId');
+  const portofolioId = localStorage.getItem('portofolioId');
 
-
-  if (source === 'penilai') {
+  if (source === 'penilaiindividu') {
     router.push({
       name: 'InfoPortofolioPenilai',
-      params: {  individuId: karya.value.individu_id, id: karya.value.portofolio_id }
+      params: { 
+        individuId: individuId,
+        id: portofolioId
+      }
     });
-    console.log(karya.value.individu_id, karya.value.portofolio_id);
-
+  } else if (source === 'penilaikelompok') {
+    router.push({
+      name: 'InfoPortofolioPenilaiKelompok',
+      params: { 
+        kelompokId: kelompokId,
+        id: portofolioId
+      }
+    });
   } else if (source === 'seniman') {
     router.push({
       name: 'InfoPortofolioSeniman',
-      params: { id: karya.value.portofolio_id }
+      params: { 
+        id: portofolioId
+      }
     });
   } else {
-    router.push('/portofolio');
+    router.push('/');
   }
 };
+
 
 
   onMounted(() => {
