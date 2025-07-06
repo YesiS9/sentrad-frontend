@@ -24,7 +24,7 @@
                         @change="handleRubrikChange"
                         :disabled="selectedRubriks.length >= 5 && !selectedRubriks.includes(rubrik.id)"
                       />
-                      <span>{{ rubrik.nama_rubrik }}</span>
+                      <span>{{ rubrik.nama_rubrik }} (Bobot Maks: {{ rubrik.bobot }})</span>
                     </label>
                     <input
                       v-if="selectedRubriks.includes(rubrik.id)"
@@ -33,6 +33,7 @@
                       placeholder="Skor"
                       min="0"
                       required
+                      @input="validateSkor(rubrik.id, rubrik.bobot)"
                     />
                   </div>
                 </div>
@@ -151,16 +152,34 @@
     }
   };
 
+  const validateSkor = (rubrikId, bobot) => {
+    if (rubrikSkors[rubrikId] > bobot) {
+      toast.error(`Nilai tidak boleh lebih dari bobot maksimal (${bobot})`);
+      rubrikSkors[rubrikId] = bobot;
+    } else if (rubrikSkors[rubrikId] < 0) {
+      rubrikSkors[rubrikId] = 0;
+    }
+  };
+
   const handleRubrikChange = () => {
     formData.rubrik_penilaians = selectedRubriks.value.map((rubrikId) => {
       const rubrik = rubrikOptions.value.find(r => r.id === rubrikId);
+      let skor = rubrikSkors[rubrikId] || 0;
+      
+      if (skor > rubrik.bobot) {
+        skor = rubrik.bobot;
+        rubrikSkors[rubrikId] = rubrik.bobot;
+        toast.error(`Nilai ${rubrik.nama_rubrik} tidak boleh lebih dari ${rubrik.bobot}`);
+      }
+
       return {
         id: rubrikId,
         nama_rubrik: rubrik ? rubrik.nama_rubrik : '',
-        skor: rubrikSkors[rubrikId] || 0,
+        skor: skor,
       };
     });
   };
+
 
   const handleSubmit = async () => {
     if (selectedRubriks.value.length < 5) {
@@ -169,7 +188,7 @@
     }
 
     handleRubrikChange();
-    
+
     formData.kuota_id = localStorage.getItem('kuota_id');
     if (!formData.kuota_id) {
       Swal.fire('Error', 'Kuota ID tidak ditemukan, tidak dapat mengirim penilaian.', 'error');
