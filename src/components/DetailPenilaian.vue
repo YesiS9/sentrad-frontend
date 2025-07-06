@@ -23,19 +23,22 @@
                 <thead>
                 <tr>
                     <th>Nama Rubrik</th>
+                    <th>Bobot Maks</th>
                     <th>Skor</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(rubrik, index) in tempRubrikPenilaians" :key="index">
                     <td>{{ rubrik.nama_rubrik }}</td>
+                    <td>{{ rubrik.bobot }}</td>
                     <td>
                     <input
                         type="number"
                         v-model.number="rubrik.skor"
                         class="skor-input"
-                        min="0"
-                        max="100"
+                        :min="0"
+                        :max="rubrik.bobot"
+                        @input="validateSkor(rubrik)"
                     />
                     </td>
                 </tr>
@@ -85,6 +88,16 @@ const getPenilaianDetail = async (id) => {
     console.error('Error fetching penilaian detail:', error.message);
   }
 };
+
+const validateSkor = (rubrik) => {
+  if (rubrik.skor > rubrik.bobot) {
+    rubrik.skor = rubrik.bobot;
+  }
+  if (rubrik.skor < 0) {
+    rubrik.skor = 0;
+  }
+};
+
 
 const confirmSave = () => {
   Swal.fire({
