@@ -100,13 +100,14 @@
         console.error('Failed to fetch aturan penilaian');
       }
 
-      const penilaiId = localStorage.getItem('penilai_id');
-      const kuotaResponse = await axios.post('/get-kuota-id', { penilai_id: penilaiId });
-      if (kuotaResponse.status === 200 && kuotaResponse.data.kuota_id) {
-        formData.kuota_id = kuotaResponse.data.kuota_id;
-      } else {
-        console.error('Failed to fetch kuota ID');
+      const kuotaId = localStorage.getItem('kuota_id');
+      if (!kuotaId) {
+        console.error('Kuota ID tidak ditemukan di localStorage');
+        Swal.fire('Error', 'Kuota ID tidak ditemukan, silakan cek kuota penilai.', 'error');
+        router.push({ name: 'PenilaianKarya' });
+        return;
       }
+      formData.kuota_id = kuotaId;
 
       const { individuId, kelompokId, id } = route.params;
 
@@ -168,6 +169,12 @@
     }
 
     handleRubrikChange();
+    
+    formData.kuota_id = localStorage.getItem('kuota_id');
+    if (!formData.kuota_id) {
+      Swal.fire('Error', 'Kuota ID tidak ditemukan, tidak dapat mengirim penilaian.', 'error');
+      return;
+    }
 
     const action = mode.value === 'add' ? 'menambahkan' : 'mengedit';
 

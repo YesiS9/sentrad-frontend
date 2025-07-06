@@ -76,6 +76,7 @@ export default {
               this.$router.push('/dashboardSeniman');
               break;
             case 'penilai':
+              await this.cekAtauBuatKuota(penilai_id);
               this.$router.push('/dashboardPenilai');
               break;
             case 'admin':
@@ -94,6 +95,15 @@ export default {
         console.error('Error logging in:', error.message);
         const errorMessage = error.response?.data?.message || 'Terjadi kesalahan saat login';
         toast.error(errorMessage);
+      }
+    },
+    async cekAtauBuatKuota(penilaiId) {
+      try {
+        const response = await api.get(`/penilai/kuota/${penilaiId}`);
+        console.log('Kuota penilai:', response.data.data);
+      } catch (error) {
+        console.error('Gagal cek/buat kuota penilai:', error);
+        toast.error('Gagal mengatur kuota penilai');
       }
     },
     goToRegister() {

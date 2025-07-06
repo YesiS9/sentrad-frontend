@@ -69,7 +69,7 @@
                                     <router-link :to="{ name: 'PortofolioIndividu', params: { individuId: individu.id }, query: { source: 'penilai-individu' } }" class="button">Lihat Karya</router-link>
                                 </td>
                                 <td>
-                                    <router-link :to="{ name: 'FormPenilaianIndividu', params: { individuId: individu.id } }" class="button">Berikan Penilaian</router-link>
+                                    <button @click="handlePenilaianIndividu(individu.id)" class="button">Berikan Penilaian</button>
                                 </td>
                             </tr>
                             <tr v-if="registrasiIndividu && registrasiIndividu.length === 0">
@@ -107,7 +107,7 @@
                                     <router-link :to="{ name: 'PortofolioKelompok', params: { kelompokId: kelompok.id }, query: { source: 'penilai-kelompok' } }" class="button">Lihat Karya</router-link>
                                 </td>
                                 <td>
-                                    <router-link :to="{ name: 'FormPenilaianKelompok', params: { kelompokId: kelompok.id } }" class="button">Berikan Penilaian</router-link>
+                                    <button @click="handlePenilaianKelompok(kelompok.id)" class="button">Berikan Penilaian</button>
                                 </td>
                             </tr>
                             <tr v-if="registrasiKelompok && registrasiKelompok.length === 0">
@@ -231,6 +231,38 @@ const deletePenilaian = async (penilaianId) => {
         console.error('Error deleting penilaian:', error);
         Swal.fire('Error!', 'Failed to delete penilaian.', 'error');
     }
+};
+
+const cekKuotaPenilai = async (callback) => {
+    try {
+        const penilaiId = localStorage.getItem('penilai_id');
+        if (!penilaiId) return;
+
+        const response = await axios.get(`/penilai/kuota/${penilaiId}`);
+        
+        const kuota = response.data.data;
+        if (kuota.kuota_terpakai >= kuota.kuota) {
+            Swal.fire('Kuota Habis', 'Kuota penilaian anda sudah habis.', 'warning');
+        } else {
+            localStorage.setItem('kuota_id', kuota.id);
+            callback();
+        }
+    } catch (error) {
+        console.error('Error cek kuota:', error);
+        Swal.fire('Error', 'Gagal cek kuota penilai.', 'error');
+    }
+};
+
+const handlePenilaianIndividu = (individuId) => {
+    cekKuotaPenilai(() => {
+        router.push({ name: 'FormPenilaianIndividu', params: { individuId } });
+    });
+};
+
+const handlePenilaianKelompok = (kelompokId) => {
+    cekKuotaPenilai(() => {
+        router.push({ name: 'FormPenilaianKelompok', params: { kelompokId } });
+    });
 };
 
 const nextPage = () => {
