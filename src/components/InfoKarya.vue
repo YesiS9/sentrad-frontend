@@ -89,7 +89,7 @@ const goBack = () => {
     });
   } else if (source === 'penilaikelompok') {
     router.push({
-      name: 'InfoPortofolioPenilaiKelompok',
+      name: 'InfoPortoKelompok',
       params: { 
         kelompokId: kelompokId,
         id: portofolioId
