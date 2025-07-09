@@ -62,7 +62,15 @@
                             <tr v-for="(portofolio, index) in portofolios" :key="portofolio.id">
                                 <td>{{ index + 1 }}</td>
                                 <td>
-                                    <router-link :to="{ name: 'InfoPortoKelompok', params: { id: portofolio.id }, query: { kelompokId: props.kelompokId } }" class="portfolio-link">
+                                    <router-link
+                                            :to="{
+                                            name: 'InfoPortoKelompok',
+                                            params: { id: portofolio.id, kelompokId: props.kelompokId },
+                                            query: { source: route.query.source }
+                                        }"
+                                        class="portfolio-link"
+                                    >
+
                                         {{ portofolio.judul_portofolio }}
                                     </router-link>
                                 </td>

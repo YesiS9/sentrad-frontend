@@ -110,10 +110,20 @@ const formatDate = (date) => {
 };
 
 const goBack = () => {
+  const source = route.query.source;
+
   if (props.individuId) {
-    router.push({ name: 'PortofolioIndividu', params: { individuId: props.individuId } });
+    router.push({
+      name: 'PortofolioIndividu',
+      params: { individuId: props.individuId },
+      query: { source },
+    });
   } else if (props.kelompokId) {
-    router.push({ name: 'PortofolioKelompok', params: { kelompokId: props.kelompokId } });
+    router.push({
+      name: 'PortofolioKelompok',
+      params: { kelompokId: props.kelompokId },
+      query: { source },
+    });
   } else {
     console.error('Unable to determine the correct route.');
   }
