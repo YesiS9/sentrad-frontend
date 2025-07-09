@@ -43,7 +43,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from '../services/api.js';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const props = defineProps({
   id: String,
@@ -52,6 +52,7 @@ const props = defineProps({
 });
 
 const router = useRouter();
+const route = useRoute();
 
 const portofolio = ref(null);
 const karyaList = ref([]);
