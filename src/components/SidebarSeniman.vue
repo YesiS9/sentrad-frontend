@@ -46,8 +46,6 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import logoURL from '../assets/Sentradlogo.png'
 
 export default {
@@ -64,16 +62,16 @@ export default {
       localStorage.setItem("is_expanded", this.is_expanded);
     },
     logout() {
-      // Clear user authentication data from local storage
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user_data');
 
-      // Redirect to the login page
+
       this.$router.push('/login');
     }
   }
 }
 </script>
+
 <style lang="scss" scoped>
 aside {
   display: flex;
@@ -120,6 +118,7 @@ aside {
       .material-icons {
         font-size: 2rem;
         color: white;
+        text-shadow: 1px 1px 3px black;
         transition: 0.2s ease-out;
       }
 
@@ -135,6 +134,7 @@ aside {
   h3, .button .text {
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
+    text-shadow: 1px 1px 2px black;
   }
 
   
@@ -143,7 +143,6 @@ aside {
     font-size: 1rem;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
   }
 
   .menu {
@@ -156,15 +155,16 @@ aside {
 
       transition: 0.2s ease-in-out;
       padding: 0.3rem 0.5rem 0.2 rem;
-      margin-bottom: 0.5rem; /* Ubah atau tambahkan margin sesuai keinginan */
+      margin-bottom: 0.5rem;
 
       .material-icons {
         font-size: 1.5 rem;
-        color: var(--light);
+        color: white;
         transition: 0.2s ease-in-out;
       }
       .text {
-        color: var(--light);
+        color: white;
+        text-shadow: 1px 1px 2px black;
         transition: 0.2s ease-in-out;
       }
 

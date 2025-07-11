@@ -33,17 +33,11 @@
 		  <span class="material-icons">logout</span>
 		  <span class="text">Logout</span>
 		</button>
-		<!-- <router-link to="/account" class="button">
-		  <span class="material-icons">account_circle</span>
-		  <span class="text">Account</span>
-		</router-link> -->
 	  </div>
 	</aside>
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import logoURL from '../assets/Sentradlogo.png'
 
 export default {
@@ -60,16 +54,16 @@ export default {
       localStorage.setItem("is_expanded", this.is_expanded);
     },
     logout() {
-      // Clear user authentication data from local storage
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user_data');
 
-      // Redirect to the login page
       this.$router.push('/login');
     }
   }
 }
 </script>
+
+
 <style lang="scss" scoped>
 aside {
   display: flex;
@@ -90,10 +84,15 @@ aside {
   }
 
   .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 1rem;
 
     img {
-      width: 2rem;
+      width: 4rem; 
+      max-width: 100%;     
+      transition: 0.2s ease-in-out;
     }
   }
 
@@ -111,6 +110,7 @@ aside {
       .material-icons {
         font-size: 2rem;
         color: white;
+        text-shadow: 1px 1px 3px black;
         transition: 0.2s ease-out;
       }
 
@@ -126,11 +126,13 @@ aside {
   h3, .button .text {
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
+    text-shadow: 1px 1px 2px black;
   }
 
+  
   h3 {
-    color: var(--grey);
-    font-size: 0.875rem;
+    color: white;
+    font-size: 1rem;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
   }
@@ -145,15 +147,16 @@ aside {
 
       transition: 0.2s ease-in-out;
       padding: 0.3rem 0.5rem 0.2 rem;
-      margin-bottom: 0.5rem; /* Ubah atau tambahkan margin sesuai keinginan */
+      margin-bottom: 0.5rem;
 
       .material-icons {
         font-size: 1.5 rem;
-        color: var(--light);
+        color: white;
         transition: 0.2s ease-in-out;
       }
       .text {
-        color: var(--light);
+        color: white;
+        text-shadow: 1px 1px 2px black;
         transition: 0.2s ease-in-out;
       }
 
