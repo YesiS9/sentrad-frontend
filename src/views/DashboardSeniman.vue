@@ -169,7 +169,7 @@ export default {
                             const { name, description, id } = location;
                             const deleteBtn = document.createElement("button");
                             deleteBtn.innerText = "Hapus Lokasi";
-                            deleteBtn.className = "delete-btn";
+                            deleteBtn.className = "leaflet-delete-btn";
                             deleteBtn.addEventListener("click", () => this.deleteLocation(id));
 
                             const popupContent = document.createElement("div");
@@ -339,6 +339,25 @@ export default {
     margin-top: 1rem;
     margin-bottom: 2rem;
 }
+
+.leaflet-popup-content .leaflet-delete-btn {
+  background-color: #e53935;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  margin-top: 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.leaflet-popup-content .leaflet-delete-btn:hover {
+  background-color: #c62828;
+}
+
 
 .add-location-btn {
     margin-top: 2rem;
