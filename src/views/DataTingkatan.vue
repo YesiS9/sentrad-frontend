@@ -98,7 +98,7 @@
         try {
             const response = await axios.delete(`/tingkatan/${id}`);
             if (response.status === 200 && response.data.status === 'success') {
-                Swal.fire('Tingkatan berhasil dihapus', '', 'success');
+                Swal.fire('Tingkatan berhasil dihapus', '', 'Berhasil');
                 getTingkatan();
             } else {
                 Swal.fire('Gagal menghapus tingkatan', response.data.message, 'error');

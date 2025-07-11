@@ -98,7 +98,7 @@ const deleteInfo = async (id) => {
   try {
     const response = await axios.delete(`/info/${id}`);
     if (response.status === 200 && response.data.status === 'success') {
-      Swal.fire('Info berhasil dihapus', '', 'success');
+      Swal.fire('Info berhasil dihapus', '', 'Berhasil');
       getInfo();
     } else {
       Swal.fire('Gagal menghapus info', response.data.message, 'error');

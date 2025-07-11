@@ -103,7 +103,7 @@
         try {
             const response = await axios.delete(`/penilai/${id}`);
             if (response.status === 200 && response.data.status === 'success') {
-                Swal.fire('Penilai berhasil dihapus', '', 'success');
+                Swal.fire('Penilai berhasil dihapus', '', 'Berhasil');
                 getPenilais();
             } else {
                 Swal.fire('Gagal menghapus penilai', response.data.message, 'error');

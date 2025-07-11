@@ -101,7 +101,7 @@ const deleteSeniman = async (id) => {
     try {
         const response = await axios.delete(`/seniman/${id}`);
         if (response.status === 200 && response.data.status === 'success') {
-            Swal.fire('Seniman berhasil dihapus', '', 'success');
+            Swal.fire('Seniman berhasil dihapus', '', 'Berhasil');
             getSenimans();
         } else {
             Swal.fire('Gagal menghapus seniman', response.data.message, 'error');

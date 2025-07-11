@@ -169,7 +169,7 @@ export default {
                         await axios.delete(`/forum/${forumId}`, {
                             headers: { Authorization: `Bearer ${token}` },
                         });
-                        Swal.fire("Deleted!", "Forum berhasil dihapus.", "success");
+                        Swal.fire("Hapus!", "Forum berhasil dihapus.", "Berhasil");
                         fetchMyForums();
                     } catch (error) {
                         console.error("Failed to delete forum:", error);

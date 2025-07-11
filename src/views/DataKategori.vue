@@ -95,7 +95,7 @@
     try {
       const response = await axios.delete(`/kategoriSeni/${id}`);
       if (response.status === 200 && response.data.status === 'success') {
-        Swal.fire('Kategori seni berhasil dihapus', '', 'success');
+        Swal.fire('Kategori seni berhasil dihapus', '', 'Berhasil');
         getkategori();
       } else {
         Swal.fire('Gagal menghapus kategori seni', response.data.message, 'error');

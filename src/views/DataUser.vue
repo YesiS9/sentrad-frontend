@@ -103,8 +103,8 @@
         try {
             const response = await axios.delete(`/user/${id}`);
             if (response.status === 200 && response.data.status === 'success') {
-                Swal.fire('User berhasil dihapus', '', 'success');
-                fetchUsers(); // Refresh users list after deletion
+                Swal.fire('User berhasil dihapus', '', 'Berhasil');
+                fetchUsers();
             } else {
                 Swal.fire('Gagal menghapus user', response.data.message, 'error');
                 console.error('Gagal menghapus user:', response.data.message);

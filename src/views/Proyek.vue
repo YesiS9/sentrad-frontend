@@ -173,7 +173,7 @@
               await axios.delete(`/proyek/${proyekId}`, {
                 headers: { Authorization: `Bearer ${token}` },
               });
-              Swal.fire("Deleted!", "The project has been deleted.", "success");
+              Swal.fire("Hapus!", "Proyek berhasil dihapus.", "Berhasil");
               fetchMyProyeks();
             } catch (error) {
               console.error("Failed to delete project:", error);

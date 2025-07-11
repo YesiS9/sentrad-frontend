@@ -176,7 +176,7 @@
         try {
             const response = await axios.delete(`/registerIndividu/${id}`);
             if (response.status === 200 && response.data.status === 'success') {
-                Swal.fire('Regitrasi individu berhasil dihapus', '', 'success');
+                Swal.fire('Regitrasi individu berhasil dihapus', '', 'Berhasil');
                 loadKelompoks();
             } else {
                 Swal.fire('Gagal menghapus regitrasi individu', response.data.message, 'error');
@@ -205,7 +205,7 @@
         try {
             const response = await axios.delete(`/registerKelompok/${id}`);
             if (response.status === 200 && response.data.status === 'success') {
-                Swal.fire('Regitrasi kelompok berhasil dihapus', '', 'success');
+                Swal.fire('Regitrasi kelompok berhasil dihapus', '', 'Berhasil');
                 loadKelompoks();
             } else {
                 Swal.fire('Gagal menghapus regitrasi kelompok', response.data.message, 'error');

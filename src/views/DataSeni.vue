@@ -96,7 +96,7 @@
     try {
       const response = await axios.delete(`/seni/${id}`);
       if (response.status === 200 && response.data.status === 'success') {
-        Swal.fire('Seni berhasil dihapus', '', 'success');
+        Swal.fire('Seni berhasil dihapus', '', 'Berhasil');
         getSeni();
       } else {
         Swal.fire('Gagal menghapus seni', response.data.message, 'error');

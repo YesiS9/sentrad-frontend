@@ -212,18 +212,18 @@ const fetchRegistrasiKelompok = async () => {
 const deletePenilaian = async (penilaianId) => {
     try {
         const result = await Swal.fire({
-            title: 'Are you sure?',
+            title: 'Apa anda yakin?',
             text: 'This action will permanently delete the penilaian.',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, keep it'
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak'
         });
 
         if (result.isConfirmed) {
             const response = await axios.delete(`/penilaianKarya/${penilaianId}`);
             if (response.status === 200) {
-                Swal.fire('Deleted!', 'The penilaian has been deleted.', 'success');
+                Swal.fire("Hapus!", "Penilaian berhasil dihapus.", "Berhasil");
                 fetchPenilaians();
             }
         }
