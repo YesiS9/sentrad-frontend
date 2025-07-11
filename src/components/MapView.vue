@@ -214,7 +214,7 @@
 }
 
 .save-location-btn {
-  background-color: #43fc49;
+  background-color: #45a049;
   color: #fff;
   padding: 0.5rem 1rem;
   border: none;
@@ -225,7 +225,7 @@
 }
 
 .save-location-btn:hover {
-  background-color: #43a047;
+  background-color: #45a049;
 }
 
 .save-location-btn:disabled {
