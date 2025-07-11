@@ -95,6 +95,7 @@ aside {
 
   .logo {
     margin-bottom: 1rem;
+    align-content: center;
 
     img {
       width: 3rem;
