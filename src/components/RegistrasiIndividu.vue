@@ -267,8 +267,8 @@
     background-color: #fff;
     width: 100vw;
     height: 100vw;
-    max-width: 600px;
-    max-height: 700px;
+    max-width: 700px;
+    max-height: 800px;
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
