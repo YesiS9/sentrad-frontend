@@ -1,37 +1,35 @@
 <template>
-  <div class="page">
-    <Sidebar class="sidebar" />
-    <div class="content-wrapper">
-      <main class="main-content">
+    <div class="page">
+        <Sidebar />
+        <main class="main-content">
         <div class="add-location-card">
-          <li>
+            <li>
             <button @click="goBack" class="btn-back">Kembali</button>
-          </li>
-          <h3>Tambah Lokasi</h3>
-          <input
+            </li>
+            <h3>Tambah Lokasi</h3>
+            <input
             type="text"
             v-model="locationData.name"
             placeholder="Masukkan nama lokasi"
             class="location-input"
-          />
-          <textarea
+            />
+            <textarea
             v-model="locationData.description"
             placeholder="Masukkan deskripsi lokasi"
             class="location-input"
-          ></textarea>
-          <button class="geo-btn" @click="useGeolocation">Gunakan Lokasi Saat Ini</button>
-          <button @click="confirmLocation" class="save-location-btn" :disabled="!locationConfirmed">
+            ></textarea>
+            <button class="geo-btn" @click="useGeolocation">Gunakan Lokasi Saat Ini</button>
+            <button @click="confirmLocation" class="save-location-btn" :disabled="!locationConfirmed">
             Simpan Lokasi
-          </button>
+            </button>
         </div>
 
         <div class="location-card">
-          <h3>Pilih Lokasi</h3>
-          <div id="map" ref="map" class="map-view"></div>
+            <h3>Pilih Lokasi</h3>
+            <div id="map" ref="map" class="map-view"></div>
         </div>
-      </main>
+        </main>
     </div>
-  </div>
 </template>
 
 <script>
@@ -152,70 +150,49 @@
   };
   </script>
 
-<style lang="scss" scoped>
+<style lang="scss"  scoped>
 .page {
   display: flex;
-  min-height: 100vh;
+  flex: 1;
   background-color: #f2d395;
   color: #333;
-  overflow-x: hidden; // hindari scroll horizontal
 }
-
-.sidebar {
-  width: 200px; // perkecil dari 250px
-  min-width: 200px;
-  background-color: #ffa500;
-  flex-shrink: 0; // jaga ukuran sidebar tetap
-}
-
-.content-wrapper {
-  flex: 1;
-  padding: 1rem;
-  box-sizing: border-box;
-  max-width: 100vw; // batasi agar tidak overflow
-  overflow-x: hidden;
-}
-
-.main-content {
-  width: 100%;
-}
-
-.add-location-card,
-.location-card {
-  margin-bottom: 1.5rem;
-}
-
-.map-view {
-  width: 100%;
-  height: 400px;
-  border-radius: 8px;
-}
-
-.location-input {
-  width: 100%;
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.btn-back {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-}
-
-.geo-btn {
-  background-color: #ff9800;
+  .location-container {
+    display: flex;
+  }
+  .btn-back {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+  .main-content {
+    width: 80%;
+    padding: 1rem;
+  }
+  .add-location-card,
+  .location-card {
+    margin-bottom: 1.5rem;
+  }
+  .map-view {
+    width: 100%;
+    height: 400px;
+    border-radius: 8px;
+  }
+  .location-input {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+  }
+  .geo-btn {
+  background-color: #ff9800; 
   color: #fff;
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
   margin-bottom: 1rem;
 }
 
@@ -231,6 +208,7 @@
   border-radius: 6px;
   cursor: pointer;
   margin-left: 1rem;
+  transition: background-color 0.3s ease;
 }
 
 .save-location-btn:hover {
@@ -241,25 +219,5 @@
   background-color: #a5d6a7;
   cursor: not-allowed;
 }
-
-
-@media (max-width: 768px) {
-  .page {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    min-width: 100%;
-  }
-
-  .content-wrapper {
-    padding: 0.5rem;
-  }
-
-  .map-view {
-    height: 300px;
-  }
-}
-
-</style>
+  
+  </style>
