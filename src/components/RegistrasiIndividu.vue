@@ -265,8 +265,8 @@
 
   .auth-form {
     background-color: #fff;
-    width: 90vw;
-    height: 90vw;
+    width: 100vw;
+    height: 100vw;
     max-width: 600px;
     max-height: 700px;
     padding: 2rem;

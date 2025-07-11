@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-      <Sidebar />
       <main class="penilaian-detail" v-bind="$attrs">
         <div class="card penilaian-detail-card" v-if="penilaianKarya">
           <div class="card-header">
@@ -42,7 +41,6 @@
 import { ref, onMounted } from 'vue';
 import axios from '../services/api.js';
 import { useRoute, useRouter } from 'vue-router';
-import Sidebar from '../components/SidebarPenilai.vue';
 
 const route = useRoute();
 const router = useRouter();

@@ -127,7 +127,7 @@ const router = createRouter({
         { path: '/detail-penilaian/:id', name: 'DetailPenilaian', component: DetailPenilaian, props: true },
         { path: '/add-map', name: 'AddMap', component: MapView},
         { path: '/penilaianKarya/:id', name: 'PenilaianDetail', component: DetailPenilaian, props: true },
-        { path: '/hasil-penilaianKarya/:id', name: 'HasilPenilaian', component: DetailHasil, props: true },
+        { path: '/hasil-penilaianKarya/:id', name: 'DetailHasil', component: DetailHasil, props: true },
         { path: '/:pathMatch(.*)*', redirect: '/' }
     ]
 })

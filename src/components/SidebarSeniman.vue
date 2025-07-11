@@ -94,11 +94,15 @@ aside {
   }
 
   .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 1rem;
-    
 
     img {
-      width: 2rem;
+      width: 4rem; 
+      max-width: 100%;     
+      transition: 0.2s ease-in-out;
     }
   }
 
@@ -133,11 +137,13 @@ aside {
     transition: opacity 0.3s ease-in-out;
   }
 
+  
   h3 {
-    color: var(--grey);
-    font-size: 0.875rem;
+    color: white;
+    font-size: 1rem;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
   }
 
   .menu {

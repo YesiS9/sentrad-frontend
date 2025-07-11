@@ -47,7 +47,7 @@
                                 <td>{{ individu.status_individu }}</td>
                                 <td>
                                     <span v-if="individu.status_individu === 'Penilaian Selesai'">
-                                        <router-link :to="{ name: 'HasilPenilaian', params: { id: individu.id } }">
+                                        <router-link :to="{ name: 'DetailHasil', params: { id: individu.id }, query: { source: 'hasil-individu' } }">
                                             Lihat Penilaian
                                         </router-link>
                                     </span>
@@ -115,7 +115,7 @@
                                 <td>{{ kelompok.status_kelompok }}</td>
                                 <td>
                                     <span v-if="kelompok.status_kelompok === 'Penilaian Selesai'">
-                                        <router-link :to="{ name: 'HasilPenilaian', params: { id: kelompok.id } }">
+                                        <router-link :to="{ name: 'DetailHasil', params: { id: kelompok.id } }">
                                             Lihat Penilaian
                                         </router-link>
                                     </span>

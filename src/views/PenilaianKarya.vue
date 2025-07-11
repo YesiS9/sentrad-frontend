@@ -213,7 +213,7 @@ const deletePenilaian = async (penilaianId) => {
     try {
         const result = await Swal.fire({
             title: 'Apa anda yakin?',
-            text: 'This action will permanently delete the penilaian.',
+            text: 'Tindakan ini akan secara permanen menghapus penilaian.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Ya',
