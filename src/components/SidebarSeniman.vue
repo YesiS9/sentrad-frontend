@@ -98,8 +98,7 @@ aside {
     
 
     img {
-      width: 3rem;
-      align-content: center;
+      width: 2rem;
     }
   }
 
