@@ -152,11 +152,12 @@
 
 <style lang="scss"  scoped>
 .page {
-  display: flex;
-  flex: 1;
-  background-color: #f2d395;
-  color: #333;
+    display: flex;
+    min-height: 100vh;
+    min-width: 100%;
+    background-color: #f5d99d;
 }
+
   .location-container {
     display: flex;
   }
@@ -168,17 +169,29 @@
     cursor: pointer;
   }
   .main-content {
-    width: 80%;
-    padding: 1rem;
+    flex-grow: 1;
+    background-color: #f5d99d;
   }
-  .add-location-card,
-  .location-card {
+  .add-location-card{
     margin-bottom: 1.5rem;
   }
+
+  .location-card {
+    width: 100%;
+    height: auto;
+    padding: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
   .map-view {
     width: 100%;
     height: 400px;
-    border-radius: 8px;
+    border-radius: 12px;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
   }
   .location-input {
     width: 100%;
