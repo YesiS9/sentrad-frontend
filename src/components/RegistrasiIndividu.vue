@@ -259,23 +259,22 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;    
+    overflow-y: auto; 
     background-color: #f7941e;
   }
 
   .auth-form {
     background-color: #fff;
-    width: 100vw;
-    height: 100vw;
+    width: 100%;
     max-width: 700px;
-    max-height: 800px;
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 
     h3 {
