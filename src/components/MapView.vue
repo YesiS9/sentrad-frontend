@@ -158,18 +158,22 @@
   min-height: 100vh;
   background-color: #f2d395;
   color: #333;
+  overflow-x: hidden; // hindari scroll horizontal
 }
 
 .sidebar {
-  width: 250px;
-  min-width: 250px;
+  width: 200px; // perkecil dari 250px
+  min-width: 200px;
   background-color: #ffa500;
+  flex-shrink: 0; // jaga ukuran sidebar tetap
 }
 
 .content-wrapper {
   flex: 1;
   padding: 1rem;
   box-sizing: border-box;
+  max-width: 100vw; // batasi agar tidak overflow
+  overflow-x: hidden;
 }
 
 .main-content {
@@ -257,4 +261,5 @@
     height: 300px;
   }
 }
+
 </style>
