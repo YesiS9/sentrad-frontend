@@ -101,6 +101,8 @@ aside {
       width: 4rem; 
       max-width: 100%;     
       transition: 0.2s ease-in-out;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); // bayangan lembut
+      border-radius: 8px;
     }
   }
 
@@ -154,12 +156,13 @@ aside {
       text-decoration: none;
 
       transition: 0.2s ease-in-out;
-      padding: 0.3rem 0.5rem 0.2 rem;
+      padding: 0.3rem 0.5rem 0.2rem;
       margin-bottom: 0.5rem;
 
       .material-icons {
         font-size: 1.5 rem;
         color: white;
+        text-shadow: 1px 1px 2px black;
         transition: 0.2s ease-in-out;
       }
       .text {
