@@ -27,7 +27,7 @@
                                 <td>{{ rubrik.bobot }}</td>
                                 <td>
                                     <router-link :to="{ name: 'FormRubrikEdit', params: { id: rubrik.id } }" class="edit-btn material-icons">
-                                        settings
+                                        edit
                                     </router-link>
                                     <button @click="deleteRubrik(rubrik.id)" class="delete-btn">
                                         <span class="material-icons">delete</span>

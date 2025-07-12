@@ -57,7 +57,7 @@
                                 </td>
                                 <td>
                                     <button @click="handleEditIndividu(individu)" class="edit-btn material-icons">
-                                        settings
+                                        edit
                                     </button>
                                     <button @click="handleDeleteIndividu(individu)" class="delete-btn">
                                         <span class="material-icons">delete</span>
@@ -126,7 +126,7 @@
 
                                 <td>
                                     <button @click="handleEditKelompok(kelompok)" class="edit-btn material-icons">
-                                        settings
+                                        edit
                                     </button>
                                     <button @click="handleDeleteKelompok(kelompok)" class="delete-btn">
                                         <span class="material-icons">delete</span>
