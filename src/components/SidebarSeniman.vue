@@ -64,6 +64,7 @@ export default {
     logout() {
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user_data');
+      localStorage.clear();
 
 
       this.$router.push('/login');

@@ -77,7 +77,7 @@ const goBack = () => {
   const source = route.query.source;
   const individuId = localStorage.getItem('individuId');
   const kelompokId = localStorage.getItem('kelompokId');
-  const portofolioId = localStorage.getItem('portofolioId');
+  const portofolioId = localStorage.getItem('current_portofolio_id');
 
   if (source === 'penilaiindividu') {
     router.push({

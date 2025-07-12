@@ -129,9 +129,18 @@ const goBack = () => {
 
 onMounted(() => {
   if (id) {
+    localStorage.setItem('current_portofolio_id', id);
     getPortofolioDetail(id);
+  } else {
+    const savedId = localStorage.getItem('current_portofolio_id');
+    if (savedId) {
+      getPortofolioDetail(savedId);
+    } else {
+      console.warn("ID portofolio tidak ditemukan di route maupun localStorage.");
+    }
   }
 });
+
 </script>
 
 

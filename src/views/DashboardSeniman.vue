@@ -7,7 +7,7 @@
                 <div class="profile-container">
                     <div class="profile-card">
                         <div class="avatar-section" v-if="seniman">
-                            <img :src="seniman.avatar" alt="Avatar" class="avatar" />
+                            <img :src="getAvatarUrl()" :alt="seniman.user.username" class="avatar" @error="handleImageError" />
                         </div>
                         <div class="profile-details" v-if="seniman">
                             <div class="info">
@@ -69,6 +69,8 @@ export default {
             editedSeniman: {},
             map: null,
             mapData: null,
+            avatarError: false,
+            defaultAvatar: '/default-avatar.jpg'
         };
     },
     mounted() {
@@ -83,19 +85,47 @@ export default {
                 const response = await axios.get(`/seniman/${senimanId}`);
                 this.seniman = response.data.data;
                 this.editedSeniman = { ...this.seniman };
-                this.seniman.avatar = this.seniman.user?.foto
-                    ? `https://sentrad-backend-production.up.railway.app/storage/${this.seniman.user.foto}`
-                    : 'default-avatar.jpg';
+                this.avatarError = false;
+                
+                console.log("Seniman data:", this.seniman);
+                console.log("User foto path:", this.seniman.user?.foto);
 
                 const mapResponse = await axios.get(`/map?seniman_id=${senimanId}`);
                 this.mapData = mapResponse.data.data;
-                console.log("response", response);
+                console.log("Map response", mapResponse);
 
                 this.initializeMap();
             } catch (error) {
                 console.error('Error fetching artist data:', error);
+                Swal.fire("Error", "Gagal memuat data seniman.", "error");
             }
         },
+
+        getAvatarUrl() {
+            if (this.avatarError || !this.seniman?.user?.foto) {
+                return this.defaultAvatar;
+            }
+
+            const photoPath = this.seniman.user.foto;
+            
+            if (photoPath.startsWith('http')) {
+                return photoPath;
+            }
+            
+            const cleanPath = photoPath.replace(/^storage\//, '');
+          
+            const fullUrl = `https://sentrad-backend-production.up.railway.app/storage/${cleanPath}`;
+            
+            console.log("Avatar URL:", fullUrl);
+            return fullUrl;
+        },
+
+        handleImageError(event) {
+            console.error("Image failed to load:", event.target.src);
+            this.avatarError = true;
+            event.target.src = this.defaultAvatar;
+        },
+
         formatDate(dateString) {
             if (!dateString) return '';
             const [year, month, day] = dateString.split('-');
@@ -109,7 +139,6 @@ export default {
 
         saveChanges() {
             const formattedTglLahir = this.formatDateToDMY(this.editedSeniman.tgl_lahir);
-
             this.editedSeniman.tgl_lahir = formattedTglLahir;
 
             axios.put(`/seniman/${this.seniman.id}`, this.editedSeniman)
@@ -118,8 +147,7 @@ export default {
                     this.seniman = response.data.data;
                     this.editedSeniman = { ...this.seniman };
                     this.editMode = false;
-                    
-                    window.location.reload();
+                    this.avatarError = false; 
                 })
                 .catch(error => {
                     console.error('Error saving changes:', error);
@@ -190,16 +218,28 @@ export default {
         },
 
         deleteLocation(id) {
-            axios.delete(`/map/${id}`)
-                .then(response => {
-                    Swal.fire("Berhasil", "Lokasi telah dihapus.", "success");
-                    this.fetchArtistData(this.seniman.id);
-                    this.showDetailCard = false;
-                })
-                .catch(error => {
-                    console.error('Error deleting location:', error);
-                    Swal.fire("Error", "Gagal menghapus lokasi.", "error");
-                });
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data lokasi akan dihapus secara permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/map/${id}`)
+                        .then(response => {
+                            Swal.fire("Berhasil", "Lokasi telah dihapus.", "success");
+                            this.fetchArtistData(this.seniman.id);
+                        })
+                        .catch(error => {
+                            console.error('Error deleting location:', error);
+                            Swal.fire("Error", "Gagal menghapus lokasi.", "error");
+                        });
+                }
+            });
         },
     },
 };
