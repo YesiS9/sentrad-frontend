@@ -33,7 +33,7 @@
                         <td>{{ penilai.status_penilai }}</td>
                         <td>
                         <router-link :to="{ name: 'FormPenilaiEdit', params: { id: penilai.id } }" class="edit-btn material-icons">
-                            settings
+                            edit
                         </router-link>
                         <button @click="deletePenilai(penilai.id)" class="delete-btn">
                             <span class="material-icons">delete</span>

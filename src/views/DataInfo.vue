@@ -29,7 +29,7 @@
                     </td>
                     <td>
                     <router-link :to="{ name: 'InfoEdit', params: { id: info.id } }" class="edit-btn material-icons">
-                        settings
+                        edit
                     </router-link>
                     <button @click="deleteInfo(info.id)" class="delete-btn">
                         <span class="material-icons">delete</span>

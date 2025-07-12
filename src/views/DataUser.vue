@@ -33,7 +33,7 @@
                                 </td>
                                 <td>
                                     <router-link :to="{ name: 'FormUserEdit', params: { id: user.id } }" class="edit-btn material-icons">
-                                        settings
+                                        edit
                                     </router-link>
                                     <button @click="deleteUser(user.id)" class="delete-btn">
                                         <span class="material-icons">delete</span>

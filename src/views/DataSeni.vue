@@ -27,7 +27,7 @@
                     <td>{{ seni.status_seni }}</td>
                     <td>
                     <router-link :to="{ name: 'FormSeniEdit', params: { id: seni.id } }" class="edit-btn material-icons">
-                        settings
+                        edit
                     </router-link>
                     <button @click="deleteSeni(seni.id)" class="delete-btn">
                         <span class="material-icons">delete</span>

@@ -37,7 +37,7 @@
                         <td>{{ individu.status_individu }}</td>
                         <td>
                             <router-link :to="{ name: 'FormIndividuEdit', params: { id: individu.id } }" class="edit-btn material-icons">
-                                settings
+                                edit
                             </router-link>
                             <button @click="deleteIndividu(individu.id)" class="delete-btn">
                                 <span class="material-icons">delete</span>
@@ -87,7 +87,7 @@
                         <td>{{ kelompok.status_kelompok }}</td>
                         <td>
                             <router-link :to="{ name: 'FormKelompokEdit', params: { id: kelompok.id } }" class="edit-btn material-icons">
-                                settings
+                                edit
                             </router-link>
                             <button @click="deleteKelompok(kelompok.id)" class="delete-btn">
                                 <span class="material-icons">delete</span>

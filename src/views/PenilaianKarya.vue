@@ -27,7 +27,7 @@
                                 <td>{{ penilaian.total_nilai }}</td>
                                 <td>
                                     <router-link :to="{ name: 'DetailPenilaian', params: { id: penilaian.id } }" class="edit-btn material-icons">
-                                        settings
+                                        edit
                                     </router-link>
                                     <button @click="deletePenilaian(penilaian.id)" class="delete-btn">
                                         <span class="material-icons">delete</span>

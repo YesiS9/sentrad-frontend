@@ -37,7 +37,7 @@
                                 </td>
                                 <td>
                                     <router-link :to="{ name: 'FormPortofolioEdit', params: { id: portofolio.id } }" class="edit-btn material-icons">
-                                        settings
+                                        edit
                                     </router-link>
                                     <button @click="deletePortofolio(portofolio.id, 'individu')" class="delete-btn">
                                         <span class="material-icons">delete</span>
@@ -79,7 +79,7 @@
                                 </td>
                                 <td>
                                     <router-link :to="{ name: 'FormPortofolioEdit', params: { id: portofolio.id } }" class="edit-btn material-icons">
-                                        settings
+                                        edit
                                     </router-link>
                                     <button @click="deletePortofolio(portofolio.id, 'kelompok')" class="delete-btn">
                                         <span class="material-icons">delete</span>

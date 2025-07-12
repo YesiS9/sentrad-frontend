@@ -25,7 +25,7 @@
                     <td>{{ kategori.nama_kategori }}</td>
                     <td>
                     <router-link :to="{ name: 'FormKategoriEdit', params: { id: kategori.id } }" class="edit-btn material-icons">
-                        settings
+                        edit
                     </router-link>
                     <button @click="deleteKategori(kategori.id)" class="delete-btn">
                         <span class="material-icons">delete</span>

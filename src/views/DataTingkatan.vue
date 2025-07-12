@@ -29,7 +29,7 @@
                                 <td>{{ tingkatan.nilai_min }}</td>
                                 <td>
                                     <router-link :to="{ name: 'FormTingkatanEdit', params: { id: tingkatan.id } }" class="edit-btn material-icons">
-                                        settings
+                                        edit
                                     </router-link>
                                     <button @click="deleteTingkatan(tingkatan.id)" class="delete-btn">
                                         <span class="material-icons">delete</span>
