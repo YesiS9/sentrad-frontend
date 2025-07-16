@@ -3,14 +3,14 @@
       <div class="auth-container">
         <div class="auth-form">
           <img :src="logoURL" alt="Sentrad Logo" class="logo" />
-          <h2>Seniman Profile</h2>
+          <h2>Profile Seniman</h2>
           <input v-model="nama_seniman" type="text" placeholder="Nama Seniman" required />
           <input v-model="tgl_lahir" type="date" placeholder="Tanggal Lahir" required />
           <textarea v-model="deskripsi_seniman" placeholder="Deskripsi Seniman" required></textarea>
           <input v-model="alamat_seniman" type="text" placeholder="Alamat Seniman" required />
           <input v-model="noTelp_seniman" type="text" placeholder="No. Telepon" required />
           <input v-model="lama_pengalaman" type="number" placeholder="Lama Pengalaman (tahun)" required />
-          <button @click="createSeniman">Create Seniman</button>
+          <button @click="createSeniman">Input</button>
         </div>
       </div>
     </main>
