@@ -49,7 +49,6 @@
             return;
           }
 
-          // Ensure all required fields are filled
           if (!this.nama_seniman || !this.tgl_lahir || !this.deskripsi_seniman || !this.alamat_seniman || !this.noTelp_seniman || !this.lama_pengalaman) {
             toast.error('Please fill in all required fields.');
             return;
@@ -68,8 +67,11 @@
             status_seniman: this.status_seniman,
           });
 
+
           if (response.status === 200 || response.status === 201) {
             toast.success(response.data.message);
+            const senimanId = response.data.data.id || response.data.data.seniman_id;
+            localStorage.setItem('seniman_id', senimanId);
             this.$router.push('/login');
           } else {
             toast.error('Failed to create Seniman: ' + response.data.message);
