@@ -14,7 +14,8 @@
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" v-model="formData.password" placeholder="Password" required>
+                        <input type="password" id="password" v-model="formData.password" placeholder="Password" :required="mode === 'add'">
+                        <small v-if="errors.password.length" class="error-text">{{ errors.password.join(', ') }}</small>
                     </div>
                     <div class="form-group">
                         <label for="role">Role</label>
@@ -28,7 +29,6 @@
                         <input type="file" id="foto" @change="handleFileChange" accept="image/*">
                         <small v-if="errors.foto.length" class="error-text">{{ errors.foto.join(', ') }}</small>
                     </div>
-
                     <div class="form-actions">
                         <button type="submit">{{ mode === 'add' ? 'Tambah' : 'Simpan' }}</button>
                         <button type="button" @click="closeForm">Batal</button>
@@ -57,6 +57,7 @@ const formData = reactive({
 const roles = ref([]);
 const errors = reactive({
     foto: [],
+    password: [],
 });
 const route = useRoute();
 const router = useRouter();
@@ -134,80 +135,93 @@ const handleFileChange = (event) => {
 
 
 const handleSubmit = async () => {
-  const action = mode.value === 'add' ? 'menambahkan' : 'mengedit';
+    errors.password = [];
+    errors.foto = [];
 
-  const result = await Swal.fire({
-    title: `Apakah Anda yakin ingin ${action} user ini?`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Ya',
-    cancelButtonText: 'Tidak',
-  });
-
-  if (!result.isConfirmed) {
-    return;
-  }
-
-try {
-    let response;
-    const formDataToSend = new FormData();
-    formDataToSend.append('username', formData.username);
-    formDataToSend.append('email', formData.email);
-    formDataToSend.append('password', formData.password);
-    formDataToSend.append('nama_role', formData.nama_role);
-
-    if (formData.foto) {
-      formDataToSend.append('foto', formData.foto);
+    if (mode.value === 'add' && formData.password.length < 8) {
+        errors.password.push('Password minimal 8 karakter.');
+        return;
     }
 
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    };
-
-    if (mode.value === 'add') {
-      response = await axios.post('/user/store-byAdmin', formDataToSend, config);
-    } else if (mode.value === 'edit') {
-      formDataToSend.append('_method', 'PUT');
-      response = await axios.post(`/user/${formData.id}`, formDataToSend, config);
+    if (mode.value === 'edit' && formData.password && formData.password.length < 8) {
+        errors.password.push('Jika ingin mengubah password, minimal 8 karakter.');
+        return;
     }
 
-    if (response.status === 200 && response.data.status === 'success') {
-      const userId = response.data.data.id;
-      localStorage.setItem('id_user', userId);
-      toast.success(`Berhasil ${action} User!`);
-      router.push({ name: 'DataUser' });
-      closeForm();
-    } else{
-        toast.error(response.data.message || `Gagal ${action} User!`);
+    const action = mode.value === 'add' ? 'menambahkan' : 'mengedit';
+
+    const result = await Swal.fire({
+        title: `Apakah Anda yakin ingin ${action} user ini?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Tidak',
+    });
+
+    if (!result.isConfirmed) {
+        return;
     }
-} catch (error) {
-    if (error.response && error.response.status === 422) {
-        const messages = error.response.data.message || {};
-        let message = 'Terjadi kesalahan:<br><ul>';
-        for (const field in messages) {
-        if (Array.isArray(messages[field])) {
-            messages[field].forEach((msg) => {
-            message += `<li>${msg}</li>`;
-            });
+
+    try {
+        let response;
+        const formDataToSend = new FormData();
+        formDataToSend.append('username', formData.username);
+        formDataToSend.append('email', formData.email);
+        formDataToSend.append('password', formData.password);
+        formDataToSend.append('nama_role', formData.nama_role);
+
+        if (formData.foto) {
+            formDataToSend.append('foto', formData.foto);
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+
+        if (mode.value === 'add') {
+            response = await axios.post('/user/store-byAdmin', formDataToSend, config);
+        } else if (mode.value === 'edit') {
+            formDataToSend.append('_method', 'PUT');
+            response = await axios.post(`/user/${formData.id}`, formDataToSend, config);
+        }
+
+        if (response.status === 200 && response.data.status === 'success') {
+            const userId = response.data.data.id;
+            localStorage.setItem('id_user', userId);
+            toast.success(`Berhasil ${action} User!`);
+            router.push({ name: 'DataUser' });
+            closeForm();
         } else {
-            message += `<li>${messages[field]}</li>`;
+            toast.error(response.data.message || `Gagal ${action} User!`);
         }
+    } catch (error) {
+        if (error.response && error.response.status === 422) {
+            const messages = error.response.data.message || {};
+            let message = 'Terjadi kesalahan:<br><ul>';
+            for (const field in messages) {
+                if (Array.isArray(messages[field])) {
+                    messages[field].forEach((msg) => {
+                        message += `<li>${msg}</li>`;
+                    });
+                } else {
+                    message += `<li>${messages[field]}</li>`;
+                }
+            }
+            message += '</ul>';
+            Swal.fire({
+                icon: 'error',
+                html: message,
+            });
+        } else if (error.response && error.response.status === 500) {
+            Swal.fire('Error', 'Terjadi kesalahan pada server.', 'error');
+        } else {
+            Swal.fire('Error', 'Terjadi kesalahan yang tidak diketahui.', 'error');
         }
-        message += '</ul>';
-        Swal.fire({
-        icon: 'error',
-        html: message,
-        });
-    } else if (error.response && error.response.status === 500) {
-        Swal.fire('Error', 'Terjadi kesalahan pada server.', 'error');
-    } else {
-        Swal.fire('Error', 'Terjadi kesalahan yang tidak diketahui.', 'error');
     }
-}
-
 };
+
 
 
 
@@ -233,6 +247,11 @@ main {
     align-items: center;
     height: 100vh;
     background-color: #f7941e;
+}
+
+.error-text {
+    color: red;
+    font-size: 0.8rem;
 }
 
 .auth-form {
