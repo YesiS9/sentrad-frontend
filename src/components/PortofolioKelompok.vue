@@ -13,7 +13,7 @@
                     <p><strong>Jumlah Anggota:</strong> {{ registrasiKelompok.jumlah_anggota }}</p>
                     <p><strong>Kategori Seni:</strong> {{ registrasiKelompok.kategori_seni.nama_kategori }}</p>
                 </div>
-                <div v-if="anggotaKelompok.length > 0" class="table-wrapper">
+                <div v-if="anggotaKelompok && anggotaKelompok.length > 0" class="table-wrapper">
                     <div class="table-header">
                         <h3>Data Anggota Kelompok</h3>
                     </div>
@@ -76,7 +76,7 @@
                                 </td>
                                 <td>{{ portofolio.jumlah_karya }}</td>
                             </tr>
-                            <tr v-if="portofolios.length === 0">
+                            <tr v-if="portofolios && portofolios.length === 0">
                                 <td colspan="3" class="no-data">Portofolio kosong</td>
                             </tr>
                         </tbody>
@@ -126,7 +126,7 @@ const loadRegistrasiKelompok = async () => {
     try {
         const response = await axios.get(`/registerKelompok/${props.kelompokId}`);
         if (response.data.status === 'success') {
-            registrasiKelompok.value = response.data.data;
+            anggotaKelompok.value = Array.isArray(response.data.data) ? response.data.data : [];
         }
     } catch (error) {
         console.error('Error fetching group registration data:', error.message);
@@ -137,7 +137,7 @@ const loadPortofolios = async () => {
     try {
         const response = await axios.get('/registrasi-portofolio/kelompok', { params: { kelompok_id: props.kelompokId, per_page: perPage, page: currentPage.value } });
         if (response.status === 200 && response.data.status === 'success') {
-            portofolios.value = response.data.data;
+            portofolios.value = Array.isArray(response.data.data) ? response.data.data : [];
             currentPage.value = response.data.current_page;
             totalPages.value = response.data.last_page;
         } else {
