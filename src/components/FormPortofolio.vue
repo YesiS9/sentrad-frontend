@@ -48,7 +48,7 @@
 
   const formData = reactive({
     id: '',
-    kelompok_id: null,
+    kelompok_id: '',
     seniman_id: '',
     nama_kategori: '',
     judul_portofolio: '',
@@ -82,7 +82,13 @@
       if (response.status === 200 && response.data.status === 'success') {
         const portofolioData = response.data.data;
         formData.id = portofolioData.id;
+
         Object.assign(formData, portofolioData);
+
+        if (!portofolioData.kelompok_id) {
+          formData.kelompok_id = null;
+        }
+
         mode.value = 'edit';
       } else {
         console.error('Failed to fetch portofolio:', response.data.message);
@@ -92,8 +98,18 @@
     }
   };
 
+
   onMounted(async () => {
     formData.seniman_id = localStorage.getItem('seniman_id');
+
+
+    const kelompokId = route.params.kelompok_id || localStorage.getItem('kelompok_id');
+    if (kelompokId) {
+      formData.kelompok_id = kelompokId;
+    } else {
+      formData.kelompok_id = null;
+    }
+
     await getKategoriOptions();
 
     const { id } = route.params;
@@ -101,6 +117,7 @@
       await getPortofolio(id);
     }
   });
+
 
   const handleSubmit = async () => {
     const action = mode.value === 'add' ? 'menambahkan' : 'mengedit';

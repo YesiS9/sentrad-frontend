@@ -199,12 +199,16 @@ const handleSubmit = async () => {
     });
 
     const kelompokId = localStorage.getItem('kelompok_id');
+    const senimanId = localStorage.getItem('seniman_id'); 
     if (response.status === 200 && response.data.status === 'success') {
       Swal.fire('Sukses', 'Data anggota berhasil disimpan!', 'success');
       router.push({ 
         name: 'FormPortofolioKelompok', 
         params: { kelompok_id: kelompokId },
-        query: { source }
+        query: { 
+          source, 
+          seniman_id: senimanId 
+        }
       });
 
     } else {

@@ -221,6 +221,7 @@ const handleSubmit = async () => {
 
       if (mode.value === 'add') {
         if (kelompokData?.id) localStorage.setItem('kelompok_id', kelompokData.id);
+        if (kelompokData?.seniman_id) localStorage.setItem('seniman_id', kelompokData.seniman_id);
         if (kelompokData?.jumlah_anggota) localStorage.setItem('jumlah_anggota', kelompokData.jumlah_anggota);
 
         router.push({
