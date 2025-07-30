@@ -1,20 +1,34 @@
 <template>
-    <main>
-      <div class="auth-container">
-        <div class="auth-form">
-          <img :src="logoURL" alt="Sentrad Logo" class="logo" />
-          <h2>Profile Seniman</h2>
-          <input v-model="nama_seniman" type="text" placeholder="Nama Seniman" required />
-          <input v-model="tgl_lahir" type="date" placeholder="Tanggal Lahir" required />
-          <textarea v-model="deskripsi_seniman" placeholder="Deskripsi Seniman" required></textarea>
-          <input v-model="alamat_seniman" type="text" placeholder="Alamat Seniman" required />
-          <input v-model="noTelp_seniman" type="text" placeholder="No. Telepon" required />
-          <input v-model="lama_pengalaman" type="number" placeholder="Lama Pengalaman (tahun)" required />
-          <button @click="createSeniman">Input</button>
-        </div>
+  <main>
+    <div class="auth-container">
+      <div class="auth-form">
+        <img :src="logoURL" alt="Sentrad Logo" class="logo" />
+        <h2>Profil Seniman</h2>
+
+        <label for="nama_seniman">Nama Seniman</label>
+        <input id="nama_seniman" v-model="nama_seniman" type="text" placeholder="Nama Seniman" required />
+
+        <label for="tgl_lahir">Tanggal Lahir</label>
+        <input id="tgl_lahir" v-model="tgl_lahir" type="date" required />
+
+        <label for="deskripsi_seniman">Deskripsi Seniman</label>
+        <textarea id="deskripsi_seniman" v-model="deskripsi_seniman" placeholder="Deskripsi Seniman" required></textarea>
+
+        <label for="alamat_seniman">Alamat Seniman</label>
+        <input id="alamat_seniman" v-model="alamat_seniman" type="text" placeholder="Alamat Seniman" required />
+
+        <label for="noTelp_seniman">No. Telepon</label>
+        <input id="noTelp_seniman" v-model="noTelp_seniman" type="text" placeholder="No. Telepon" required />
+
+        <label for="lama_pengalaman">Lama Pengalaman (tahun)</label>
+        <input id="lama_pengalaman" v-model="lama_pengalaman" type="number" placeholder="Lama Pengalaman (tahun)" required />
+
+        <button @click="createSeniman">Input</button>
       </div>
-    </main>
-  </template>
+    </div>
+  </main>
+</template>
+
 
   <script>
   import axios from 'axios';
@@ -116,6 +130,15 @@
     justify-content: center;
     align-items: center;
   }
+
+  label {
+    display: block;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+
 
   .logo {
     width: 100px;
