@@ -111,16 +111,14 @@
   .auth-container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     height: 100vh;
     background-color: #f7941e;
   }
   .auth-form {
     background-color: #fff;
-    width: 85vw;
-    height: 85vw;
-    max-width: 450px;
-    max-height: 650px;
+    width: 100vw;
+    max-width: 650px;
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
