@@ -11,7 +11,7 @@
                     <p><strong>Tanggal Lahir:</strong> {{ registrasiIndividu.tgl_lahir }}</p>
                     <p><strong>Tanggal Mulai Berkarya:</strong> {{ registrasiIndividu.tgl_mulai }}</p>
                     <p><strong>Alamat:</strong> {{ registrasiIndividu.alamat }}</p>
-                    <p><strong>Kategori Seni:</strong> {{ registrasiIndividu.kategori_seni.nama_kategori }}</p>
+                    <p><strong>Kategori Seni:</strong> {{ registrasiIndividu?.kategori_seni?.nama_kategori || '-' }}</p>
                 </div>
                 <div class="table-wrapper">
                     <div class="table-header">

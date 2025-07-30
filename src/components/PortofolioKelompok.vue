@@ -11,9 +11,9 @@
                     <p><strong>Tanggal Terbentuk:</strong> {{ registrasiKelompok.tgl_terbentuk }}</p>
                     <p><strong>Alamat Kelompok:</strong> {{ registrasiKelompok.alamat_kelompok }}</p>
                     <p><strong>Jumlah Anggota:</strong> {{ registrasiKelompok.jumlah_anggota }}</p>
-                    <p><strong>Kategori Seni:</strong> {{ registrasiKelompok.kategori_seni.nama_kategori }}</p>
+                    <p><strong>Kategori Seni:</strong> {{ registrasiKelompok?.kategori_seni?.nama_kategori || '-' }}</p>
                 </div>
-                <div v-if="anggotaKelompok.length > 0" class="table-wrapper">
+                <div v-if="Array.isArray(anggotaKelompok) && anggotaKelompok.length > 0" class="table-wrapper">
                     <div class="table-header">
                         <h3>Data Anggota Kelompok</h3>
                     </div>
