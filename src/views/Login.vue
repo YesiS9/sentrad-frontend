@@ -239,46 +239,85 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+<style lang="scss" scoped>
+main {
+    background-color: #f7941e;
 }
 
-button.loading {
-  position: relative;
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7941e;
 }
 
-button.loading::after {
-  content: '';
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  margin: auto;
-  border: 2px solid transparent;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: spin 1s ease infinite;
-  top: 0;
-  bottom: 0;
-  right: 10px;
+@media screen and (max-width:  1000px){
+    .auth-form{
+        width: 90%;
+        max-width: 90%;
+        max-height: 90%;
+        height: auto;
+    }
+    .app main{
+        padding: 0;
+    }
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+.auth-form {
+    background-color: #fff;
+    width: 400px;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-.links a.disabled {
-  opacity: 0.5;
-  pointer-events: none;
-  cursor: not-allowed;
-}
+    .logo {
+        width: 100px;
+        margin-bottom: 1rem;
+    }
 
-input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background-color: #f5f5f5;
+    input {
+        display: block;
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #f7941e;
+        color: #fff;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #e6830d;
+    }
+
+    .links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+
+        a {
+            color: #f7941e;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    }
 }
 </style>
