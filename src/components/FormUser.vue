@@ -197,29 +197,92 @@ const handleSubmit = async () => {
             toast.error(response.data.message || `Gagal ${action} User!`);
         }
     } catch (error) {
-        if (error.response && error.response.status === 422) {
-            const messages = error.response.data.message || {};
-            let message = 'Terjadi kesalahan:<br><ul>';
-            for (const field in messages) {
-                if (Array.isArray(messages[field])) {
-                    messages[field].forEach((msg) => {
-                        message += `<li>${msg}</li>`;
-                    });
-                } else {
-                    message += `<li>${messages[field]}</li>`;
-                }
+    console.log('Full error object:', error);
+    console.log('Error response:', error.response); 
+    
+    if (error.response && error.response.status === 422) {
+      const errorData = error.response.data;
+      console.log('Error data:', errorData);
+      
+      let message = 'Terjadi kesalahan validasi:<br><ul>';
+
+      if (errorData.message) {
+        if (typeof errorData.message === 'object') {
+          for (const field in errorData.message) {
+            if (Array.isArray(errorData.message[field])) {
+              errorData.message[field].forEach((msg) => {
+                message += `<li>${msg}</li>`;
+              });
+            } else {
+              message += `<li>${errorData.message[field]}</li>`;
             }
-            message += '</ul>';
-            Swal.fire({
-                icon: 'error',
-                html: message,
-            });
-        } else if (error.response && error.response.status === 500) {
-            Swal.fire('Error', 'Terjadi kesalahan pada server.', 'error');
-        } else {
-            Swal.fire('Error', 'Terjadi kesalahan yang tidak diketahui.', 'error');
+          }
+        } 
+        else if (typeof errorData.message === 'string') {
+          message += `<li>${errorData.message}</li>`;
         }
+      } 
+      else if (errorData.errors) {
+        for (const field in errorData.errors) {
+          if (Array.isArray(errorData.errors[field])) {
+            errorData.errors[field].forEach((msg) => {
+              message += `<li>${msg}</li>`;
+            });
+          } else {
+            message += `<li>${errorData.errors[field]}</li>`;
+          }
+        }
+      }
+      else {
+        for (const field in errorData) {
+          if (field !== 'status' && field !== 'message') {
+            if (Array.isArray(errorData[field])) {
+              errorData[field].forEach((msg) => {
+                message += `<li>${msg}</li>`;
+              });
+            } else {
+              message += `<li>${errorData[field]}</li>`;
+            }
+          }
+        }
+      }
+      
+      message += '</ul>';
+      
+      Swal.fire({
+        icon: 'error',
+        title: 'Kesalahan Validasi',
+        html: message,
+        confirmButtonText: 'OK'
+      });
+    } 
+    else if (error.response && error.response.status === 500) {
+      const errorMessage = error.response.data?.message || 'Terjadi kesalahan pada server.';
+      Swal.fire({
+        icon: 'error',
+        title: 'Server Error',
+        text: errorMessage,
+        confirmButtonText: 'OK'
+      });
+    } 
+    else if (error.response) {
+      const errorMessage = error.response.data?.message || `HTTP Error ${error.response.status}`;
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessage,
+        confirmButtonText: 'OK'
+      });
+    } 
+    else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Kesalahan Jaringan',
+        text: 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.',
+        confirmButtonText: 'OK'
+      });
     }
+  }
 };
 
 
