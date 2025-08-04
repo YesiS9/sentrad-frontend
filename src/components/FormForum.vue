@@ -5,7 +5,7 @@
           <h3>{{ mode === 'add' ? 'Tambah Forum' : 'Edit Forum' }}</h3>
           <form @submit.prevent="handleSubmit">
             <div class="form-group">
-              <label for="kategori">Kategori</label>
+              <label for="kategori" data-icon="🎭">Kategori</label>
               <Multiselect
                 v-model="formData.nama_kategori"
                 :options="kategoriOptions"
@@ -21,7 +21,7 @@
             </div>
 
             <div class="form-group">
-              <label for="judul_forum">Judul Forum</label>
+              <label for="judul_forum" data-icon="📝">Judul Forum</label>
               <input
                 type="text"
                 id="judul_forum"
@@ -167,90 +167,125 @@
   };
   </script>
 
-  <style lang="scss" scoped>
-  @import '@vueform/multiselect/themes/default.css';
+<style lang="scss" scoped>
+@import '@vueform/multiselect/themes/default.css';
 
-  main {
-    background-color: #f7941e;
-    padding: 0;
+main {
+  background-color: #f7941e;
+  padding: 0;
+  font-family: 'Georgia', serif;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f7941e;
+}
+
+.auth-form {
+  background-color: rgba(255, 255, 255, 0.15); // transparan
+  backdrop-filter: blur(10px);
+  width: 90vw;
+  max-width: 600px;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+
+  form {
+    width: 100%;
   }
 
-  .auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f7941e;
+  h3 {
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    font-size: 1.6rem;
   }
 
-  .auth-form {
-    background-color: #fff;
-    width: 90vw;
-    max-width: 600px;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  .form-group {
+    margin-bottom: 1.2rem;
+    text-align: left;
+    width: 100%;
 
-    form{
-    width:100%;
-    }
-
-    h3 {
-      margin-bottom: 1rem;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-      text-align: left;
-      width: 100%;
-    }
-
-    .custom-multiselect {
-      width: 100%;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    .form-actions {
-      margin-top: 1rem;
-      text-align: right;
-      width: 100%;
-    }
-
-    button {
-      background-color: #f7941e;
+    label {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
       color: #fff;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-left: 0.5rem;
-    }
 
-    button[type="submit"] {
-      background-color: #45a049;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #45a049;
-    }
-
-    button[type="button"] {
-      background-color: #f44336;
-    }
-
-    button[type="button"]:hover {
-      background-color: #da190b;
+      &::before {
+        content: attr(data-icon);
+        display: inline-block;
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+      }
     }
   }
-  </style>
+
+  input[type="text"],
+  .custom-multiselect {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 1rem;
+    transition: border-color 0.3s, background-color 0.3s;
+
+    &::placeholder {
+      color: #f0f0f0;
+      opacity: 0.8;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #fff;
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+  }
+
+  .form-actions {
+    margin-top: 1.5rem;
+    text-align: right;
+    width: 100%;
+  }
+
+  button {
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: background-color 0.3s;
+  }
+
+  button[type="submit"] {
+    background-color: #45a049;
+    color: white;
+
+    &:hover {
+      background-color: #388e3c;
+    }
+  }
+
+  button[type="button"] {
+    background-color: #f44336;
+    color: white;
+
+    &:hover {
+      background-color: #d32f2f;
+    }
+  }
+}
+</style>
