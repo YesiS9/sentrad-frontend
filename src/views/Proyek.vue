@@ -1,77 +1,76 @@
 <template>
-    <div class="proyek-page">
-        <Sidebar />
-        <main class="proyek-data">
-        <div class="content">
-            <div class="search-bar">
-            <input type="text" v-model="searchQuery" placeholder="Search proyek..." />
-            </div>
-
-            <div class="section" style="margin-top:64px;">
-            <h2>Event Saya</h2>
-            <div class="proyek-list">
-                <div class="proyek-card add-proyek" @click="goToAddProyek">
-                <div class="proyek-info">
-                    <span class="add-icon">+</span>
-                </div>
-                </div>
-                <div
-                class="proyek-card"
-                v-for="proyek in filteredMyProyeks"
-                :key="proyek.id"
-                @click="goToProyekDetail(proyek.id)"
-                >
-                <div class="proyek-info">
-                    <h3>{{ proyek.judul_proyek }}</h3>
-                    <p>Waktu Mulai: {{ formatDate(proyek.waktu_mulai) }}</p>
-                    <p>Waktu Selesai: {{ formatDate(proyek.waktu_selesai) }}</p>
-                    <p>Likes: <span class="likes-count">{{ proyek.jumlah_like }}</span></p>
-                </div>
-                <div class="proyek-actions">
-                    <button class="edit-btn" @click.stop="editProyek(proyek.id)">Edit</button>
-                    <button class="delete-btn" @click.stop="deleteProyek(proyek.id)">Hapus</button>
-                </div>
-                <div class="social-actions">
-                    <button @click.stop="likeProyek(proyek.id)">
-                    <span class="heart-icon">❤️</span> Like ({{ proyek.jumlah_like }})
-                    </button>
-                    <button @click.stop="shareProyek(proyek.id)">
-                    <span class="share-icon">🔗</span> Share
-                    </button>
-                </div>
-                </div>
-            </div>
-            </div>
-            <div class="section">
-            <h2>Event Lainnya</h2>
-            <div class="proyek-list">
-                <div
-                class="proyek-card"
-                v-for="proyek in filteredProyeks"
-                :key="proyek.id"
-                @click="goToProyekDetail(proyek.id)"
-                >
-                <div class="proyek-info">
-                    <h3>{{ proyek.judul_proyek }}</h3>
-                    <p>Waktu Mulai: {{ formatDate(proyek.waktu_mulai) }}</p>
-                    <p>Waktu Selesai: {{ formatDate(proyek.waktu_selesai) }}</p>
-                    <p>Likes: <span class="likes-count">{{ proyek.jumlah_like }}</span></p>
-                </div>
-                <div class="social-actions">
-                    <button @click.stop="toggleLikeProyek(proyek)">
-                    <span class="heart-icon" :class="{ liked: proyek.liked }">❤️</span> Like ({{ proyek.jumlah_like }})
-                    </button>
-                    <button @click.stop="shareProyek(proyek.id)">
-                    <span class="share-icon">🔗</span> Share
-                    </button>
-                </div>
-                </div>
-            </div>
-            </div>
+  <div class="proyek-page">
+    <Sidebar />
+    <main class="proyek-container">
+      <div class="content">
+        <div class="search-bar">
+          <input type="text" v-model="searchQuery" class="search-input" placeholder="Cari proyek..." />
         </div>
-        </main>
-    </div>
-  </template>
+
+        <section class="section">
+          <h2>Event Saya</h2>
+          <div class="proyek-list">
+            <div class="proyek-card add-card" @click="goToAddProyek">
+              <span class="add-icon">+</span>
+            </div>
+            <div
+              class="proyek-card"
+              v-for="proyek in filteredMyProyeks"
+              :key="proyek.id"
+              @click="goToProyekDetail(proyek.id)"
+            >
+              <div class="proyek-info">
+                <h3>{{ proyek.judul_proyek }}</h3>
+                <p>Mulai: {{ formatDate(proyek.waktu_mulai) }}</p>
+                <p>Selesai: {{ formatDate(proyek.waktu_selesai) }}</p>
+                <p><strong>Likes:</strong> {{ proyek.jumlah_like }}</p>
+              </div>
+              <div class="proyek-actions">
+                <button class="edit-btn" @click.stop="editProyek(proyek.id)">Edit</button>
+                <button class="delete-btn" @click.stop="deleteProyek(proyek.id)">Hapus</button>
+              </div>
+              <div class="social-actions">
+                <button @click.stop="likeProyek(proyek.id)">
+                  ❤️ Like ({{ proyek.jumlah_like }})
+                </button>
+                <button @click.stop="shareProyek(proyek.id)">
+                  🔗 Share
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Event Lainnya</h2>
+          <div class="proyek-list">
+            <div
+              class="proyek-card"
+              v-for="proyek in filteredProyeks"
+              :key="proyek.id"
+              @click="goToProyekDetail(proyek.id)"
+            >
+              <div class="proyek-info">
+                <h3>{{ proyek.judul_proyek }}</h3>
+                <p>Mulai: {{ formatDate(proyek.waktu_mulai) }}</p>
+                <p>Selesai: {{ formatDate(proyek.waktu_selesai) }}</p>
+                <p><strong>Likes:</strong> {{ proyek.jumlah_like }}</p>
+              </div>
+              <div class="social-actions">
+                <button @click.stop="toggleLikeProyek(proyek)">
+                  <span class="heart-icon" :class="{ liked: proyek.liked }">❤️</span> Like ({{ proyek.jumlah_like }})
+                </button>
+                <button @click.stop="shareProyek(proyek.id)">
+                  <span class="share-icon">🔗</span> Share
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</template>
 
   <script>
   import { ref, onMounted, computed } from "vue";
@@ -133,11 +132,11 @@
                 liked: p.is_liked,
             }));
             } else {
-            proyek.value = []; // Initialize to empty array if no data is returned
+            proyek.value = []; 
             }
         } catch (error) {
             console.error("Failed to fetch projects:", error);
-            proyek.value = []; // Ensure proyek is an array even on error
+            proyek.value = []; 
         }
         };
 
@@ -242,78 +241,112 @@
   };
   </script>
 
-  <style lang="scss" scoped>
-  .proyek-page {
+<style lang="scss" scoped>
+.proyek-page {
   display: flex;
-  flex: 1;
   background-color: #f2d395;
   color: #333;
+  min-height: 100vh;
 }
-  .proyek-data {
-    display: flex;
-    background-color: #f5d99d;
-  }
-  .content {
-    flex: 1;
-  }
-  .search-bar {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    width: 300px;
-  }
-  .search-bar input {
+
+.proyek-container {
+  flex: 1;
+  background-color: #f5d99d;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.content {
+  position: relative;
+}
+
+.search-bar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 280px;
+
+  .search-input {
     width: 100%;
-    padding: 10px;
+    padding: 10px 15px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
     font-size: 16px;
-    border-radius: 20px;
-    border: 1px solid #ddd;
   }
-  .section {
-    margin-bottom: 20px;
-  }
-  .proyek-list {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .proyek-card {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin: 10px;
-    width: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: #ffffff;
-    cursor: pointer;
-  }
-  .add-proyek {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f0f0f0;
-    font-size: 2em;
+}
+
+.section {
+  margin-top: 80px;
+
+  h2 {
+    margin-bottom: 16px;
+    font-size: 20px;
     font-weight: bold;
-    cursor: pointer;
   }
-  .add-icon {
-    font-size: 3em;
-    color: #888;
+}
+
+.proyek-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.proyek-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
   }
-  .proyek-info {
-    margin-bottom: 10px;
+}
+
+.add-card {
+  justify-content: center;
+  align-items: center;
+  font-size: 48px;
+  font-weight: bold;
+  color: #888;
+  background-color: #f0f0f0;
+}
+
+.proyek-info {
+  margin-bottom: 12px;
+
+  h3 {
+    font-size: 18px;
+    margin-bottom: 4px;
   }
-  .proyek-actions {
+
+  p {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+}
+
+.proyek-actions {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;
+
+  .edit-btn,
+  .delete-btn {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+  }
 
   .edit-btn {
     background-color: #f7941e;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
 
     &:hover {
       background-color: darkorange;
@@ -322,11 +355,6 @@
 
   .delete-btn {
     background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
 
     &:hover {
       background-color: darkred;
@@ -334,32 +362,28 @@
   }
 }
 
-  .social-actions {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.social-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
   button {
-    padding: 5px 10px;
+    background: none;
+    border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
+    font-size: 14px;
+    padding: 0;
+
+    .heart-icon.liked {
+      color: red;
+    }
+
+    .heart-icon,
+    .share-icon {
+      margin-right: 6px;
+    }
   }
-  .heart-icon {
-    margin-right: 5px;
-  }
-  .share-icon {
-    margin-right: 5px;
-  }
-  .likes-count {
-    font-weight: bold;
-  }
-  input {
-    width: 100%;
-    padding: 5px;
-    margin-top: 5px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-  </style>
+}
+</style>
