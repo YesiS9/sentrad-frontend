@@ -297,11 +297,10 @@ export default {
 .forum-data {
   display: flex;
   flex: 1;
-  background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
+  background: linear-gradient(135deg, #f2d395 0%, #e8d5c4 100%);
   position: relative;
 }
 
-// Artistic background pattern
 .forum-data::before {
   content: '';
   position: absolute;
