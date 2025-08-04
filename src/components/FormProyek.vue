@@ -217,7 +217,7 @@ const closeForm = () => {
 
 main {
   background-color: #f7941e;
-  padding: 0;
+  font-family: 'Georgia', serif;
 }
 
 .auth-container {
@@ -230,63 +230,104 @@ main {
 
 .auth-form {
   background-color: #fff;
+  width: 90vw;
+  max-width: 600px;
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 
+  form {
+    width: 100%;
+  }
+
   h3 {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    font-size: 1.6rem;
+    color: #f7941e;
   }
 
   .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
     text-align: left;
     width: 100%;
-  }
 
-  .custom-multiselect {
-    width: 100%;
+    label {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
+      color: #000000;
+
+      &::before {
+        content: attr(data-icon);
+        display: inline-block;
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+      }
+    }
   }
 
   input[type="text"],
-  textarea {
+  .custom-multiselect {
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.75rem 1rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #333;
+    font-size: 1rem;
+    transition: box-shadow 0.3s, border-color 0.3s;
+
+    &::placeholder {
+      color: #888;
+      opacity: 1;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #f7941e;
+      box-shadow: 0 0 0 3px rgba(247, 148, 30, 0.2);
+    }
   }
 
   .form-actions {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     text-align: right;
     width: 100%;
   }
 
   button {
-    background-color: #45a049;
-    color: #fff;
     border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
     cursor: pointer;
-    margin-left: 0.5rem;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: background-color 0.3s;
+    color: white;
   }
 
-  button[type="submit"]:hover {
+  button[type="submit"] {
     background-color: #45a049;
+
+    &:hover {
+      background-color: #388e3c;
+    }
   }
 
   button[type="button"] {
     background-color: #f44336;
-  }
 
-  button[type="button"]:hover {
-    background-color: #d32f2f;
+    &:hover {
+      background-color: #d32f2f;
+    }
   }
 }
 </style>

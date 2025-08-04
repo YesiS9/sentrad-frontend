@@ -42,7 +42,7 @@
                 <div class="location-container">
                     <div class="location-card">
                         <h3>Lokasi Sanggar</h3>
-                        <div v-if="!mapData">
+                        <div v-if="!mapData || mapData.length === 0">
                             <p class="no-location">Lokasi tidak tersedia</p>
                         </div>
                         <div id="map" ref="map" class="map-view" v-else></div>
@@ -90,14 +90,20 @@ export default {
                 console.log("Seniman data:", this.seniman);
                 console.log("User foto path:", this.seniman.user?.foto);
 
-                const mapResponse = await axios.get(`/map?seniman_id=${senimanId}`);
-                this.mapData = mapResponse.data.data;
-                console.log("Map response", mapResponse);
+                try {
+                    const mapResponse = await axios.get(`/map?seniman_id=${senimanId}`);
+                    this.mapData = mapResponse.data.data;
+                    console.log("Map response", mapResponse);
+                } catch (mapError) {
+                    console.log("Map data not found or error fetching map:", mapError);
+                }
 
                 this.initializeMap();
             } catch (error) {
                 console.error('Error fetching artist data:', error);
-                Swal.fire("Error", "Gagal memuat data seniman.", "error");
+                if (error.response && error.response.status !== 404) {
+                    Swal.fire("Error", "Gagal memuat data seniman.", "error");
+                }
             }
         },
 
@@ -121,7 +127,7 @@ export default {
         },
 
         handleImageError(event) {
-            console.error("Image failed to load:", event.target.src);
+            console.log("Image not found, using default avatar:", event.target.src);
             this.avatarError = true;
             event.target.src = this.defaultAvatar;
         },
@@ -171,7 +177,12 @@ export default {
         initializeMap() {
             this.$nextTick(() => {
                 if (!this.$refs.map) {
-                    console.error("Map container not found");
+                    console.log("Map container not found - no map data available");
+                    return;
+                }
+
+                if (!this.mapData || !Array.isArray(this.mapData) || this.mapData.length === 0) {
+                    console.log("No map data available");
                     return;
                 }
 
@@ -183,37 +194,35 @@ export default {
                     }).addTo(this.map);
                 }
 
-                if (this.mapData && Array.isArray(this.mapData)) {
-                    this.map.eachLayer((layer) => {
-                        if (layer instanceof L.Marker) {
-                            this.map.removeLayer(layer);
-                        }
-                    });
+                this.map.eachLayer((layer) => {
+                    if (layer instanceof L.Marker) {
+                        this.map.removeLayer(layer);
+                    }
+                });
 
-                    this.mapData.forEach(location => {
-                        if (location.latitude && location.longitude) {
-                            const marker = L.marker([location.latitude, location.longitude]).addTo(this.map);
+                this.mapData.forEach(location => {
+                    if (location.latitude && location.longitude) {
+                        const marker = L.marker([location.latitude, location.longitude]).addTo(this.map);
 
-                            const { name, description, id } = location;
-                            const deleteBtn = document.createElement("button");
-                            deleteBtn.innerText = "Hapus Lokasi";
-                            deleteBtn.className = "leaflet-delete-btn";
-                            deleteBtn.addEventListener("click", () => this.deleteLocation(id));
+                        const { name, description, id } = location;
+                        const deleteBtn = document.createElement("button");
+                        deleteBtn.innerText = "Hapus Lokasi";
+                        deleteBtn.className = "leaflet-delete-btn";
+                        deleteBtn.addEventListener("click", () => this.deleteLocation(id));
 
-                            const popupContent = document.createElement("div");
-                            popupContent.innerHTML = `
-                                <strong>Nama Sanggar:</strong> ${name || 'Tidak tersedia'}<br/>
-                                <strong>Deskripsi:</strong> ${description || 'Tidak tersedia'}<br/>
-                            `;
-                            popupContent.appendChild(deleteBtn);
+                        const popupContent = document.createElement("div");
+                        popupContent.innerHTML = `
+                            <strong>Nama Sanggar:</strong> ${name || 'Tidak tersedia'}<br/>
+                            <strong>Deskripsi:</strong> ${description || 'Tidak tersedia'}<br/>
+                        `;
+                        popupContent.appendChild(deleteBtn);
 
-                            marker.bindPopup(popupContent).openPopup();
-                        }
-                    });
+                        marker.bindPopup(popupContent).openPopup();
+                    }
+                });
 
-                    const bounds = L.latLngBounds(this.mapData.map(location => [location.latitude, location.longitude]));
-                    this.map.fitBounds(bounds);
-                }
+                const bounds = L.latLngBounds(this.mapData.map(location => [location.latitude, location.longitude]));
+                this.map.fitBounds(bounds);
             });
         },
 
@@ -244,7 +253,6 @@ export default {
     },
 };
 </script>
-
 
 <style scoped lang="scss">
 

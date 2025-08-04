@@ -5,7 +5,7 @@
           <h3>{{ mode === 'add' ? 'Tambah Forum' : 'Edit Forum' }}</h3>
           <form @submit.prevent="handleSubmit">
             <div class="form-group">
-              <label for="kategori" data-icon="🎭">Kategori</label>
+              <label for="kategori">Kategori</label>
               <Multiselect
                 v-model="formData.nama_kategori"
                 :options="kategoriOptions"
@@ -21,7 +21,7 @@
             </div>
 
             <div class="form-group">
-              <label for="judul_forum" data-icon="📝">Judul Forum</label>
+              <label for="judul_forum">Judul Forum</label>
               <input
                 type="text"
                 id="judul_forum"
@@ -218,7 +218,7 @@ main {
       display: flex;
       align-items: center;
       font-size: 1rem;
-      color: #f18500;
+      color: #000000;
 
       &::before {
         content: attr(data-icon);
