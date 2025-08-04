@@ -218,7 +218,7 @@ main {
       display: flex;
       align-items: center;
       font-size: 1rem;
-      color: #f7941e;
+      color: #f18500;
 
       &::before {
         content: attr(data-icon);
