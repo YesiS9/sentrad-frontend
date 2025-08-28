@@ -1,7 +1,6 @@
 <template>
   <main class="home-page">
     <div class="homepage-container">
-      <!-- Hero Section -->
       <div class="hero-section">
         <div class="logo-container">
           <div class="logo-backdrop">
@@ -10,12 +9,8 @@
         </div>
         <h1 class="main-title">Sentrad</h1>
         <p class="subtitle">Platform Digital untuk Seniman Tradisional Indonesia</p>
-        
-        <!-- Decorative elements -->
         <div class="decorative-line"></div>
       </div>
-
-      <!-- Gallery Section -->
       <div class="gallery-section">
         <h2 class="section-title">Seni Tradisional Nusantara</h2>
         <div class="gallery">
@@ -38,8 +33,6 @@
           </div>
         </div>
       </div>
-
-      <!-- CTA Section -->
       <div class="cta-section">
         <div class="cta-content">
           <h3>Bergabunglah dengan Komunitas Seniman</h3>
@@ -56,14 +49,11 @@
           </div>
         </div>
       </div>
-
-      <!-- Map Section -->
       <div class="map-section">
         <div class="map-header">
           <h2 class="section-title">Peta Sanggar Seniman</h2>
           <p class="section-description">Jelajahi lokasi sanggar-sanggar seni tradisional di seluruh Indonesia</p>
         </div>
-        
         <div class="search-container">
           <div class="search-wrapper">
             <span class="search-icon">🔍</span>
@@ -76,7 +66,6 @@
             />
           </div>
         </div>
-        
         <div class="map-wrapper">
           <div id="map"></div>
         </div>

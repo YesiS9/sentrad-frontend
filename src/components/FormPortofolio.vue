@@ -48,7 +48,6 @@
 
   const formData = reactive({
     id: '',
-    kelompok_id: '',
     seniman_id: '',
     nama_kategori: '',
     judul_portofolio: '',
