@@ -77,26 +77,28 @@
   };
 
   const getPortofolio = async (id) => {
-    try {
-      const response = await axios.get(`/portofolio/data/${id}`);
-      if (response.status === 200 && response.data.status === 'success') {
-        const portofolioData = response.data.data;
-        formData.id = portofolioData.id;
+  try {
+    const response = await axios.get(`/portofolio/data/${id}`);
+    if (response.status === 200 && response.data.status === 'success') {
+      const portofolioData = response.data.data;
+      
+      formData.id = portofolioData.id;
 
-        Object.assign(formData, portofolioData);
-
-        if (!portofolioData.kelompok_id) {
-          formData.kelompok_id = null;
-        }
-
-        mode.value = 'edit';
-      } else {
-        console.error('Failed to fetch portofolio:', response.data.message);
-      }
-    } catch (error) {
-      console.error('Error fetching portofolio:', error.message);
+      formData.nama_kategori = portofolioData.nama_kategori || '';
+      formData.judul_portofolio = portofolioData.judul_portofolio || '';
+      formData.deskripsi_portofolio = portofolioData.deskripsi_portofolio || '';
+      formData.jumlah_karya = portofolioData.jumlah_karya || 0;
+      
+      formData.kelompok_id = null;
+      
+      mode.value = 'edit';
+    } else {
+      console.error('Failed to fetch portofolio:', response.data.message);
     }
-  };
+  } catch (error) {
+    console.error('Error fetching portofolio:', error.message);
+  }
+};
 
 
   onMounted(async () => {
