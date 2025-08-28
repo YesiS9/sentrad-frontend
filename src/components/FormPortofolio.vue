@@ -48,6 +48,7 @@
 
   const formData = reactive({
     id: '',
+    kelompok_id: '',
     seniman_id: '',
     nama_kategori: '',
     judul_portofolio: '',
@@ -100,14 +101,7 @@
 
   onMounted(async () => {
     formData.seniman_id = localStorage.getItem('seniman_id');
-
-
-    const kelompokId = route.params.kelompok_id || localStorage.getItem('kelompok_id');
-    if (kelompokId) {
-      formData.kelompok_id = kelompokId;
-    } else {
-      formData.kelompok_id = null;
-    }
+    formData.kelompok_id = null;
 
     await getKategoriOptions();
 
