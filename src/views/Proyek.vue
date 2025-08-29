@@ -75,7 +75,7 @@
                                 <p class="likes-info">❤️ {{ proyek.jumlah_like }} likes</p>
                             </div>
                             <div class="social-actions">
-                                <button class="like-btn artistic-btn" @click.stop="toggleLikeProyek(proyek)">
+                                <button class="like-btn artistic-btn" @click.stop="toggleLikeMyProyek(proyek)">
                                     <span class="heart-icon" :class="{ liked: proyek.liked }">❤️</span> Like ({{ proyek.jumlah_like }})
                                 </button>
                                 <button class="share-btn artistic-btn" @click.stop="shareProyek(proyek.id)">
@@ -204,29 +204,70 @@ export default {
       });
     };
 
-    const toggleLikeProyek = async (proyek) => {
+    const toggleLikeMyProyek = async (targetProyek) => {
       try {
         const token = localStorage.getItem("authToken");
-        if (proyek.liked) {
-          await axios.post(`/proyek/${proyek.id}/unlike`, {}, {
+        if (targetProyek.liked) {
+          await axios.post(`/proyek/${targetProyek.id}/unlike`, {}, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          proyek.jumlah_like--;
+          targetProyek.jumlah_like--;
         } else {
-          await axios.post(`/proyek/${proyek.id}/like`, {}, {
+          await axios.post(`/proyek/${targetProyek.id}/like`, {}, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          proyek.jumlah_like++;
+          targetProyek.jumlah_like++;
         }
-        proyek.liked = !proyek.liked;
+        targetProyek.liked = !targetProyek.liked;
       } catch (error) {
         console.error("Failed to toggle like:", error);
-        Swal.fire("Error", "Failed to toggle like. Please try again later.", "error");
+        Swal.fire("Error", "Gagal mengubah like. Silakan coba lagi nanti.", "error");
+      }
+    };
+
+    const toggleLikeProyek = async (targetProyek) => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (targetProyek.liked) {
+          await axios.post(`/proyek/${targetProyek.id}/unlike`, {}, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          targetProyek.jumlah_like--;
+        } else {
+          await axios.post(`/proyek/${targetProyek.id}/like`, {}, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          targetProyek.jumlah_like++;
+        }
+        targetProyek.liked = !targetProyek.liked;
+      } catch (error) {
+        console.error("Failed to toggle like:", error);
+        Swal.fire("Error", "Gagal mengubah like. Silakan coba lagi nanti.", "error");
       }
     };
 
     const shareProyek = (proyekId) => {
-      // share proyek
+      const shareUrl = `${window.location.origin}/detail-proyek/${proyekId}`;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: 'Event Seni',
+          text: 'Lihat event seni menarik ini!',
+          url: shareUrl,
+        });
+      } else {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Link berhasil disalin!',
+            text: 'Link event telah disalin ke clipboard.',
+            timer: 2000,
+            showConfirmButton: false
+          });
+        }).catch(() => {
+          Swal.fire('Info', `Link event: ${shareUrl}`, 'info');
+        });
+      }
     };
 
     const filteredMyProyeks = computed(() =>
