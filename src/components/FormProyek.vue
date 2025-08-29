@@ -223,22 +223,25 @@ main {
 .auth-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
   background-color: #f7941e;
+  align-items: flex-start;
+  min-height: 100vh; 
+  padding: 20px 0;
 }
 
 .auth-form {
   background-color: #fff;
   width: 90vw;
   max-width: 600px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto
   padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
   form {
@@ -275,7 +278,7 @@ main {
   }
 
   input[type="text"],
-  .custom-multiselect {
+  .custom-multiselect,textarea{
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #ccc;
@@ -311,7 +314,7 @@ main {
     font-size: 0.95rem;
     transition: background-color 0.3s;
     color: white;
-    margin-left: 0.5rem;
+    margin-right: 0.5rem;
   }
 
   button[type="submit"] {
