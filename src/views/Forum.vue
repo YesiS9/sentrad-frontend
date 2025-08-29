@@ -269,9 +269,17 @@ export default {
             ) || [];
         });
 
+        const filteredForums = computed(() =>{
+            return myForums.value?.filter(forum =>
+                forum.judul_forum.toLowerCase().includes(searchQuery.value.toLowerCase())
+            ) || [];
+        });
+
+
         return {
             searchQuery,
             filteredMyForums,
+            filteredForums,
             followedForums,
             otherForums,
             goToAddForum,

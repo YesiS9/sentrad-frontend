@@ -271,6 +271,7 @@ main {
 
   button[type="submit"] {
     background-color: #45a049;
+    gap: 1rem;
 
     &:hover {
       background-color: #388e3c;
