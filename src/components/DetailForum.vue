@@ -36,7 +36,6 @@
               </button>
               <div v-if="showMenu === index" class="popup-menu">
                   <ul>
-                  <li @click="replyComment(komen)">Reply</li>
                   <li @click="startEditComment(index, komen)">Edit</li>
                   <li @click="deleteComment(komen)">Hapus</li>
                   </ul>
@@ -129,9 +128,7 @@ const getKategoriName = async (kategoriId) => {
     console.error('Error fetching kategori name:', error.message);
   }
 };
-const replyComment = (komen) => {
-alert(`Reply to: ${komen.isi_komenForum}`);
-};
+
 const startEditComment = (index, komen) => {
 editIndex.value = index;
 editedComment.value = komen.isi_komenForum;
