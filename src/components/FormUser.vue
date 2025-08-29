@@ -365,11 +365,13 @@ main {
     }
 
     button {
-        background-color: #f7941e;
         color: #fff;
         border: none;
         padding: 0.5rem 1rem;
         border-radius: 4px;
+        font-weight: bold;
+        font-size: 0.95rem;
+        transition: background-color 0.3s;
         cursor: pointer;
         margin-left: 0.5rem;
     }

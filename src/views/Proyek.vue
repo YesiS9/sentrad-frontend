@@ -48,7 +48,7 @@
                                 </button>
                             </div>
                             <div class="social-actions">
-                                <button class="like-btn artistic-btn" @click.stop="likeProyek(proyek.id)">
+                                <button class="like-btn artistic-btn" @click.stop="likeProyek(proyek)">
                                     <span class="heart-icon">❤️</span> Like ({{ proyek.jumlah_like }})
                                 </button>
                                 <button class="share-btn artistic-btn" @click.stop="shareProyek(proyek.id)">

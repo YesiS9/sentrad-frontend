@@ -4,7 +4,7 @@
         <main class="main-content">
         <div class="add-location-card">
             <li>
-            <button @click="goBack" class="btn-back">Kembali</button>
+            <button @click="goBack" class="btn-back">Back</button>
             </li>
             <h3>Tambah Lokasi</h3>
             <input

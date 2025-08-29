@@ -151,10 +151,13 @@
   }
   button {
     padding: 0.5rem 1rem;
-    border: none;
     border-radius: 4px;
-    color: #fff;
     cursor: pointer;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: background-color 0.3s;
+    color: white;
+    margin-left: 0.5rem;
   }
   button[type='submit'] {
     background-color: #45a049;

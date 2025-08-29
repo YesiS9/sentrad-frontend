@@ -376,12 +376,13 @@
       margin-top: 1rem;
 
       button {
-          background-color: #f7941e;
-          color: #fff;
-          border: none;
           padding: 0.5rem 1rem;
           border-radius: 4px;
           cursor: pointer;
+          font-weight: bold;
+          font-size: 0.95rem;
+          transition: background-color 0.3s;
+          color: white;
           margin-left: 0.5rem;
       }
 
