@@ -226,7 +226,7 @@ main {
   background-color: #f7941e;
   align-items: flex-start;
   min-height: 100vh; 
-  padding: 20px 0;
+  padding: 20px;
 }
 
 .auth-form {
@@ -234,7 +234,7 @@ main {
   width: 90vw;
   max-width: 600px;
   max-height: calc(100vh - 40px);
-  overflow-y: auto
+  overflow-y: auto,
   padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
