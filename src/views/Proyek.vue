@@ -292,6 +292,7 @@ export default {
       goToProyekDetail,
       editProyek,
       deleteProyek,
+      toggleLikeMyProyek,
       toggleLikeProyek,
       shareProyek,
       formatDate,
