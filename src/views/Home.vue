@@ -107,7 +107,7 @@ export default {
   methods: {
     async fetchArtists() {
       try {
-        const response = await axios.get("/map-sanggar");
+        const response = await axios.get("/map");
         if (response.data && Array.isArray(response.data.data)) {
           this.artists = response.data.data;
           this.filteredArtists = this.artists;
@@ -129,7 +129,6 @@ export default {
     updateMarkers() {
       if (!this.map) return;
 
-      // Remove existing markers
       this.markers.forEach(marker => this.map.removeLayer(marker));
       this.markers = [];
 
@@ -149,7 +148,6 @@ export default {
         }
       });
 
-      // If only one result, pan and open popup
       if (this.filteredArtists.length === 1) {
         const artist = this.filteredArtists[0];
         if (artist.latitude && artist.longitude) {
@@ -171,7 +169,6 @@ export default {
     },
     initializeAnimations() {
       this.$nextTick(() => {
-        // Animate elements on scroll
         const observerOptions = {
           threshold: 0.1,
           rootMargin: '0px 0px -50px 0px'
@@ -186,7 +183,6 @@ export default {
           });
         }, observerOptions);
 
-        // Observe gallery items
         document.querySelectorAll('.gallery-item').forEach((item, index) => {
           item.style.opacity = '0';
           item.style.transform = 'translateY(30px)';
@@ -227,7 +223,7 @@ main {
   overflow: hidden;
 }
 
-/* Hero Section */
+
 .hero-section {
   text-align: center;
   padding: 60px 40px 40px;
@@ -309,7 +305,7 @@ main {
   border-radius: 2px;
 }
 
-/* Gallery Section */
+
 .gallery-section {
   padding: 60px 40px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(247, 148, 30, 0.02) 100%);
@@ -410,7 +406,7 @@ main {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* CTA Section */
+
 .cta-section {
   padding: 60px 40px;
   background: linear-gradient(135deg, rgba(247, 148, 30, 0.08) 0%, rgba(255, 255, 255, 0.95) 100%);
@@ -508,7 +504,6 @@ main {
   font-size: 1.2rem;
 }
 
-/* Map Section */
 .map-section {
   padding: 60px 40px 40px;
   background: rgba(255, 255, 255, 0.98);
@@ -586,7 +581,7 @@ main {
   border: none;
 }
 
-/* Custom popup styles */
+
 :global(.custom-popup) {
   h4 {
     margin: 0 0 8px;
@@ -602,7 +597,7 @@ main {
   }
 }
 
-/* Responsive Design */
+
 @media (max-width: 1024px) {
   .homepage-container {
     margin: 20px;
