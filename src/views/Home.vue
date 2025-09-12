@@ -107,7 +107,7 @@ export default {
   methods: {
     async fetchArtists() {
       try {
-        const response = await axios.get("/map");
+        const response = await axios.get("/map-sanggar");
         if (response.data && Array.isArray(response.data.data)) {
           this.artists = response.data.data;
           this.filteredArtists = this.artists;
