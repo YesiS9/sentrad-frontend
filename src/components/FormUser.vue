@@ -71,6 +71,11 @@ const getAuthToken = () => {
 
 const createAuthHeaders = (isMultipart = false) => {
     const token = getAuthToken();
+    console.log('=== DEBUG CREATE AUTH HEADERS ===');
+    console.log('Token from getAuthToken():', token);
+    console.log('Token exists:', !!token);
+    console.log('Is multipart request:', isMultipart);
+
     const headers = {};
     
     if (token) {
@@ -86,9 +91,7 @@ const createAuthHeaders = (isMultipart = false) => {
 
 const checkAuth = () => {
     const token = getAuthToken();
-    console.log('Token:', localStorage.getItem('token'));
-    console.log('Token type:', typeof localStorage.getItem('token'));
-    console.log('Token exists:', !!localStorage.getItem('token'));
+    
     
     if (!token) {
         toast.error('Anda belum login. Silakan login terlebih dahulu.');
