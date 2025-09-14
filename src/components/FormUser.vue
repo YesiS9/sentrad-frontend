@@ -64,18 +64,59 @@ const router = useRouter();
 const mode = ref('add');
 const toast = useToast();
 
+const getAuthToken = () => {
+    return localStorage.getItem('token') || localStorage.getItem('access_token') || sessionStorage.getItem('token') || sessionStorage.getItem('access_token');
+};
+
+const createAuthHeaders = (isMultipart = false) => {
+    const token = getAuthToken();
+    const headers = {};
+    
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    
+    if (isMultipart) {
+        headers['Content-Type'] = 'multipart/form-data';
+    }
+    
+    return headers;
+};
+
+const checkAuth = () => {
+    const token = getAuthToken();
+    if (!token) {
+        toast.error('Anda belum login. Silakan login terlebih dahulu.');
+        router.push({ name: 'Login' });
+        return false;
+    }
+    return true;
+};
+
 const getRoles = async () => {
+    if (!checkAuth()) return;
+    
     try {
-        const response = await axios.get('/roles');
+        const response = await axios.get('/roles', {
+            headers: createAuthHeaders()
+        });
         roles.value = response.data;
     } catch (error) {
         console.error('Error fetching roles:', error.message);
+        if (error.response?.status === 401) {
+            toast.error('Session expired. Please login again.');
+            router.push({ name: 'Login' });
+        }
     }
 };
 
 const getUser = async (id) => {
+    if (!checkAuth()) return;
+    
     try {
-        const response = await axios.get(`/user/${id}`);
+        const response = await axios.get(`/user/${id}`, {
+            headers: createAuthHeaders()
+        });
         if (response.status === 200 && response.data.status === 'success') {
             const userData = response.data.data;
             Object.assign(formData, userData);
@@ -86,10 +127,16 @@ const getUser = async (id) => {
         }
     } catch (error) {
         console.error('Error fetching user:', error.message);
+        if (error.response?.status === 401) {
+            toast.error('Session expired. Please login again.');
+            router.push({ name: 'Login' });
+        }
     }
 };
 
 onMounted(async () => {
+    if (!checkAuth()) return;
+    
     await getRoles();
     const { id } = route.params;
     if (id) {
@@ -99,6 +146,26 @@ onMounted(async () => {
 
 const handleFileChange = (event) => {
     const file = event.target.files[0];
+    if (!file) return;
+    
+ 
+    const maxSize = 200 * 1024 * 1024; 
+    if (file.size > maxSize) {
+        errors.foto = ['Ukuran file tidak boleh lebih dari 200MB'];
+        event.target.value = ''; 
+        return;
+    }
+    
+ 
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (!allowedTypes.includes(file.type)) {
+        errors.foto = ['File harus berupa gambar (JPG, JPEG, PNG)'];
+        event.target.value = ''; 
+        return;
+    }
+    
+    errors.foto = [];
+    
     const reader = new FileReader();
     reader.onload = (e) => {
         const img = new Image();
@@ -132,9 +199,9 @@ const handleFileChange = (event) => {
     reader.readAsDataURL(file);
 };
 
-
-
 const handleSubmit = async () => {
+    if (!checkAuth()) return;
+    
     errors.password = [];
     errors.foto = [];
 
@@ -167,7 +234,11 @@ const handleSubmit = async () => {
         const formDataToSend = new FormData();
         formDataToSend.append('username', formData.username);
         formDataToSend.append('email', formData.email);
-        formDataToSend.append('password', formData.password);
+
+        if (formData.password) {
+            formDataToSend.append('password', formData.password);
+        }
+        
         formDataToSend.append('nama_role', formData.nama_role);
 
         if (formData.foto) {
@@ -175,9 +246,7 @@ const handleSubmit = async () => {
         }
 
         const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
+            headers: createAuthHeaders(true)
         };
 
         if (mode.value === 'add') {
@@ -197,96 +266,99 @@ const handleSubmit = async () => {
             toast.error(response.data.message || `Gagal ${action} User!`);
         }
     } catch (error) {
-    console.log('Full error object:', error);
-    console.log('Error response:', error.response); 
-    
-    if (error.response && error.response.status === 422) {
-      const errorData = error.response.data;
-      console.log('Error data:', errorData);
-      
-      let message = 'Terjadi kesalahan validasi:<br><ul>';
-
-      if (errorData.message) {
-        if (typeof errorData.message === 'object') {
-          for (const field in errorData.message) {
-            if (Array.isArray(errorData.message[field])) {
-              errorData.message[field].forEach((msg) => {
-                message += `<li>${msg}</li>`;
-              });
-            } else {
-              message += `<li>${errorData.message[field]}</li>`;
-            }
-          }
-        } 
-        else if (typeof errorData.message === 'string') {
-          message += `<li>${errorData.message}</li>`;
+        console.log('Full error object:', error);
+        console.log('Error response:', error.response); 
+        
+        if (error.response?.status === 401) {
+            toast.error('Session expired. Please login again.');
+            router.push({ name: 'Login' });
+            return;
         }
-      } 
-      else if (errorData.errors) {
-        for (const field in errorData.errors) {
-          if (Array.isArray(errorData.errors[field])) {
-            errorData.errors[field].forEach((msg) => {
-              message += `<li>${msg}</li>`;
+        
+        if (error.response && error.response.status === 422) {
+            const errorData = error.response.data;
+            console.log('Error data:', errorData);
+            
+            let message = 'Terjadi kesalahan validasi:<br><ul>';
+
+            if (errorData.message) {
+                if (typeof errorData.message === 'object') {
+                    for (const field in errorData.message) {
+                        if (Array.isArray(errorData.message[field])) {
+                            errorData.message[field].forEach((msg) => {
+                                message += `<li>${msg}</li>`;
+                            });
+                        } else {
+                            message += `<li>${errorData.message[field]}</li>`;
+                        }
+                    }
+                } 
+                else if (typeof errorData.message === 'string') {
+                    message += `<li>${errorData.message}</li>`;
+                }
+            } 
+            else if (errorData.errors) {
+                for (const field in errorData.errors) {
+                    if (Array.isArray(errorData.errors[field])) {
+                        errorData.errors[field].forEach((msg) => {
+                            message += `<li>${msg}</li>`;
+                        });
+                    } else {
+                        message += `<li>${errorData.errors[field]}</li>`;
+                    }
+                }
+            }
+            else {
+                for (const field in errorData) {
+                    if (field !== 'status' && field !== 'message') {
+                        if (Array.isArray(errorData[field])) {
+                            errorData[field].forEach((msg) => {
+                                message += `<li>${msg}</li>`;
+                            });
+                        } else {
+                            message += `<li>${errorData[field]}</li>`;
+                        }
+                    }
+                }
+            }
+            
+            message += '</ul>';
+            
+            Swal.fire({
+                icon: 'error',
+                title: 'Kesalahan Validasi',
+                html: message,
+                confirmButtonText: 'OK'
             });
-          } else {
-            message += `<li>${errorData.errors[field]}</li>`;
-          }
+        } 
+        else if (error.response && error.response.status === 500) {
+            const errorMessage = error.response.data?.message || 'Terjadi kesalahan pada server.';
+            Swal.fire({
+                icon: 'error',
+                title: 'Server Error',
+                text: errorMessage,
+                confirmButtonText: 'OK'
+            });
+        } 
+        else if (error.response) {
+            const errorMessage = error.response.data?.message || `HTTP Error ${error.response.status}`;
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonText: 'OK'
+            });
+        } 
+        else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Kesalahan Jaringan',
+                text: 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.',
+                confirmButtonText: 'OK'
+            });
         }
-      }
-      else {
-        for (const field in errorData) {
-          if (field !== 'status' && field !== 'message') {
-            if (Array.isArray(errorData[field])) {
-              errorData[field].forEach((msg) => {
-                message += `<li>${msg}</li>`;
-              });
-            } else {
-              message += `<li>${errorData[field]}</li>`;
-            }
-          }
-        }
-      }
-      
-      message += '</ul>';
-      
-      Swal.fire({
-        icon: 'error',
-        title: 'Kesalahan Validasi',
-        html: message,
-        confirmButtonText: 'OK'
-      });
-    } 
-    else if (error.response && error.response.status === 500) {
-      const errorMessage = error.response.data?.message || 'Terjadi kesalahan pada server.';
-      Swal.fire({
-        icon: 'error',
-        title: 'Server Error',
-        text: errorMessage,
-        confirmButtonText: 'OK'
-      });
-    } 
-    else if (error.response) {
-      const errorMessage = error.response.data?.message || `HTTP Error ${error.response.status}`;
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: errorMessage,
-        confirmButtonText: 'OK'
-      });
-    } 
-    else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Kesalahan Jaringan',
-        text: 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.',
-        confirmButtonText: 'OK'
-      });
     }
-  }
 };
-
-
-
 
 const closeForm = () => {
     formData.username = '';
