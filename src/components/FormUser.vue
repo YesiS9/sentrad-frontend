@@ -66,6 +66,7 @@ const toast = useToast();
 
 const getAuthToken = () => {
     return localStorage.getItem('token') || localStorage.getItem('access_token') || sessionStorage.getItem('token') || sessionStorage.getItem('access_token');
+    
 };
 
 const createAuthHeaders = (isMultipart = false) => {
@@ -85,6 +86,10 @@ const createAuthHeaders = (isMultipart = false) => {
 
 const checkAuth = () => {
     const token = getAuthToken();
+    console.log('Token:', localStorage.getItem('token'));
+    console.log('Token type:', typeof localStorage.getItem('token'));
+    console.log('Token exists:', !!localStorage.getItem('token'));
+    
     if (!token) {
         toast.error('Anda belum login. Silakan login terlebih dahulu.');
         router.push({ name: 'Login' });
