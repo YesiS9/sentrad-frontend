@@ -8,6 +8,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 api.interceptors.request.use(config => {
@@ -20,16 +21,17 @@ api.interceptors.request.use(config => {
 });
 
 api.interceptors.response.use(
-  response => {
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Hapus token yang expired
+      localStorage.removeItem('token')
+      // Redirect ke login
+      window.location.href = '/login'
     }
-    return response;
-  },
-  error => {
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
-);
+)
 
 export const getUnreadNotificationCount = () => api.get('/notifikasi/unread');
 export const fetchNotifications = () => api.get('/notifikasi');
