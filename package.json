@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "clean": "rimraf dist node_modules"
+    "clean": "rimraf public/build node_modules",
+    "clean:build": "rimraf public/build",
+    "clean:modules": "rimraf node_modules",
+    "fresh": "npm run clean && npm install && npm run build"
   },
   "dependencies": {
     "@vueform/multiselect": "^2.6.8",

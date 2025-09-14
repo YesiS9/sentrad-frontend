@@ -1,4 +1,19 @@
 {
+  "index.html": {
+    "file": "assets/index-Adx-ANeR.js",
+    "name": "index",
+    "src": "index.html",
+    "isEntry": true,
+    "css": [
+      "assets/index-CdL1h5TB.css"
+    ],
+    "assets": [
+      "assets/Sentradlogo-DUhD4h_z.png",
+      "assets/pahat-bixBOdhk.jpg",
+      "assets/rupa-C-iJuai1.jpg",
+      "assets/Tari-buX7OFa6.jpg"
+    ]
+  },
   "src/assets/Sentradlogo.png": {
     "file": "assets/Sentradlogo-DUhD4h_z.png",
     "src": "src/assets/Sentradlogo.png"
@@ -14,20 +29,5 @@
   "src/assets/rupa.jpg": {
     "file": "assets/rupa-C-iJuai1.jpg",
     "src": "src/assets/rupa.jpg"
-  },
-  "src/main.js": {
-    "file": "assets/main-CYaNyI2h.js",
-    "name": "main",
-    "src": "src/main.js",
-    "isEntry": true,
-    "css": [
-      "assets/main-kdGKTcuc.css"
-    ],
-    "assets": [
-      "assets/Sentradlogo-DUhD4h_z.png",
-      "assets/pahat-bixBOdhk.jpg",
-      "assets/rupa-C-iJuai1.jpg",
-      "assets/Tari-buX7OFa6.jpg"
-    ]
   }
 }
